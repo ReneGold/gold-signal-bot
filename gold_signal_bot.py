@@ -183,13 +183,38 @@ def wait_seconds():
 
 def main():
     print('Gold Signal Bot V1 gestartet – keine automatischen Orders.')
+
+    # In GitHub Actions soll der Bot genau EINMAL prüfen und danach sauber enden.
+    # Auf dem Mac kann er wie bisher dauerhaft weiterlaufen.
+    one_shot = (
+        os.getenv('GITHUB_ACTIONS','').lower() == 'true'
+        or os.getenv('RUN_ONCE','').lower() in ('1','true','yes')
+    )
+
+    if one_shot:
+        try:
+            run_once()
+        except Exception as e:
+            print('FEHLER:', e)
+            try:
+                send('⚠️ Gold Signal Bot Fehler: ' + str(e))
+            except Exception:
+                pass
+            raise
+        return
+
     while True:
-        try: run_once()
-        except KeyboardInterrupt: break
+        try:
+            run_once()
+        except KeyboardInterrupt:
+            break
         except Exception as e:
             print('FEHLER:',e)
-            try: send('⚠️ Gold Signal Bot Fehler: '+str(e))
-            except Exception: pass
+            try:
+                send('⚠️ Gold Signal Bot Fehler: '+str(e))
+            except Exception:
+                pass
         time.sleep(wait_seconds())
 
-if __name__=='__main__': main()
+if __name__=='__main__':
+    main()
