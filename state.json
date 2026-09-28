@@ -1,5 +1,5 @@
 {
-  "last_processed": "2026-09-28T05:30:00+00:00",
+  "last_processed": "2026-09-28T06:00:00+00:00",
   "plan": {
     "direction": -1,
     "signal_time": "2026-09-28T03:30:00+00:00",
@@ -11,6 +11,6 @@
     "signal_type": "AUSBRUCH",
     "pattern": "Ausbruch",
     "tp1_hit": true,
-    "tp2_hit": false
+    "tp2_hit": true
   }
 }
