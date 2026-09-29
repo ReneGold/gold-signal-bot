@@ -1,16 +1,4 @@
 {
-  "last_processed": "2026-09-29T01:00:00+00:00",
-  "plan": {
-    "direction": -1,
-    "signal_time": "2026-09-29T00:45:00+00:00",
-    "entry": 4120.37016,
-    "sl": 4127.926064181723,
-    "tp1": 4114.703231863708,
-    "tp2": 4109.036303727416,
-    "tp3": 4103.369375591125,
-    "signal_type": "TRENDFOLGE / SHOOTING STAR",
-    "pattern": "SHOOTING STAR",
-    "tp1_hit": true,
-    "tp2_hit": false
-  }
+  "last_processed": "2026-09-29T01:15:00+00:00",
+  "plan": null
 }
