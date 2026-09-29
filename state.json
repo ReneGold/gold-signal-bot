@@ -1,16 +1,4 @@
 {
-  "last_processed": "2026-09-29T13:30:00+00:00",
-  "plan": {
-    "direction": 1,
-    "signal_time": "2026-09-29T10:45:00+00:00",
-    "entry": 4154.42347,
-    "sl": 4145.680348579516,
-    "tp1": 4160.980811065362,
-    "tp2": 4167.5381521307245,
-    "tp3": 4174.095493196088,
-    "signal_type": "AUSBRUCH",
-    "pattern": "Ausbruch",
-    "tp1_hit": true,
-    "tp2_hit": false
-  }
+  "last_processed": "2026-09-29T14:00:00+00:00",
+  "plan": null
 }
