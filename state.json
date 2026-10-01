@@ -1,4 +1,16 @@
 {
-  "last_processed": "2026-10-01T20:30:00+00:00",
-  "plan": null
+  "last_processed": "2026-10-01T21:00:00+00:00",
+  "plan": {
+    "direction": 1,
+    "signal_time": "2026-10-01T21:00:00+00:00",
+    "entry": 4178.58843,
+    "sl": 4172.00436223716,
+    "tp1": 4183.526480822129,
+    "tp2": 4188.464531644258,
+    "tp3": 4193.402582466389,
+    "signal_type": "TRENDFOLGE / TWEEZER BOTTOM",
+    "pattern": "TWEEZER BOTTOM",
+    "tp1_hit": false,
+    "tp2_hit": false
+  }
 }
