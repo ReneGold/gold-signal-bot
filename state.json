@@ -1,5 +1,5 @@
 {
-  "last_processed": "2026-10-02T09:30:00+00:00",
+  "last_processed": "2026-10-02T10:00:00+00:00",
   "plan": {
     "direction": -1,
     "signal_time": "2026-10-02T08:30:00+00:00",
@@ -10,7 +10,7 @@
     "tp3": 4161.293998687666,
     "signal_type": "FRUEH / EVENING STAR",
     "pattern": "EVENING STAR",
-    "tp1_hit": false,
+    "tp1_hit": true,
     "tp2_hit": false
   }
 }
