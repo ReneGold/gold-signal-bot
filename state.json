@@ -1,16 +1,4 @@
 {
-  "last_processed": "2026-10-01T23:30:00+00:00",
-  "plan": {
-    "direction": 1,
-    "signal_time": "2026-10-01T22:45:00+00:00",
-    "entry": 4178.92148,
-    "sl": 4170.681057581029,
-    "tp1": 4185.101796814229,
-    "tp2": 4191.2821136284565,
-    "tp3": 4197.462430442685,
-    "signal_type": "TRENDFOLGE / MORNING STAR",
-    "pattern": "MORNING STAR",
-    "tp1_hit": false,
-    "tp2_hit": false
-  }
+  "last_processed": "2026-10-02T00:00:00+00:00",
+  "plan": null
 }
