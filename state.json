@@ -1,16 +1,4 @@
 {
-  "last_processed": "2026-10-05T12:30:00+00:00",
-  "plan": {
-    "direction": 1,
-    "signal_time": "2026-10-05T12:00:00+00:00",
-    "entry": 4158.5024,
-    "sl": 4149.239556249017,
-    "tp1": 4165.449532813238,
-    "tp2": 4172.396665626475,
-    "tp3": 4179.3437984397115,
-    "signal_type": "TRENDFOLGE / HAMMER",
-    "pattern": "HAMMER",
-    "tp1_hit": true,
-    "tp2_hit": false
-  }
+  "last_processed": "2026-10-05T13:00:00+00:00",
+  "plan": null
 }
