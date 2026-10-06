@@ -1,4 +1,16 @@
 {
-  "last_processed": "2026-10-06T07:00:00+00:00",
-  "plan": null
+  "last_processed": "2026-10-06T07:30:00+00:00",
+  "plan": {
+    "direction": 1,
+    "signal_time": "2026-10-06T07:15:00+00:00",
+    "entry": 4136.39832,
+    "sl": 4126.364466663098,
+    "tp1": 4143.923710002677,
+    "tp2": 4151.449100005353,
+    "tp3": 4158.97449000803,
+    "signal_type": "MOMENTUM-WENDE",
+    "pattern": "Momentum-Wende",
+    "tp1_hit": false,
+    "tp2_hit": false
+  }
 }
