@@ -751,7 +751,11 @@ def process(c, ef, es, atr, htf, i, state):
 
     if state.get("plan") is None and not just_finished:
         s = signal(c, ef, es, atr, htf, i)
-
+b = c[i]
+print(
+    f"DEBUG KERZE | Zeit={b.t.isoformat()} | "
+    f"O={b.o:.2f} | H={b.h:.2f} | L={b.l:.2f} | C={b.c:.2f}"
+)
         if s:
             p = Plan(
                 direction=s[0],
