@@ -1,4 +1,18 @@
 {
-  "last_processed": "2026-10-07T19:30:00+00:00",
-  "plan": null
+  "last_processed": "2026-10-07T20:00:00+00:00",
+  "plan": {
+    "direction": -1,
+    "signal_time": "2026-10-07T19:45:00+00:00",
+    "entry": 4100.53054,
+    "sl": 4111.052403541666,
+    "tp1": 4092.6391423437503,
+    "tp2": 4084.747744687501,
+    "tp3": 4076.8563470312515,
+    "signal_type": "AUSBRUCH",
+    "pattern": "Ausbruch",
+    "score": 90,
+    "score_detail": "1H=SHORT | Struktur=LH/LL | BOS/CHoCH=ja | Sweep=nein | FVG=ja | Fib=ja",
+    "tp1_hit": false,
+    "tp2_hit": false
+  }
 }
