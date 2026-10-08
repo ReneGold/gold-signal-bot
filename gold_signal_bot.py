@@ -749,36 +749,33 @@ def process(c, ef, es, atr, htf, i, state):
 
             state["plan"] = asdict(p)
 
-                if state.get("plan") is None and not just_finished:
-            s = signal(c, ef, es, atr, htf, i)
-    
-            b = c[i]
-            print(
-                f"DEBUG KERZE | Zeit={b.t.isoformat()} | "
-                f"O={b.o:.2f} | H={b.h:.2f} | L={b.l:.2f} | C={b.c:.2f}"
+    if state.get("plan") is None and not just_finished:
+        s = signal(c, ef, es, atr, htf, i)
+
+        if s:
+            p = Plan(
+                direction=s[0],
+                signal_time=c[i].t.isoformat(),
+                entry=s[1],
+                sl=s[2],
+                tp1=s[3],
+                tp2=s[4],
+                tp3=s[5],
+                signal_type=s[6],
+                pattern=s[7],
+                score=s[8],
+                score_detail=s[9],
             )
-    
-            if s:
-                p = Plan(
-                    direction=s[0],
-                    signal_time=c[i].t.isoformat(),
-                    entry=s[1],
-                    sl=s[2],
-                    tp1=s[3],
-                    tp2=s[4],
-                    tp3=s[5],
-                    signal_type=s[6],
-                    pattern=s[7],
-                    score=s[8],
-                    score_detail=s[9],
-                )
-                state["plan"] = asdict(p)
-                send(new_plan_message(p))
+            state["plan"] = asdict(p)
+            send(new_plan_message(p))
+
+
+def run_once():
+    c = candles("15min", 320)
+    htf = candles(HTF_INTERVAL, 220)
 
     if len(c) < 100:
         raise RuntimeError(f"Zu wenige 15M-Kerzen: {len(c)}")
-        
-    
     if len(htf) < SLOW + 5:
         raise RuntimeError(f"Zu wenige {HTF_INTERVAL}-Kerzen: {len(htf)}")
 
