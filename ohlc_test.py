@@ -11,7 +11,7 @@ url = "https://api.twelvedata.com/time_series"
 params = {
     "symbol": "XAU/USD",
     "interval": "15min",
-    "outputsize": 8,
+    "outputsize": 80,
     "apikey": API_KEY,
     "timezone": "UTC",
 }
@@ -34,3 +34,20 @@ for candle in reversed(data["values"]):
         f"L={float(candle['low']):.2f} | "
         f"C={float(candle['close']):.2f}"
     )
+TARGET = 4100.53
+
+closest = min(
+    data["values"],
+    key=lambda candle: abs(float(candle["close"]) - TARGET)
+)
+
+print()
+print("=== SUCHE NACH TELEGRAM-EINSTIEG 4100.53 ===")
+print(
+    f"Nächster Close-Wert: {closest['datetime']} | "
+    f"O={float(closest['open']):.2f} | "
+    f"H={float(closest['high']):.2f} | "
+    f"L={float(closest['low']):.2f} | "
+    f"C={float(closest['close']):.2f} | "
+    f"Abweichung={abs(float(closest['close']) - TARGET):.2f}"
+)
