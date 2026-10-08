@@ -786,21 +786,21 @@ def run_once():
 
     now_utc = datetime.now(timezone.utc)
 
-closed_idx = [
-    i for i, x in enumerate(c)
-    if x.t + timedelta(minutes=15) <= now_utc
-]
-
-if not closed_idx:
-    idx = []
-else:
-    latest_i = closed_idx[-1]
-    latest_time = c[latest_i].t.isoformat()
-
-    if last and latest_time <= last:
+    closed_idx = [
+        i for i, x in enumerate(c)
+        if x.t + timedelta(minutes=15) <= now_utc
+    ]
+    
+    if not closed_idx:
         idx = []
     else:
-        idx = [latest_i]
+        latest_i = closed_idx[-1]
+        latest_time = c[latest_i].t.isoformat()
+    
+        if last and latest_time <= last:
+            idx = []
+        else:
+            idx = [latest_i]
 
     for i in idx:
         process(c, ef, es, atr, htf, i, state)
