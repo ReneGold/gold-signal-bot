@@ -784,7 +784,7 @@ def run_once():
     state = load_state()
     last = state.get("last_processed")
 
-    now_utc = datetime.now(timezone.utc)
+    now_utc = datetime. now(timezone.utc)
 
 closed_idx = [
     i for i, x in enumerate(c)
