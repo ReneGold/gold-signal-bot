@@ -557,17 +557,19 @@ def signal(c, ef, es, atr, htf, i):
     short_score += 5 if volatility_ok else 0
 
     # Bei gleichzeitigen Kandidaten nur die stärkere Seite zulassen.
-long_ok = long_base and long_score >= MIN_SCORE
-short_ok = short_base and short_score >= MIN_SCORE
-long_watch = long_base and OBSERVE_SCORE <= long_score < MIN_SCORE
-short_watch = short_base and OBSERVE_SCORE <= short_score < MIN_SCORE    
-if long_ok and short_ok:
+    long_ok = long_base and long_score >= MIN_SCORE
+    short_ok = short_base and short_score >= MIN_SCORE
+    long_watch = long_base and OBSERVE_SCORE <= long_score < MIN_SCORE
+    short_watch = short_base and OBSERVE_SCORE <= short_score < MIN_SCORE
+
+    if long_ok and short_ok:
         if long_score > short_score:
             short_ok = False
         elif short_score > long_score:
             long_ok = False
         else:
             return None
+
     if not long_ok and not short_ok:
         if long_watch and short_watch:
             if long_score > short_score:
@@ -594,7 +596,6 @@ if long_ok and short_ok:
                 f"Kerze: {c[i].t.isoformat()}"
             )
             return None
-
     # ------------------------------------------------------------
     # Stops / Ziele unverändert nach bestehender Logik
     # ------------------------------------------------------------
