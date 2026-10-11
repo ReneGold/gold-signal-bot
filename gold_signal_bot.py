@@ -594,21 +594,21 @@ if not long_ok and not short_ok:
                 f"Kerze: {c[i].t.isoformat()}"
             )
             return None
-    # -------------------------------------------------------------------------
+    # ------------------------------------------------------------
     # Stops / Ziele unverändert nach bestehender Logik
-    # -------------------------------------------------------------------------
+    # ------------------------------------------------------------
     lstop_turn = min(c[i].l, c[i - 1].l) - ai * ATR_BUF
     sstop_turn = max(c[i].h, c[i - 1].h) + ai * ATR_BUF
-    
+
     lstop_br = (
-    min(min(x.l for x in c[i - BREAKOUT_STOP_BARS + 1 : i + 1]), bh)
-    - ai * ATR_BUF
+        min(min(x.l for x in c[i - BREAKOUT_STOP_BARS + 1 : i + 1]), bh)
+        - ai * ATR_BUF
     )
     sstop_br = (
-    max(max(x.h for x in c[i - BREAKOUT_STOP_BARS + 1 : i + 1]), bl)
-    + ai * ATR_BUF
+        max(max(x.h for x in c[i - BREAKOUT_STOP_BARS + 1 : i + 1]), bl)
+        + ai * ATR_BUF
     )
-    
+
     lstop_m = min(x.l for x in c[i - 2 : i + 1]) - ai * ATR_BUF
     sstop_m = max(x.h for x in c[i - 2 : i + 1]) + ai * ATR_BUF
 
