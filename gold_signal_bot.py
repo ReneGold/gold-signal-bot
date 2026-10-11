@@ -53,6 +53,7 @@ MINTICK = 0.01
 
 # --- V3.8 Score-Einstellungen ---
 MIN_SCORE = int(os.getenv("MIN_SCORE", "70"))
+OBSERVE_SCORE = int(os.getenv("OBSERVE_SCORE", "65"))
 HTF_INTERVAL = os.getenv("HTF_INTERVAL", "1h")
 STRUCT_LEN = int(os.getenv("STRUCT_LEN", "6"))
 LIQ_LEN = int(os.getenv("LIQ_LEN", "12"))
@@ -558,7 +559,8 @@ def signal(c, ef, es, atr, htf, i):
     # Bei gleichzeitigen Kandidaten nur die stärkere Seite zulassen.
     long_ok = long_base and long_score >= MIN_SCORE
     short_ok = short_base and short_score >= MIN_SCORE
-
+long_watch = long_base and OBSERVE_SCORE <= long_score < MIN_SCORE
+short_watch = short_base and OBSERVE_SCORE <= short_score < MIN_SCORE
     if long_ok and short_ok:
         if long_score > short_score:
             short_ok = False
@@ -566,7 +568,32 @@ def signal(c, ef, es, atr, htf, i):
             long_ok = False
         else:
             return None
+    if not long_ok and not short_ok:
+        if long_watch and short_watch:
+            if long_score > short_score:
+                short_watch = False
+            elif short_score > long_score:
+                long_watch = False
+            else:
+                return None
 
+        if long_watch:
+            send(
+                f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / LONG\n"
+                f"Score: {long_score}/100\n"
+                f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
+                f"Kerze: {c[i].t.isoformat()}"
+            )
+            return None
+
+        if short_watch:
+            send(
+                f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / SHORT\n"
+                f"Score: {short_score}/100\n"
+                f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
+                f"Kerze: {c[i].t.isoformat()}"
+            )
+            return None
     # -------------------------------------------------------------------------
     # Stops / Ziele unverändert nach bestehender Logik
     # -------------------------------------------------------------------------
