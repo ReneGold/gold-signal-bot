@@ -568,7 +568,7 @@ if long_ok and short_ok:
             long_ok = False
         else:
             return None
-if not long_ok and not short_ok:
+    if not long_ok and not short_ok:
         if long_watch and short_watch:
             if long_score > short_score:
                 short_watch = False
@@ -594,6 +594,7 @@ if not long_ok and not short_ok:
                 f"Kerze: {c[i].t.isoformat()}"
             )
             return None
+
     # ------------------------------------------------------------
     # Stops / Ziele unverändert nach bestehender Logik
     # ------------------------------------------------------------
