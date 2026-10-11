@@ -717,7 +717,8 @@ def process(c, ef, es, atr, htf, i, state):
                 f"Schutz-Stop: {fmt(protective)}\n"
                 f"Plan beendet."
             )
-            record_trade(state, p, protective, "STOP", b.t.isoformat())
+           result = "STOP_NACH_TP2" if p.tp2_hit else "BREAK_EVEN_NACH_TP1" if p.tp1_hit else "STOP"
+record_trade(state, p, protective, result, b.t.isoformat())
             state["plan"] = None
             just_finished = True
 
