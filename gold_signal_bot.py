@@ -596,7 +596,14 @@ def signal(c, ef, es, atr, htf, i):
 
     atr_percent = ai / c[i].c * 100.0 if c[i].c else 0.0
     volatility_ok = atr_percent >= MIN_ATR_PERCENT
+    range_len = 12
+    range_start = max(0, i - range_len + 1)
+    range_high = max(x.h for x in c[range_start : i + 1])
+    range_low = min(x.l for x in c[range_start : i + 1])
+    range_width = max(range_high - range_low, MINTICK)
+    range_atr_ratio = range_width / ai if ai > 0 else 999.0
 
+    range_market = adx_now < 22 and range_atr_ratio <= 3.5
     long_score = 0
     long_score += 15 if htf_bull else 0
     long_score += 15 if structure_bull else 0
@@ -623,6 +630,8 @@ def signal(c, ef, es, atr, htf, i):
     adx_adjust = 5 if adx_now >= 25 else -5 if adx_now < 18 else 0
     long_score = max(0, min(100, long_score + adx_adjust))
     short_score = max(0, min(100, short_score + adx_adjust))
+    long_score = max(0, long_score - (5 if range_market else 0))
+    short_score = max(0, short_score - (5 if range_market else 0))
     # Bei gleichzeitigen Kandidaten nur die stärkere Seite zulassen.
     long_ok = long_base and long_score >= MIN_SCORE
     short_ok = short_base and short_score >= MIN_SCORE
@@ -705,6 +714,7 @@ def signal(c, ef, es, atr, htf, i):
                 f"FVG={'ja' if long_fvg_ok else 'nein'} | "
                 f"Fib={'ja' if long_fib_ok else 'nein'}"
                 f" | ADX={adx_now:.1f} ({'stark' if adx_now >= 25 else 'schwach' if adx_now < 18 else 'neutral'})"
+                f" | Range={'ja' if range_market else 'nein'}"
             )
 
             return (
@@ -744,6 +754,7 @@ def signal(c, ef, es, atr, htf, i):
                 f"FVG={'ja' if short_fvg_ok else 'nein'} | "
                 f"Fib={'ja' if short_fib_ok else 'nein'}"
                 f" | ADX={adx_now:.1f} ({'stark' if adx_now >= 25 else 'schwach' if adx_now < 18 else 'neutral'})"
+                f" | Range={'ja' if range_market else 'nein'}"
             )
 
             return (
