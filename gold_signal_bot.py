@@ -549,10 +549,14 @@ def signal(c, ef, es, atr, htf, i):
         and min(x.l for x in c[i - 1 - STRUCT_LEN + 1 : i])
         > min(x.l for x in c[i - 1 - 2 * STRUCT_LEN + 1 : i - 1 - STRUCT_LEN + 1])
     )
+    retest_tol = ai * 0.20
+
+    bull_retest = (bull_bos or bull_choch) and c[i].l <= bos_ref_high + retest_tol
+    bear_retest = (bear_bos or bear_choch) and c[i].h >= bos_ref_low - retest_tol
 
     liq_high = max(x.h for x in c[i - LIQ_LEN : i])
     liq_low = min(x.l for x in c[i - LIQ_LEN : i])
-
+    
     long_sweep = c[i].l < liq_low and c[i].c > liq_low
     short_sweep = c[i].h > liq_high and c[i].c < liq_high
 
@@ -608,6 +612,7 @@ def signal(c, ef, es, atr, htf, i):
     long_score += 15 if htf_bull else 0
     long_score += 15 if structure_bull else 0
     long_score += 10 if (bull_bos or bull_choch) else 0
+    long_score += 5 if bull_retest else 0
     long_score += 10 if long_sweep else 0
     long_score += 10 if long_fvg_ok else 0
     long_score += 10 if long_fib_ok else 0
@@ -620,6 +625,7 @@ def signal(c, ef, es, atr, htf, i):
     short_score += 15 if htf_bear else 0
     short_score += 15 if structure_bear else 0
     short_score += 10 if (bear_bos or bear_choch) else 0
+    short_score += 5 if bear_retest else 0
     short_score += 10 if short_sweep else 0
     short_score += 10 if short_fvg_ok else 0
     short_score += 10 if short_fib_ok else 0
@@ -710,6 +716,7 @@ def signal(c, ef, es, atr, htf, i):
                 f"1H={'LONG' if htf_bull else 'neutral'} | "
                 f"Struktur={'HH/HL' if structure_bull else 'nein'} | "
                 f"BOS/CHoCH={'ja' if (bull_bos or bull_choch) else 'nein'} | "
+                f"Retest={'ja' if bull_retest else 'nein'} | "
                 f"Sweep={'ja' if long_sweep else 'nein'} | "
                 f"FVG={'ja' if long_fvg_ok else 'nein'} | "
                 f"Fib={'ja' if long_fib_ok else 'nein'}"
@@ -750,6 +757,7 @@ def signal(c, ef, es, atr, htf, i):
                 f"1H={'SHORT' if htf_bear else 'neutral'} | "
                 f"Struktur={'LH/LL' if structure_bear else 'nein'} | "
                 f"BOS/CHoCH={'ja' if (bear_bos or bear_choch) else 'nein'} | "
+                f"Retest={'ja' if bear_retest else 'nein'} | "
                 f"Sweep={'ja' if short_sweep else 'nein'} | "
                 f"FVG={'ja' if short_fvg_ok else 'nein'} | "
                 f"Fib={'ja' if short_fib_ok else 'nein'}"
