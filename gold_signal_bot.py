@@ -717,7 +717,36 @@ def new_plan_message(p: Plan):
         f"Hinweis: Demo-Signal, keine Garantie."
     )
 
+def record_trade(state, p, exit_price, result, exit_time):
+    risk = abs(p.entry - p.sl)
 
+    if risk > 0:
+        r_multiple = ((exit_price - p.entry) * p.direction) / risk
+    else:
+        r_multiple = 0.0
+
+    trade = {
+        "signal_time": p.signal_time,
+        "exit_time": exit_time,
+        "direction": "LONG" if p.direction == 1 else "SHORT",
+        "signal_type": p.signal_type,
+        "pattern": p.pattern,
+        "score": p.score,
+        "score_detail": p.score_detail,
+        "entry": round(p.entry, 2),
+        "sl": round(p.sl, 2),
+        "tp1": round(p.tp1, 2),
+        "tp2": round(p.tp2, 2),
+        "tp3": round(p.tp3, 2),
+        "exit_price": round(exit_price, 2),
+        "result": result,
+        "r_multiple": round(r_multiple, 2),
+        "tp1_hit": p.tp1_hit,
+        "tp2_hit": p.tp2_hit,
+    }
+
+    state.setdefault("trade_history", []).append(trade)
+    state["trade_history"] = state["trade_history"][-200:]
 def process(c, ef, es, atr, htf, i, state):
     just_finished = False
 
