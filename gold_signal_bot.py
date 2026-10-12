@@ -15,11 +15,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # =============================================================================
-# GOLD DEMO BOT V3.8
+# GOLD DEMO BOT V3.9
 # - nur Demo-Signale, KEINE automatischen Orders
 # - Daten: Twelve Data
 # - Ausgabe: Telegram
-# - Basislogik aus dem bisherigen Bot + V3.8 Score-Filter
+# - Basislogik aus dem bisherigen Bot + V3.9 Score-Filter
 # =============================================================================
 
 # --- Bestehende V3.7/V3.6-Basiswerte ---
@@ -51,7 +51,7 @@ MOM_BODY = 0.35
 
 MINTICK = 0.01
 
-# --- V3.8 Score-Einstellungen ---
+# --- V3.9 Score-Einstellungen ---
 MIN_SCORE = int(os.getenv("MIN_SCORE", "70"))
 OBSERVE_SCORE = int(os.getenv("OBSERVE_SCORE", "65"))
 HTF_INTERVAL = os.getenv("HTF_INTERVAL", "1h")
@@ -516,7 +516,7 @@ def signal(c, ef, es, atr, htf, i):
         return None
 
     # -------------------------------------------------------------------------
-    # V3.8 Zusatzfilter / Score
+    # V3.9 Zusatzfilter / Score
     # -------------------------------------------------------------------------
     htf_bull, htf_bear = htf_context_at(htf, c[i].t)
 
@@ -790,7 +790,7 @@ def new_plan_message(p: Plan):
     icon = "🟢" if p.direction == 1 else "🔴"
 
     return (
-        f"{icon} GOLD DEMO V3.8 – {side}\n"
+        f"{icon} GOLD DEMO V3.9 – {side}\n"
         f"Score: {p.score}/100\n"
         f"Signal: {p.signal_type}\n"
         f"Muster: {p.pattern}\n"
@@ -859,7 +859,7 @@ def process(c, ef, es, atr, htf, i, state):
         # Konservativ: wenn Stop und Ziel in derselben Kerze liegen, Stop zuerst.
         if stop:
             send(
-                f"🛑 GOLD DEMO V3.8 – STOP\n"
+                f"🛑 GOLD DEMO V3.9 – STOP\n"
                 f"Schutz-Stop: {fmt(protective)}\n"
                 f"Plan beendet."
             )
@@ -871,7 +871,7 @@ def process(c, ef, es, atr, htf, i, state):
 
         elif h3:
             send(
-                f"✅ GOLD DEMO V3.8 – TP3 erreicht\n"
+                f"✅ GOLD DEMO V3.9 – TP3 erreicht\n"
                 f"TP3: {fmt(p.tp3)}\n"
                 f"Plan abgeschlossen."
             )
@@ -884,7 +884,7 @@ def process(c, ef, es, atr, htf, i, state):
                 p.tp1_hit = True
                 p.tp2_hit = True
                 send(
-                    f"✅ GOLD DEMO V3.8 – TP2 erreicht\n"
+                    f"✅ GOLD DEMO V3.9 – TP2 erreicht\n"
                     f"TP2: {fmt(p.tp2)}\n"
                     f"Schutz-Stop ab nächster Kerze auf TP1: {fmt(p.tp1)}"
                 )
@@ -892,7 +892,7 @@ def process(c, ef, es, atr, htf, i, state):
             elif h1 and not p.tp1_hit:
                 p.tp1_hit = True
                 send(
-                    f"✅ GOLD DEMO V3.8 – TP1 erreicht\n"
+                    f"✅ GOLD DEMO V3.9 – TP1 erreicht\n"
                     f"TP1: {fmt(p.tp1)}\n"
                     f"Schutz-Stop ab nächster Kerze auf Einstieg: {fmt(p.entry)}"
                 )
@@ -977,7 +977,7 @@ def wait_seconds():
 
 def main():
     print(
-        f"Gold Signal Bot V3.8 gestartet – keine automatischen Orders. "
+        f"Gold Signal Bot V3.9 gestartet – keine automatischen Orders. "
         f"MIN_SCORE={MIN_SCORE}"
     )
 
@@ -994,7 +994,7 @@ def main():
         except Exception as e:
             print("FEHLER:", e)
             try:
-                send("⚠️ Gold Signal Bot V3.8 Fehler: " + str(e))
+                send("⚠️ Gold Signal Bot V3.9 Fehler: " + str(e))
             except Exception:
                 pass
             raise
@@ -1008,7 +1008,7 @@ def main():
         except Exception as e:
             print("FEHLER:", e)
             try:
-                send("⚠️ Gold Signal Bot V3.8 Fehler: " + str(e))
+                send("⚠️ Gold Signal Bot V3.9 Fehler: " + str(e))
             except Exception:
                 pass
 
