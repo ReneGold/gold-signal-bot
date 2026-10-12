@@ -1,5 +1,5 @@
 {
-  "last_processed": "2026-10-11T23:30:00+00:00",
+  "last_processed": "2026-10-12T00:15:00+00:00",
   "plan": {
     "direction": 1,
     "signal_time": "2026-10-09T18:00:00+00:00",
@@ -12,7 +12,7 @@
     "pattern": "Ausbruch",
     "score": 70,
     "score_detail": "1H=LONG | Struktur=HH/HL | BOS/CHoCH=nein | Sweep=nein | FVG=ja | Fib=nein",
-    "tp1_hit": false,
+    "tp1_hit": true,
     "tp2_hit": false
   }
 }
