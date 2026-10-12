@@ -1,18 +1,25 @@
 {
-  "last_processed": "2026-10-12T02:00:00+00:00",
-  "plan": {
-    "direction": 1,
-    "signal_time": "2026-10-09T18:00:00+00:00",
-    "entry": 4198.31219,
-    "sl": 4189.45371393283,
-    "tp1": 4204.956047050377,
-    "tp2": 4211.5999041007535,
-    "tp3": 4218.2437611511305,
-    "signal_type": "AUSBRUCH",
-    "pattern": "Ausbruch",
-    "score": 70,
-    "score_detail": "1H=LONG | Struktur=HH/HL | BOS/CHoCH=nein | Sweep=nein | FVG=ja | Fib=nein",
-    "tp1_hit": true,
-    "tp2_hit": true
-  }
+  "last_processed": "2026-10-12T06:00:00+00:00",
+  "plan": null,
+  "trade_history": [
+    {
+      "signal_time": "2026-10-09T18:00:00+00:00",
+      "exit_time": "2026-10-12T06:00:00+00:00",
+      "direction": "LONG",
+      "signal_type": "AUSBRUCH",
+      "pattern": "Ausbruch",
+      "score": 70,
+      "score_detail": "1H=LONG | Struktur=HH/HL | BOS/CHoCH=nein | Sweep=nein | FVG=ja | Fib=nein",
+      "entry": 4198.31,
+      "sl": 4189.45,
+      "tp1": 4204.96,
+      "tp2": 4211.6,
+      "tp3": 4218.24,
+      "exit_price": 4204.96,
+      "result": "STOP_NACH_TP2",
+      "r_multiple": 0.75,
+      "tp1_hit": true,
+      "tp2_hit": true
+    }
+  ]
 }
