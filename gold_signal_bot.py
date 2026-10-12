@@ -208,7 +208,66 @@ def rma(values: list[float], n: int) -> list[Optional[float]]:
         out[i] = p
 
     return out
+def adx(c: list[Candle], n: int = 14) -> list[Optional[float]]:
+    out: list[Optional[float]] = [None] * len(c)
 
+    if len(c) < n * 2:
+        return out
+
+    tr = [0.0] * len(c)
+    plus_dm = [0.0] * len(c)
+    minus_dm = [0.0] * len(c)
+
+    for i in range(1, len(c)):
+        up_move = c[i].h - c[i - 1].h
+        down_move = c[i - 1].l - c[i].l
+
+        plus_dm[i] = up_move if up_move > down_move and up_move > 0 else 0.0
+        minus_dm[i] = down_move if down_move > up_move and down_move > 0 else 0.0
+
+        tr[i] = max(
+            c[i].h - c[i].l,
+            abs(c[i].h - c[i - 1].c),
+            abs(c[i].l - c[i - 1].c),
+        )
+
+    atr_sm = rma(tr[1:], n)
+    plus_sm = rma(plus_dm[1:], n)
+    minus_sm = rma(minus_dm[1:], n)
+
+    dx_values = []
+    dx_indices = []
+
+    for j in range(len(atr_sm)):
+        atr_v = atr_sm[j]
+        plus_v = plus_sm[j]
+        minus_v = minus_sm[j]
+
+        if atr_v is None or plus_v is None or minus_v is None or atr_v == 0:
+            continue
+
+        plus_di = 100.0 * plus_v / atr_v
+        minus_di = 100.0 * minus_v / atr_v
+        denom = plus_di + minus_di
+
+        if denom == 0:
+            dx = 0.0
+        else:
+            dx = 100.0 * abs(plus_di - minus_di) / denom
+
+        dx_values.append(dx)
+        dx_indices.append(j + 1)
+
+    if len(dx_values) < n:
+        return out
+
+    adx_sm = rma(dx_values, n)
+
+    for k, value in enumerate(adx_sm):
+        if value is not None:
+            out[dx_indices[k]] = value
+
+    return out
 
 def indicators(c: list[Candle]):
     closes = [x.c for x in c]
@@ -278,6 +337,12 @@ def signal(c, ef, es, atr, htf, i):
     ai = A[i]
     if ai is None:
         return None
+        
+    adx_values = adx(c)
+    adx_now = adx_values[i]
+
+    if adx_now is None:
+        adx_now = 0.0
 
     body = lambda j: max(abs(c[j].c - c[j].o), MINTICK)
 
@@ -555,7 +620,9 @@ def signal(c, ef, es, atr, htf, i):
     short_score += 10 if momentum_short_ok else 0
     short_score += 5 if down else 0
     short_score += 5 if volatility_ok else 0
-
+    adx_adjust = 5 if adx_now >= 25 else -5 if adx_now < 18 else 0
+    long_score = max(0, min(100, long_score + adx_adjust))
+    short_score = max(0, min(100, short_score + adx_adjust))
     # Bei gleichzeitigen Kandidaten nur die stärkere Seite zulassen.
     long_ok = long_base and long_score >= MIN_SCORE
     short_ok = short_base and short_score >= MIN_SCORE
@@ -637,6 +704,7 @@ def signal(c, ef, es, atr, htf, i):
                 f"Sweep={'ja' if long_sweep else 'nein'} | "
                 f"FVG={'ja' if long_fvg_ok else 'nein'} | "
                 f"Fib={'ja' if long_fib_ok else 'nein'}"
+                f" | ADX={adx_now:.1f} ({'stark' if adx_now >= 25 else 'schwach' if adx_now < 18 else 'neutral'})"
             )
 
             return (
@@ -675,6 +743,7 @@ def signal(c, ef, es, atr, htf, i):
                 f"Sweep={'ja' if short_sweep else 'nein'} | "
                 f"FVG={'ja' if short_fvg_ok else 'nein'} | "
                 f"Fib={'ja' if short_fib_ok else 'nein'}"
+                f" | ADX={adx_now:.1f} ({'stark' if adx_now >= 25 else 'schwach' if adx_now < 18 else 'neutral'})"
             )
 
             return (
