@@ -648,7 +648,17 @@ def signal(c, ef, es, atr, htf, i):
     short_ok = short_base and short_score >= MIN_SCORE
     long_watch = long_base and OBSERVE_SCORE <= long_score < MIN_SCORE
     short_watch = short_base and OBSERVE_SCORE <= short_score < MIN_SCORE
-
+print(
+    f"DEBUG SCORE {c[i].t.isoformat()} | "
+    f"long_score={long_score} short_score={short_score} | "
+    f"htf_bull={htf_bull} structure_bull={structure_bull} | "
+    f"bull_bos={bull_bos} bull_choch={bull_choch} bull_retest={bull_retest} | "
+    f"long_sweep={long_sweep} long_fvg_ok={long_fvg_ok} long_fib_ok={long_fib_ok} | "
+    f"bull_candle_quality={bull_candle_quality} momentum_long_ok={momentum_long_ok} | "
+    f"up={up} volatility_ok={volatility_ok} | "
+    f"adx_now={adx_now} range_market={range_market} | "
+    f"long_ok={long_ok} long_watch={long_watch}"
+)
     if long_ok and short_ok:
         if long_score > short_score:
             short_ok = False
