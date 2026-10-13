@@ -511,7 +511,12 @@ def signal(c, ef, es, atr, htf, i):
 
     long_base = lt or le or lb or lm
     short_base = st or se or sb or sm
-
+print(
+    f"DEBUG BASIS {c[i].t.isoformat()} | "
+    f"lt={lt} le={le} lb={lb} lm={lm} | "
+    f"st={st} se={se} sb={sb} sm={sm} | "
+    f"long_base={long_base} short_base={short_base}"
+)
     if not long_base and not short_base:
         return None
 
