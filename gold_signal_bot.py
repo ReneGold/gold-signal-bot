@@ -511,12 +511,12 @@ def signal(c, ef, es, atr, htf, i):
 
     long_base = lt or le or lb or lm
     short_base = st or se or sb or sm
-    print(
-        f"DEBUG BASIS {c[i].t.isoformat()} | "
-        f"lt={lt} le={le} lb={lb} lm={lm} | "
-        f"st={st} se={se} sb={sb} sm={sm} | "
-        f"long_base={long_base} short_base={short_base}"
-    )
+print(
+    f"DEBUG BASIS {c[i].t.isoformat()} | "
+    f"lt={lt} le={le} lb={lb} lm={lm} | "
+    f"st={st} se={se} sb={sb} sm={sm} | "
+    f"long_base={long_base} short_base={short_base}"
+)
     if not long_base and not short_base:
         return None
 
@@ -648,18 +648,8 @@ def signal(c, ef, es, atr, htf, i):
     short_ok = short_base and short_score >= MIN_SCORE
     long_watch = long_base and OBSERVE_SCORE <= long_score < MIN_SCORE
     short_watch = short_base and OBSERVE_SCORE <= short_score < MIN_SCORE
-print(
-    f"DEBUG SCORE {c[i].t.isoformat()} | "
-    f"long_score={long_score} short_score={short_score} | "
-    f"htf_bull={htf_bull} structure_bull={structure_bull} | "
-    f"bull_bos={bull_bos} bull_choch={bull_choch} bull_retest={bull_retest} | "
-    f"long_sweep={long_sweep} long_fvg_ok={long_fvg_ok} long_fib_ok={long_fib_ok} | "
-    f"bull_candle_quality={bull_candle_quality} momentum_long_ok={momentum_long_ok} | "
-    f"up={up} volatility_ok={volatility_ok} | "
-    f"adx_now={adx_now} range_market={range_market} | "
-    f"long_ok={long_ok} long_watch={long_watch}"
-)
-if long_ok and short_ok:
+
+    if long_ok and short_ok:
         if long_score > short_score:
             short_ok = False
         elif short_score > long_score:
@@ -667,7 +657,7 @@ if long_ok and short_ok:
         else:
             return None
 
-if not long_ok and not short_ok:
+    if not long_ok and not short_ok:
         if long_watch and short_watch:
             if long_score > short_score:
                 short_watch = False
@@ -677,23 +667,22 @@ if not long_ok and not short_ok:
                 return None
 
         if long_watch:
-                send(
-                    f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / LONG\n"
-                    f"Score: {long_score}/100\n"
-                    f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
-                    f"Kerze: {c[i].t.isoformat()}"
-                )
-                return None
+            send(
+                f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / LONG\n"
+                f"Score: {long_score}/100\n"
+                f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
+                f"Kerze: {c[i].t.isoformat()}"
+            )
+            return None
 
-            if short_watch:
-                send(
-                    f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / SHORT\n"
-                    f"Score: {short_score}/100\n"
-                    f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
-                    f"Kerze: {c[i].t.isoformat()}"
-                )
-                return None
-
+        if short_watch:
+            send(
+                f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / SHORT\n"
+                f"Score: {short_score}/100\n"
+                f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
+                f"Kerze: {c[i].t.isoformat()}"
+            )
+            return None
     # ------------------------------------------------------------
     # Stops / Ziele unverändert nach bestehender Logik
     # ------------------------------------------------------------
@@ -704,7 +693,6 @@ if not long_ok and not short_ok:
         min(min(x.l for x in c[i - BREAKOUT_STOP_BARS + 1 : i + 1]), bh)
         - ai * ATR_BUF
     )
-
     sstop_br = (
         max(max(x.h for x in c[i - BREAKOUT_STOP_BARS + 1 : i + 1]), bl)
         + ai * ATR_BUF
@@ -712,6 +700,7 @@ if not long_ok and not short_ok:
 
     lstop_m = min(x.l for x in c[i - 2 : i + 1]) - ai * ATR_BUF
     sstop_m = max(x.h for x in c[i - 2 : i + 1]) + ai * ATR_BUF
+
     if long_ok:
         sl = lstop_m if lm else lstop_br if lb else lstop_turn
         risk = c[i].c - sl
