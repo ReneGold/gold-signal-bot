@@ -685,15 +685,16 @@ if not long_ok and not short_ok:
             )
             return None
 
-        if short_watch:
-            send(
-                f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / SHORT\n"
-                f"Score: {short_score}/100\n"
-                f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
-                f"Kerze: {c[i].t.isoformat()}"
-            )
-            return None
-     # ------------------------------------------------------------
+            if short_watch:
+        send(
+            f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / SHORT\n"
+            f"Score: {short_score}/100\n"
+            f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
+            f"Kerze: {c[i].t.isoformat()}"
+        )
+        return None
+
+    # ------------------------------------------------------------
     # Stops / Ziele unverändert nach bestehender Logik
     # ------------------------------------------------------------
     lstop_turn = min(c[i].l, c[i - 1].l) - ai * ATR_BUF
@@ -703,6 +704,7 @@ if not long_ok and not short_ok:
         min(min(x.l for x in c[i - BREAKOUT_STOP_BARS + 1 : i + 1]), bh)
         - ai * ATR_BUF
     )
+
     sstop_br = (
         max(max(x.h for x in c[i - BREAKOUT_STOP_BARS + 1 : i + 1]), bl)
         + ai * ATR_BUF
