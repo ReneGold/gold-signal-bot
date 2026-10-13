@@ -659,7 +659,7 @@ print(
     f"adx_now={adx_now} range_market={range_market} | "
     f"long_ok={long_ok} long_watch={long_watch}"
 )
-    if long_ok and short_ok:
+if long_ok and short_ok:
         if long_score > short_score:
             short_ok = False
         elif short_score > long_score:
@@ -667,7 +667,7 @@ print(
         else:
             return None
 
-    if not long_ok and not short_ok:
+if not long_ok and not short_ok:
         if long_watch and short_watch:
             if long_score > short_score:
                 short_watch = False
