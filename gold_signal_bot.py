@@ -658,7 +658,7 @@ print(
     f"up={up} volatility_ok={volatility_ok} | "
     f"adx_now={adx_now} range_market={range_market} | "
     f"long_ok={long_ok} long_watch={long_watch}"
-)
+    )
     if long_ok and short_ok:
         if long_score > short_score:
             short_ok = False
