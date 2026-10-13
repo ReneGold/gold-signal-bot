@@ -693,7 +693,7 @@ if not long_ok and not short_ok:
                 f"Kerze: {c[i].t.isoformat()}"
             )
             return None
-    # ------------------------------------------------------------
+     # ------------------------------------------------------------
     # Stops / Ziele unverändert nach bestehender Logik
     # ------------------------------------------------------------
     lstop_turn = min(c[i].l, c[i - 1].l) - ai * ATR_BUF
@@ -710,7 +710,6 @@ if not long_ok and not short_ok:
 
     lstop_m = min(x.l for x in c[i - 2 : i + 1]) - ai * ATR_BUF
     sstop_m = max(x.h for x in c[i - 2 : i + 1]) + ai * ATR_BUF
-
     if long_ok:
         sl = lstop_m if lm else lstop_br if lb else lstop_turn
         risk = c[i].c - sl
