@@ -677,22 +677,22 @@ if not long_ok and not short_ok:
                 return None
 
         if long_watch:
-            send(
-                f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / LONG\n"
-                f"Score: {long_score}/100\n"
-                f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
-                f"Kerze: {c[i].t.isoformat()}"
-            )
-            return None
+                send(
+                    f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / LONG\n"
+                    f"Score: {long_score}/100\n"
+                    f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
+                    f"Kerze: {c[i].t.isoformat()}"
+                )
+                return None
 
             if short_watch:
-        send(
-            f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / SHORT\n"
-            f"Score: {short_score}/100\n"
-            f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
-            f"Kerze: {c[i].t.isoformat()}"
-        )
-        return None
+                send(
+                    f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / SHORT\n"
+                    f"Score: {short_score}/100\n"
+                    f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
+                    f"Kerze: {c[i].t.isoformat()}"
+                )
+                return None
 
     # ------------------------------------------------------------
     # Stops / Ziele unverändert nach bestehender Logik
