@@ -273,3 +273,53 @@ if target_i is not None:
     ):
         if key in captured:
             print(f"{key}={captured[key]}")
+
+
+# SESSION + SETUP GRADE TEST:
+# Nur Anzeige-Test, keine Aenderung am Produktionsbot.
+from zoneinfo import ZoneInfo
+
+def debug_setup_grade(score: int) -> str:
+    if score >= 90:
+        return "A+"
+    if score >= 85:
+        return "A"
+    if score >= 80:
+        return "A-"
+    if score >= 75:
+        return "B+"
+    if score >= 70:
+        return "B"
+    return "C"
+
+def debug_session(dt):
+    london = dt.astimezone(ZoneInfo("Europe/London"))
+    new_york = dt.astimezone(ZoneInfo("America/New_York"))
+    tokyo = dt.astimezone(ZoneInfo("Asia/Tokyo"))
+
+    london_min = london.hour * 60 + london.minute
+    ny_min = new_york.hour * 60 + new_york.minute
+    tokyo_min = tokyo.hour * 60 + tokyo.minute
+
+    london_active = 8 * 60 <= london_min < 16 * 60 + 30
+    ny_active = 8 * 60 <= ny_min < 17 * 60
+    asia_active = 9 * 60 <= tokyo_min < 17 * 60
+
+    if london_active and ny_active:
+        return "LONDON / NEW YORK OVERLAP"
+    if london_active:
+        return "LONDON"
+    if ny_active:
+        return "NEW YORK"
+    if asia_active:
+        return "ASIA"
+    return "OFF-HOURS"
+
+print("\nSESSION + SETUP GRADE TEST:")
+if target_i is not None:
+    score_for_grade = 70
+    print("session=", debug_session(c[target_i].t))
+    print("setup_grade_70=", debug_setup_grade(score_for_grade))
+    print("setup_grade_75=", debug_setup_grade(75))
+    print("setup_grade_80=", debug_setup_grade(80))
+    print("setup_grade_85=", debug_setup_grade(85))
