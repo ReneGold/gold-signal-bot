@@ -323,3 +323,69 @@ if target_i is not None:
     print("setup_grade_75=", debug_setup_grade(75))
     print("setup_grade_80=", debug_setup_grade(80))
     print("setup_grade_85=", debug_setup_grade(85))
+
+
+# MARKET BIAS + CONFIRMATION TEST:
+# Nur Anzeige-Test. Keine Aenderung an der Signalentscheidung.
+print("\nMARKET BIAS + CONFIRMATION TEST:")
+if target_i is not None:
+    long_bias_points = 0
+    short_bias_points = 0
+
+    # Uebergeordneter Trend / Uebergang
+    long_bias_points += int(captured.get("htf_long_points", 0))
+    short_bias_points += int(captured.get("htf_short_points", 0))
+
+    # Marktstruktur
+    long_bias_points += 15 if captured.get("structure_bull") else 0
+    short_bias_points += 15 if captured.get("structure_bear") else 0
+
+    # Lokale EMA-Richtung
+    long_bias_points += 10 if captured.get("up") else 0
+    short_bias_points += 10 if captured.get("down") else 0
+
+    # Momentum
+    long_bias_points += 10 if captured.get("momentum_long_ok") else 0
+    short_bias_points += 10 if captured.get("momentum_short_ok") else 0
+
+    if long_bias_points >= short_bias_points + 10:
+        market_bias = "LONG"
+    elif short_bias_points >= long_bias_points + 10:
+        market_bias = "SHORT"
+    else:
+        market_bias = "NEUTRAL"
+
+    # Bestaetigungen fuer das konkrete Setup
+    long_conf = sum([
+        1 if captured.get("bull_candle_quality") else 0,
+        1 if captured.get("momentum_long_ok") else 0,
+        1 if captured.get("volatility_ok") else 0,
+        1 if captured.get("bull_retest") else 0,
+        1 if captured.get("long_sweep") else 0,
+        1 if captured.get("long_fvg_ok") else 0,
+        1 if captured.get("long_fib_ok") else 0,
+    ])
+    short_conf = sum([
+        1 if captured.get("bear_candle_quality") else 0,
+        1 if captured.get("momentum_short_ok") else 0,
+        1 if captured.get("volatility_ok") else 0,
+        1 if captured.get("bear_retest") else 0,
+        1 if captured.get("short_sweep") else 0,
+        1 if captured.get("short_fvg_ok") else 0,
+        1 if captured.get("short_fib_ok") else 0,
+    ])
+
+    def conf_label(n):
+        if n >= 5:
+            return "STARK BESTAETIGT"
+        if n >= 3:
+            return "BESTAETIGT"
+        if n >= 2:
+            return "TEILBESTAETIGT"
+        return "SCHWACH"
+
+    print(f"market_bias={market_bias}")
+    print(f"long_bias_points={long_bias_points}")
+    print(f"short_bias_points={short_bias_points}")
+    print(f"long_confirmation={long_conf}/7 ({conf_label(long_conf)})")
+    print(f"short_confirmation={short_conf}/7 ({conf_label(short_conf)})")
