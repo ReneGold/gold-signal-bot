@@ -92,3 +92,28 @@ if target_i is not None:
         print("htf_ema_fast=", htf_fast[-1])
         print("htf_ema_slow=", htf_slow[-1])
         print("htf_bull_calc=", htf_closes[-1] > htf_fast[-1] and htf_fast[-1] > htf_slow[-1])
+
+
+# HTF HISTORY WARMUP TEST:
+# TradingView berechnet EMA ueber sehr viel mehr Historie als die 220 Stunden,
+# die der Bot bisher laedt. Wir pruefen, ob genau das die 15 Punkte Differenz erklaert.
+print("\nHTF HISTORY WARMUP TEST:")
+for size in (220, 500, 1000, 2000):
+    try:
+        htf_test = candles(HTF_INTERVAL, size)
+        eligible_test = [x for x in htf_test if x.t + _interval_delta(HTF_INTERVAL) <= c[target_i].t]
+        if len(eligible_test) < SLOW + 2:
+            print(f"size={size}: zu wenig Daten ({len(eligible_test)})")
+            continue
+        closes_test = [x.c for x in eligible_test]
+        fast_test = ema(closes_test, FAST)[-1]
+        slow_test = ema(closes_test, SLOW)[-1]
+        close_test = closes_test[-1]
+        bull_test = close_test > fast_test and fast_test > slow_test
+        print(
+            f"size={size} | candles={len(eligible_test)} | "
+            f"close={close_test:.5f} | fast={fast_test:.5f} | "
+            f"slow={slow_test:.5f} | htf_bull={bull_test}"
+        )
+    except Exception as e:
+        print(f"size={size}: FEHLER {e}")
