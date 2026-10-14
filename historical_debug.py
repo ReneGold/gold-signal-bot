@@ -1,3 +1,5 @@
+import sys
+
 from gold_signal_bot import candles, indicators, signal, HTF_INTERVAL
 
 TARGET = "2026-10-13T03:45:00+00:00"
@@ -27,7 +29,47 @@ else:
         "C=", c[target_i].c,
     )
 
-    result = signal(c, ef, es, atr, htf, target_i)
+    captured = {}
 
-    print("SIGNAL-ERGEBNIS:")
+    def tracer(frame, event, arg):
+        if frame.f_code.co_name == "signal" and event == "return":
+            captured.update(frame.f_locals.copy())
+        return tracer
+
+    sys.settrace(tracer)
+    try:
+        result = signal(c, ef, es, atr, htf, target_i)
+    finally:
+        sys.settrace(None)
+
+    print("\nSIGNAL-ERGEBNIS:")
     print(result)
+
+    keys = [
+        "lt", "le", "lb", "lm",
+        "st", "se", "sb", "sm",
+        "long_base", "short_base",
+        "long_score", "short_score",
+        "htf_bull", "htf_bear",
+        "structure_bull", "structure_bear",
+        "bull_bos", "bull_choch", "bull_retest",
+        "bear_bos", "bear_choch", "bear_retest",
+        "long_sweep", "short_sweep",
+        "long_fvg_ok", "short_fvg_ok",
+        "long_fib_ok", "short_fib_ok",
+        "bull_candle_quality", "bear_candle_quality",
+        "momentum_long_ok", "momentum_short_ok",
+        "up", "down",
+        "volatility_ok", "atr_percent",
+        "adx_now", "range_market", "range_atr_ratio",
+        "long_ok", "short_ok", "long_watch", "short_watch",
+        "bh", "bl", "pbh", "pbl", "cur_body", "ai",
+    ]
+
+    print("\nDEBUG HISTORISCH:")
+    for key in keys:
+        if key in captured:
+            print(f"{key}={captured[key]}")
+
+    print("\nWICHTIG:")
+    print("Der Produktionsbot wird durch diesen Test nicht veraendert und sendet keinen Trade.")
