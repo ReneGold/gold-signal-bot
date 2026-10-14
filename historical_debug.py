@@ -159,3 +159,45 @@ if target_i is not None:
                 f"tol={frac:.2f} ATR | abs_tol={tol:.5f} | "
                 f"htf_bull_relaxed={bull_relaxed}"
             )
+
+
+# HTF PARTIAL SCORE TEST:
+# Testet einen abgestuften HTF-Score statt nur 15 oder 0 Punkte.
+# Idee:
+# +15 = voll bullisch: Close > EMA Fast > EMA Slow
+# +10 = Close > EMA Fast und EMA Fast steigt, aber noch unter EMA Slow
+# +5  = Close > EMA Fast, EMA Fast noch nicht steigend
+#  0  = sonst
+print("\nHTF PARTIAL SCORE TEST:")
+if target_i is not None:
+    signal_time = c[target_i].t
+    delta = _interval_delta(HTF_INTERVAL)
+    eligible_ps = [x for x in htf if x.t + delta <= signal_time]
+
+    if len(eligible_ps) >= SLOW + 3:
+        closes_ps = [x.c for x in eligible_ps]
+        ef_ps = ema(closes_ps, FAST)
+        es_ps = ema(closes_ps, SLOW)
+
+        full_bull = closes_ps[-1] > ef_ps[-1] and ef_ps[-1] > es_ps[-1]
+        close_above_fast = closes_ps[-1] > ef_ps[-1]
+        fast_rising = ef_ps[-1] > ef_ps[-2]
+
+        if full_bull:
+            htf_points = 15
+        elif close_above_fast and fast_rising:
+            htf_points = 10
+        elif close_above_fast:
+            htf_points = 5
+        else:
+            htf_points = 0
+
+        revised_long_score = captured.get("long_score", 0) + htf_points
+
+        print(f"full_bull={full_bull}")
+        print(f"close_above_fast={close_above_fast}")
+        print(f"fast_rising={fast_rising}")
+        print(f"htf_partial_points={htf_points}")
+        print(f"original_long_score={captured.get('long_score')}")
+        print(f"revised_long_score={revised_long_score}")
+        print(f"would_pass_min_score={revised_long_score >= 70}")
