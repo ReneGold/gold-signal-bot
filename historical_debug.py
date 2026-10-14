@@ -73,3 +73,22 @@ else:
 
     print("\nWICHTIG:")
     print("Der Produktionsbot wird durch diesen Test nicht veraendert und sendet keinen Trade.")
+
+
+# Zusatz: Python-HTF-Werte fuer den Vergleich mit TradingView
+from gold_signal_bot import ema, FAST, SLOW, _interval_delta
+
+if target_i is not None:
+    signal_time = c[target_i].t
+    delta = _interval_delta(HTF_INTERVAL)
+    eligible = [x for x in htf if x.t + delta <= signal_time]
+    if len(eligible) >= SLOW + 2:
+        htf_closes = [x.c for x in eligible]
+        htf_fast = ema(htf_closes, FAST)
+        htf_slow = ema(htf_closes, SLOW)
+        print("\nPYTHON HTF DETAILS:")
+        print("htf_time=", eligible[-1].t.isoformat())
+        print("htf_close=", htf_closes[-1])
+        print("htf_ema_fast=", htf_fast[-1])
+        print("htf_ema_slow=", htf_slow[-1])
+        print("htf_bull_calc=", htf_closes[-1] > htf_fast[-1] and htf_fast[-1] > htf_slow[-1])
