@@ -671,6 +671,36 @@ def signal(c, ef, es, atr, htf, i):
     long_watch = long_base and OBSERVE_SCORE <= long_score < MIN_SCORE
     short_watch = short_base and OBSERVE_SCORE <= short_score < MIN_SCORE
 
+    # Zonenqualitaet nur als Zusatzinformation; beeinflusst NICHT die Signalentscheidung.
+    long_zone_score = (
+        (25 if near_sup else 0)
+        + (15 if near_ema else 0)
+        + (20 if long_fvg_ok else 0)
+        + (15 if long_fib_ok else 0)
+        + (15 if long_sweep else 0)
+        + (10 if bull_retest else 0)
+    )
+    short_zone_score = (
+        (25 if near_res else 0)
+        + (15 if near_ema else 0)
+        + (20 if short_fvg_ok else 0)
+        + (15 if short_fib_ok else 0)
+        + (15 if short_sweep else 0)
+        + (10 if bear_retest else 0)
+    )
+
+    def zone_grade(score: int) -> str:
+        if score >= 75:
+            return "A"
+        if score >= 55:
+            return "B"
+        if score >= 35:
+            return "C"
+        return "D"
+
+    long_zone_grade = zone_grade(long_zone_score)
+    short_zone_grade = zone_grade(short_zone_score)
+
     if long_ok and short_ok:
         if long_score > short_score:
             short_ok = False
@@ -749,6 +779,7 @@ def signal(c, ef, es, atr, htf, i):
                 f"Fib={'ja' if long_fib_ok else 'nein'}"
                 f" | ADX={adx_now:.1f} ({'stark' if adx_now >= 25 else 'schwach' if adx_now < 18 else 'neutral'})"
                 f" | Range={'ja' if range_market else 'nein'}"
+                f" | Zone={long_zone_score}/100 ({long_zone_grade})"
             )
 
             return (
@@ -790,6 +821,7 @@ def signal(c, ef, es, atr, htf, i):
                 f"Fib={'ja' if short_fib_ok else 'nein'}"
                 f" | ADX={adx_now:.1f} ({'stark' if adx_now >= 25 else 'schwach' if adx_now < 18 else 'neutral'})"
                 f" | Range={'ja' if range_market else 'nein'}"
+                f" | Zone={short_zone_score}/100 ({short_zone_grade})"
             )
 
             return (
