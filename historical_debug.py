@@ -76,7 +76,7 @@ else:
 
 
 # Zusatz: Python-HTF-Werte fuer den Vergleich mit TradingView
-from gold_signal_bot import ema, FAST, SLOW, _interval_delta
+from gold_signal_bot import ema, rma, FAST, SLOW, ATR_LEN, _interval_delta
 
 if target_i is not None:
     signal_time = c[target_i].t
@@ -117,3 +117,45 @@ for size in (220, 500, 1000, 2000):
         )
     except Exception as e:
         print(f"size={size}: FEHLER {e}")
+
+
+# HTF TOLERANCE TEST:
+# Testet, wie viel Toleranz zwischen EMA Fast und EMA Slow noetig waere,
+# damit die Beispielkerze als bullischer HTF-Kontext gilt.
+print("\nHTF TOLERANCE TEST:")
+if target_i is not None:
+    signal_time = c[target_i].t
+    delta = _interval_delta(HTF_INTERVAL)
+    eligible_tol = [x for x in htf if x.t + delta <= signal_time]
+    if len(eligible_tol) >= SLOW + 2:
+        closes_tol = [x.c for x in eligible_tol]
+        ef_tol = ema(closes_tol, FAST)
+        es_tol = ema(closes_tol, SLOW)
+
+        # 1H ATR berechnen
+        tr_tol = []
+        for j, x in enumerate(eligible_tol):
+            if j == 0:
+                tr_tol.append(x.h - x.l)
+            else:
+                tr_tol.append(max(
+                    x.h - x.l,
+                    abs(x.h - eligible_tol[j - 1].c),
+                    abs(x.l - eligible_tol[j - 1].c),
+                ))
+        atr_tol_series = rma(tr_tol, ATR_LEN)
+        atr1h = atr_tol_series[-1]
+
+        gap = es_tol[-1] - ef_tol[-1]
+        print(f"ema_gap_slow_minus_fast={gap:.5f}")
+        print(f"atr_1h={atr1h:.5f}" if atr1h is not None else "atr_1h=None")
+
+        for frac in (0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50):
+            if atr1h is None:
+                break
+            tol = atr1h * frac
+            bull_relaxed = closes_tol[-1] > ef_tol[-1] and ef_tol[-1] >= es_tol[-1] - tol
+            print(
+                f"tol={frac:.2f} ATR | abs_tol={tol:.5f} | "
+                f"htf_bull_relaxed={bull_relaxed}"
+            )
