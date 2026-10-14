@@ -292,23 +292,50 @@ def indicators(c: list[Candle]):
 
 def htf_context_at(htf: list[Candle], signal_time: datetime):
     """
-    Nimmt die letzte 1H-Kerze, die zum Zeitpunkt der 15M-Signalkerze
-    bereits vollständig geschlossen war.
+    Bewertet die letzte vollstaendig geschlossene HTF-Kerze abgestuft.
+
+    Rueckgabe:
+    - htf_bull / htf_bear: voller Trendkontext
+    - htf_long_points / htf_short_points: 0, 5, 10 oder 15 Score-Punkte
+
+    Die Zwischenstufen sollen Trend-Uebergaenge erfassen, ohne den
+    vollstaendigen EMA20/EMA50-Trendfilter komplett aufzuweichen.
     """
     delta = _interval_delta(HTF_INTERVAL)
     eligible = [x for x in htf if x.t + delta <= signal_time]
 
-    if len(eligible) < SLOW + 2:
-        return False, False
+    if len(eligible) < SLOW + 3:
+        return False, False, 0, 0
 
     closes = [x.c for x in eligible]
     ef = ema(closes, FAST)
     es = ema(closes, SLOW)
 
-    return (
-        closes[-1] > ef[-1] and ef[-1] > es[-1],
-        closes[-1] < ef[-1] and ef[-1] < es[-1],
-    )
+    htf_bull = closes[-1] > ef[-1] and ef[-1] > es[-1]
+    htf_bear = closes[-1] < ef[-1] and ef[-1] < es[-1]
+
+    fast_rising = ef[-1] > ef[-2]
+    fast_falling = ef[-1] < ef[-2]
+
+    if htf_bull:
+        htf_long_points = 15
+    elif closes[-1] > ef[-1] and fast_rising:
+        htf_long_points = 10
+    elif closes[-1] > ef[-1]:
+        htf_long_points = 5
+    else:
+        htf_long_points = 0
+
+    if htf_bear:
+        htf_short_points = 15
+    elif closes[-1] < ef[-1] and fast_falling:
+        htf_short_points = 10
+    elif closes[-1] < ef[-1]:
+        htf_short_points = 5
+    else:
+        htf_short_points = 0
+
+    return htf_bull, htf_bear, htf_long_points, htf_short_points
 
 
 def _recent_fvg(c: list[Candle], i: int, bullish: bool):
@@ -518,7 +545,7 @@ def signal(c, ef, es, atr, htf, i):
     # -------------------------------------------------------------------------
     # V3.9 Zusatzfilter / Score
     # -------------------------------------------------------------------------
-    htf_bull, htf_bear = htf_context_at(htf, c[i].t)
+    htf_bull, htf_bear, htf_long_points, htf_short_points = htf_context_at(htf, c[i].t)
 
     sh_now = max(x.h for x in c[i - STRUCT_LEN + 1 : i + 1])
     sl_now = min(x.l for x in c[i - STRUCT_LEN + 1 : i + 1])
@@ -609,7 +636,7 @@ def signal(c, ef, es, atr, htf, i):
 
     range_market = adx_now < 22 and range_atr_ratio <= 3.5
     long_score = 0
-    long_score += 15 if htf_bull else 0
+    long_score += htf_long_points
     long_score += 15 if structure_bull else 0
     long_score += 10 if (bull_bos or bull_choch) else 0
     long_score += 5 if bull_retest else 0
@@ -622,7 +649,7 @@ def signal(c, ef, es, atr, htf, i):
     long_score += 5 if volatility_ok else 0
 
     short_score = 0
-    short_score += 15 if htf_bear else 0
+    short_score += htf_short_points
     short_score += 15 if structure_bear else 0
     short_score += 10 if (bear_bos or bear_choch) else 0
     short_score += 5 if bear_retest else 0
@@ -713,7 +740,7 @@ def signal(c, ef, es, atr, htf, i):
             pat = "Momentum-Wende" if lm else "Ausbruch" if lb else bull_name
 
             detail = (
-                f"1H={'LONG' if htf_bull else 'neutral'} | "
+                f"1H={'LONG' if htf_bull else ('Uebergang +' + str(htf_long_points)) if htf_long_points else 'neutral'} | "
                 f"Struktur={'HH/HL' if structure_bull else 'nein'} | "
                 f"BOS/CHoCH={'ja' if (bull_bos or bull_choch) else 'nein'} | "
                 f"Retest={'ja' if bull_retest else 'nein'} | "
@@ -754,7 +781,7 @@ def signal(c, ef, es, atr, htf, i):
             pat = "Momentum-Wende" if sm else "Ausbruch" if sb else bear_name
 
             detail = (
-                f"1H={'SHORT' if htf_bear else 'neutral'} | "
+                f"1H={'SHORT' if htf_bear else ('Uebergang +' + str(htf_short_points)) if htf_short_points else 'neutral'} | "
                 f"Struktur={'LH/LL' if structure_bear else 'nein'} | "
                 f"BOS/CHoCH={'ja' if (bear_bos or bear_choch) else 'nein'} | "
                 f"Retest={'ja' if bear_retest else 'nein'} | "
