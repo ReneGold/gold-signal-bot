@@ -890,10 +890,13 @@ def trading_session(signal_time: str) -> str:
 def new_plan_message(p: Plan):
     side = "KAUF / LONG" if p.direction == 1 else "VERKAUF / SHORT"
     icon = "🟢" if p.direction == 1 else "🔴"
+    grade = setup_grade(p.score)
+    session = trading_session(p.signal_time)
 
     return (
         f"{icon} GOLD DEMO V3.9 – {side}\n"
-        f"Score: {p.score}/100\n"
+        f"Score: {p.score}/100 | Setup Grade: {grade}\n"
+        f"Session: {session}\n"
         f"Signal: {p.signal_type}\n"
         f"Muster: {p.pattern}\n"
         f"{p.score_detail}\n"
