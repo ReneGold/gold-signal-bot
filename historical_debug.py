@@ -201,3 +201,75 @@ if target_i is not None:
         print(f"original_long_score={captured.get('long_score')}")
         print(f"revised_long_score={revised_long_score}")
         print(f"would_pass_min_score={revised_long_score >= 70}")
+
+
+# ZONE SCORE TEST:
+# Erste objektive Zonenbewertung 0-100 auf Basis bereits vorhandener Bot-Faktoren.
+# Noch KEINE Aenderung am Produktionsbot.
+print("\nZONE SCORE TEST:")
+if target_i is not None:
+    # Werte stammen direkt aus signal()-Lokalspeicher des historischen Tests.
+    long_zone_score = 0
+    short_zone_score = 0
+
+    # Naehe zu Support/Resistance: 25 Punkte
+    if captured.get("near_sup"):
+        long_zone_score += 25
+    if captured.get("near_res"):
+        short_zone_score += 25
+
+    # Naehe zur langsamen EMA: 15 Punkte
+    if captured.get("near_ema"):
+        long_zone_score += 15
+        short_zone_score += 15
+
+    # FVG-Reaktion: 20 Punkte
+    if captured.get("long_fvg_ok"):
+        long_zone_score += 20
+    if captured.get("short_fvg_ok"):
+        short_zone_score += 20
+
+    # Fibonacci-Reaktionszone: 15 Punkte
+    if captured.get("long_fib_ok"):
+        long_zone_score += 15
+    if captured.get("short_fib_ok"):
+        short_zone_score += 15
+
+    # Liquidity Sweep: 15 Punkte
+    if captured.get("long_sweep"):
+        long_zone_score += 15
+    if captured.get("short_sweep"):
+        short_zone_score += 15
+
+    # BOS/CHoCH-Retest: 10 Punkte
+    if captured.get("bull_retest"):
+        long_zone_score += 10
+    if captured.get("bear_retest"):
+        short_zone_score += 10
+
+    print(f"long_zone_score={long_zone_score}")
+    print(f"short_zone_score={short_zone_score}")
+    print(
+        "long_zone_grade=" +
+        ("A" if long_zone_score >= 75 else
+         "B" if long_zone_score >= 55 else
+         "C" if long_zone_score >= 35 else
+         "D")
+    )
+    print(
+        "short_zone_grade=" +
+        ("A" if short_zone_score >= 75 else
+         "B" if short_zone_score >= 55 else
+         "C" if short_zone_score >= 35 else
+         "D")
+    )
+    print("ZONE SCORE DETAILS:")
+    for key in (
+        "near_sup", "near_res", "near_ema",
+        "long_fvg_ok", "short_fvg_ok",
+        "long_fib_ok", "short_fib_ok",
+        "long_sweep", "short_sweep",
+        "bull_retest", "bear_retest",
+    ):
+        if key in captured:
+            print(f"{key}={captured[key]}")
