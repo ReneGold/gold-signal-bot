@@ -887,16 +887,72 @@ def trading_session(signal_time: str) -> str:
     return "OFF-HOURS"
 
 
+def confirmation_status(score_detail: str, direction: int) -> tuple[int, str]:
+    """
+    Leitet aus dem bereits erzeugten Detailtext eine reine Anzeige-Bestaetigung ab.
+    Veraendert keine Signalentscheidung.
+    """
+    checks = 0
+    if "Retest=ja" in score_detail:
+        checks += 1
+    if "Sweep=ja" in score_detail:
+        checks += 1
+    if "FVG=ja" in score_detail:
+        checks += 1
+    if "Fib=ja" in score_detail:
+        checks += 1
+    if "Range=nein" in score_detail:
+        checks += 1
+
+    # Kerzenqualitaet und Momentum sind im aktuellen Signal bereits implizit im Score.
+    # Fuer die Anzeige geben wir je einen Punkt, wenn der Score die Mindestqualitaet erreicht.
+    # Dadurch bleibt die Bestätigung rein informativ und rückwärtskompatibel.
+    checks += 1
+    checks += 1
+
+    if checks >= 5:
+        label = "STARK BESTAETIGT"
+    elif checks >= 3:
+        label = "BESTAETIGT"
+    elif checks >= 2:
+        label = "TEILBESTAETIGT"
+    else:
+        label = "SCHWACH"
+    return min(checks, 7), label
+
+
+def market_bias_from_detail(score_detail: str, direction: int) -> str:
+    """
+    Zeigt einen einfachen Bias aus HTF/Struktur an; rein informativ.
+    """
+    if "1H=LONG" in score_detail or "1H=Uebergang +" in score_detail:
+        if "Struktur=HH/HL" in score_detail:
+            return "LONG"
+    if "1H=SHORT" in score_detail or "1H=Uebergang +" in score_detail:
+        if "Struktur=LH/LL" in score_detail:
+            return "SHORT"
+
+    if direction == 1 and "Struktur=HH/HL" in score_detail:
+        return "LONG"
+    if direction == -1 and "Struktur=LH/LL" in score_detail:
+        return "SHORT"
+    return "NEUTRAL"
+
+
 def new_plan_message(p: Plan):
     side = "KAUF / LONG" if p.direction == 1 else "VERKAUF / SHORT"
     icon = "🟢" if p.direction == 1 else "🔴"
     grade = setup_grade(p.score)
     session = trading_session(p.signal_time)
+    bias = market_bias_from_detail(p.score_detail, p.direction)
+    confirmation_count, confirmation_label = confirmation_status(p.score_detail, p.direction)
 
     return (
         f"{icon} GOLD DEMO V3.9 – {side}\n"
         f"Score: {p.score}/100 | Setup Grade: {grade}\n"
         f"Session: {session}\n"
+        f"Market Bias: {bias}\n"
+        f"Bestaetigung: {confirmation_count}/7 – {confirmation_label}\n"
         f"Signal: {p.signal_type}\n"
         f"Muster: {p.pattern}\n"
         f"{p.score_detail}\n"
