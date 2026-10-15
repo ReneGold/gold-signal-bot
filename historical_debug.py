@@ -389,3 +389,71 @@ if target_i is not None:
     print(f"short_bias_points={short_bias_points}")
     print(f"long_confirmation={long_conf}/7 ({conf_label(long_conf)})")
     print(f"short_confirmation={short_conf}/7 ({conf_label(short_conf)})")
+
+
+# TREND CONTINUATION TEST OCT15:
+# Sucht im beobachteten Anstieg vom 15.10. nach einer sauberen Trendfortsetzung.
+# Nur Historical Debug, KEINE Aenderung am Live-Bot.
+from datetime import datetime, timezone
+from gold_signal_bot import STRUCT_LEN
+
+print("\nTREND CONTINUATION TEST OCT15:")
+window_start = datetime(2026, 10, 15, 0, 0, tzinfo=timezone.utc)
+window_end = datetime(2026, 10, 15, 10, 30, tzinfo=timezone.utc)
+
+continuation_candidates = []
+
+for j in range(max(2 * STRUCT_LEN, 80), len(c)):
+    if not (window_start <= c[j].t <= window_end):
+        continue
+    if atr[j] is None or ef[j] is None or es[j] is None:
+        continue
+
+    # Bullische Struktur: aktuelles Hoch/Tief liegt ueber der vorherigen Strukturzone.
+    sh_now = max(x.h for x in c[j - STRUCT_LEN + 1 : j + 1])
+    sl_now = min(x.l for x in c[j - STRUCT_LEN + 1 : j + 1])
+    sh_prev = max(x.h for x in c[j - 2 * STRUCT_LEN + 1 : j - STRUCT_LEN + 1])
+    sl_prev = min(x.l for x in c[j - 2 * STRUCT_LEN + 1 : j - STRUCT_LEN + 1])
+    hh_hl = sh_now > sh_prev and sl_now > sl_prev
+
+    trend_up = ef[j] > es[j] and ef[j] > ef[j - 1] and c[j].c > ef[j]
+    momentum_up = c[j].c > c[j - 1].c
+
+    # Pullback: in den letzten 3 Kerzen wurde EMA20 bzw. deren Naehe getestet.
+    pullback_touch = False
+    for k in range(max(j - 3, 1), j):
+        if atr[k] is not None and ef[k] is not None:
+            if c[k].l <= ef[k] + atr[k] * 0.35 and c[k].h >= ef[k] - atr[k] * 0.10:
+                pullback_touch = True
+                break
+
+    ai_tc = atr[j]
+    body_tc = abs(c[j].c - c[j].o)
+    bullish_confirmation = (
+        c[j].c > c[j].o
+        and (
+            c[j].c > c[j - 1].h
+            or body_tc >= ai_tc * 0.25
+        )
+    )
+
+    trend_continuation = (
+        hh_hl
+        and trend_up
+        and momentum_up
+        and pullback_touch
+        and bullish_confirmation
+    )
+
+    if trend_continuation:
+        continuation_candidates.append(j)
+        print(
+            f"candidate={c[j].t.isoformat()} | close={c[j].c:.2f} | "
+            f"HHHL={hh_hl} | trend_up={trend_up} | momentum={momentum_up} | "
+            f"pullback={pullback_touch} | confirmation={bullish_confirmation} | "
+            f"EMA20={ef[j]:.2f} | EMA50={es[j]:.2f}"
+        )
+
+print(f"trend_continuation_candidates={len(continuation_candidates)}")
+if not continuation_candidates:
+    print("Kein Kandidat mit dieser ersten, bewusst strengen Trendfortsetzungs-Regel.")
