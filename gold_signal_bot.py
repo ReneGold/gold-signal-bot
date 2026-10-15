@@ -537,7 +537,37 @@ def signal(c, ef, es, atr, htf, i):
         and cur_body >= ai * MOM_BODY
     )
 
-    long_base = lt or le or lb or lm
+    # Testweise: Trendfortsetzung LONG.
+    # Soll laufende HH/HL-Aufwaertstrends nach einem Pullback zur EMA20 erfassen.
+    tc_sh_now = max(x.h for x in c[i - STRUCT_LEN + 1 : i + 1])
+    tc_sl_now = min(x.l for x in c[i - STRUCT_LEN + 1 : i + 1])
+    tc_sh_prev = max(x.h for x in c[i - 2 * STRUCT_LEN + 1 : i - STRUCT_LEN + 1])
+    tc_sl_prev = min(x.l for x in c[i - 2 * STRUCT_LEN + 1 : i - STRUCT_LEN + 1])
+    tc_hh_hl = tc_sh_now > tc_sh_prev and tc_sl_now > tc_sl_prev
+
+    tc_pullback_touch = False
+    for k in range(max(i - 3, 1), i):
+        if A[k] is not None and ef[k] is not None:
+            if c[k].l <= ef[k] + A[k] * 0.35 and c[k].h >= ef[k] - A[k] * 0.10:
+                tc_pullback_touch = True
+                break
+
+    tc_trend_up = ef[i] > es[i] and ef[i] > ef[i - 1] and c[i].c > ef[i]
+    tc_momentum_up = c[i].c > c[i - 1].c
+    tc_confirmation = (
+        c[i].c > c[i].o
+        and (c[i].c > c[i - 1].h or cur_body >= ai * 0.25)
+    )
+
+    ltc = (
+        tc_hh_hl
+        and tc_trend_up
+        and tc_momentum_up
+        and tc_pullback_touch
+        and tc_confirmation
+    )
+
+    long_base = lt or le or lb or lm or ltc
     short_base = st or se or sb or sm
 
     if not long_base and not short_base:
@@ -755,12 +785,14 @@ def signal(c, ef, es, atr, htf, i):
     sstop_m = max(x.h for x in c[i - 2 : i + 1]) + ai * ATR_BUF
 
     if long_ok:
-        sl = lstop_m if lm else lstop_br if lb else lstop_turn
+        sl = lstop_m if (lm or ltc) else lstop_br if lb else lstop_turn
         risk = c[i].c - sl
 
         if MINTICK < risk <= ai * MAX_RISK_ATR:
             typ = (
-                "MOMENTUM-WENDE"
+                "TREND-FORTSETZUNG"
+                if ltc
+                else "MOMENTUM-WENDE"
                 if lm
                 else "AUSBRUCH"
                 if lb
@@ -768,7 +800,7 @@ def signal(c, ef, es, atr, htf, i):
                 if le
                 else ("TRENDFOLGE / " + bull_name)
             )
-            pat = "Momentum-Wende" if lm else "Ausbruch" if lb else bull_name
+            pat = "Trend-Fortsetzung" if ltc else "Momentum-Wende" if lm else "Ausbruch" if lb else bull_name
 
             detail = (
                 f"1H={'LONG' if htf_bull else ('Uebergang +' + str(htf_long_points)) if htf_long_points else 'neutral'} | "
