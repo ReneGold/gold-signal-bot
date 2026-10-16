@@ -750,20 +750,58 @@ def signal(c, ef, es, atr, htf, i):
                 return None
 
         if long_watch:
+            long_score_lines = [
+                f"1H-Trend: +{htf_long_points}",
+                f"Struktur HH/HL: +{15 if structure_bull else 0}",
+                f"BOS/CHoCH: +{10 if (bull_bos or bull_choch) else 0}",
+                f"Retest: +{5 if bull_retest else 0}",
+                f"Sweep: +{10 if long_sweep else 0}",
+                f"FVG: +{10 if long_fvg_ok else 0}",
+                f"Fibonacci: +{10 if long_fib_ok else 0}",
+                f"Kerzenqualitaet: +{10 if bull_candle_quality else 0}",
+                f"Momentum: +{10 if momentum_long_ok else 0}",
+                f"EMA-Trend: +{5 if up else 0}",
+                f"Volatilitaet: +{5 if volatility_ok else 0}",
+                f"ADX-Anpassung: {adx_adjust:+d}",
+                f"Range-Malus: {-5 if range_market else 0:+d}",
+            ]
             send(
                 f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / LONG\n"
                 f"Score: {long_score}/100\n"
-                f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
-                f"Kerze: {c[i].t.isoformat()}"
+                f"\nScore-Aufbau:\n"
+                + "\n".join(long_score_lines)
+                + f"\n\nZone: {long_zone_score}/100 ({long_zone_grade}) – nur Information"
+                + f"\nADX: {adx_now:.1f} | Range: {'ja' if range_market else 'nein'}"
+                + f"\nNoch kein Trade – Mindestscore: {MIN_SCORE}"
+                + f"\nKerze: {c[i].t.isoformat()}"
             )
             return None
 
         if short_watch:
+            short_score_lines = [
+                f"1H-Trend: +{htf_short_points}",
+                f"Struktur LH/LL: +{15 if structure_bear else 0}",
+                f"BOS/CHoCH: +{10 if (bear_bos or bear_choch) else 0}",
+                f"Retest: +{5 if bear_retest else 0}",
+                f"Sweep: +{10 if short_sweep else 0}",
+                f"FVG: +{10 if short_fvg_ok else 0}",
+                f"Fibonacci: +{10 if short_fib_ok else 0}",
+                f"Kerzenqualitaet: +{10 if bear_candle_quality else 0}",
+                f"Momentum: +{10 if momentum_short_ok else 0}",
+                f"EMA-Trend: +{5 if down else 0}",
+                f"Volatilitaet: +{5 if volatility_ok else 0}",
+                f"ADX-Anpassung: {adx_adjust:+d}",
+                f"Range-Malus: {-5 if range_market else 0:+d}",
+            ]
             send(
                 f"🟡 GOLD V3.9 – SETUP BEOBACHTEN / SHORT\n"
                 f"Score: {short_score}/100\n"
-                f"Noch kein Trade – Mindestscore: {MIN_SCORE}\n"
-                f"Kerze: {c[i].t.isoformat()}"
+                f"\nScore-Aufbau:\n"
+                + "\n".join(short_score_lines)
+                + f"\n\nZone: {short_zone_score}/100 ({short_zone_grade}) – nur Information"
+                + f"\nADX: {adx_now:.1f} | Range: {'ja' if range_market else 'nein'}"
+                + f"\nNoch kein Trade – Mindestscore: {MIN_SCORE}"
+                + f"\nKerze: {c[i].t.isoformat()}"
             )
             return None
     # ------------------------------------------------------------
