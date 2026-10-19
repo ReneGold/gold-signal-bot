@@ -1,5 +1,5 @@
 {
-  "last_processed": "2026-10-19T22:45:00+00:00",
+  "last_processed": "2026-10-19T23:15:00+00:00",
   "plan": {
     "direction": -1,
     "signal_time": "2026-10-19T15:45:00+00:00",
@@ -12,7 +12,7 @@
     "pattern": "BEAR ENGULF",
     "score": 80,
     "score_detail": "1H=SHORT | Struktur=LH/LL | BOS/CHoCH=ja | Retest=ja | Sweep=nein | FVG=nein | Fib=nein | ADX=43.4 (stark) | Range=nein | Zone=10/100 (D)",
-    "tp1_hit": false,
+    "tp1_hit": true,
     "tp2_hit": false
   },
   "trade_history": [
