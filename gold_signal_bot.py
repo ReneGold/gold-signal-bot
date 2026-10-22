@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # =============================================================================
-# GOLD DEMO BOT V3.9
+# GOLD DEMO BOT V3.9.3
 # - nur Demo-Signale, KEINE automatischen Orders
 # - Daten: Twelve Data
 # - Ausgabe: Telegram
@@ -318,23 +318,9 @@ def htf_context_at(htf: list[Candle], signal_time: datetime):
     fast_rising = ef[-1] > ef[-2]
     fast_falling = ef[-1] < ef[-2]
 
-    if htf_bull:
-        htf_long_points = 15
-    elif closes[-1] > ef[-1] and fast_rising:
-        htf_long_points = 10
-    elif closes[-1] > ef[-1]:
-        htf_long_points = 5
-    else:
-        htf_long_points = 0
-
-    if htf_bear:
-        htf_short_points = 15
-    elif closes[-1] < ef[-1] and fast_falling:
-        htf_short_points = 10
-    elif closes[-1] < ef[-1]:
-        htf_short_points = 5
-    else:
-        htf_short_points = 0
+    # TradingView V3.9.x: HTF zaehlt strikt mit 15 oder 0 Punkten.
+    htf_long_points = 15 if htf_bull else 0
+    htf_short_points = 15 if htf_bear else 0
 
     return htf_bull, htf_bear, htf_long_points, htf_short_points
 
@@ -567,7 +553,9 @@ def signal(c, ef, es, atr, htf, i):
         and tc_confirmation
     )
 
-    long_base = lt or le or lb or lm or ltc
+    # TradingView-Kandidaten exakt: Trend / Frueh / Ausbruch / Momentum.
+    # Die zusaetzliche Cloud-Trendfortsetzung darf kein eigenes Signal erzeugen.
+    long_base = lt or le or lb or lm
     short_base = st or se or sb or sm
 
     if not long_base and not short_base:
@@ -595,18 +583,18 @@ def signal(c, ef, es, atr, htf, i):
     bull_bos = c[i].c > bos_ref_high and c[i - 1].c <= prev_bos_ref_high
     bear_bos = c[i].c < bos_ref_low and c[i - 1].c >= prev_bos_ref_low
 
-    bull_choch = bull_bos and (
-        max(x.h for x in c[i - 1 - STRUCT_LEN + 1 : i])
-        < max(x.h for x in c[i - 1 - 2 * STRUCT_LEN + 1 : i - 1 - STRUCT_LEN + 1])
-        and min(x.l for x in c[i - 1 - STRUCT_LEN + 1 : i])
-        < min(x.l for x in c[i - 1 - 2 * STRUCT_LEN + 1 : i - 1 - STRUCT_LEN + 1])
-    )
-    bear_choch = bear_bos and (
-        max(x.h for x in c[i - 1 - STRUCT_LEN + 1 : i])
-        > max(x.h for x in c[i - 1 - 2 * STRUCT_LEN + 1 : i - 1 - STRUCT_LEN + 1])
-        and min(x.l for x in c[i - 1 - STRUCT_LEN + 1 : i])
-        > min(x.l for x in c[i - 1 - 2 * STRUCT_LEN + 1 : i - 1 - STRUCT_LEN + 1])
-    )
+    # TradingView: bullCHoCH = bullBOS and strukturBear[1]
+    #              bearCHoCH = bearBOS and strukturBull[1]
+    prev_sh_now = max(x.h for x in c[i - STRUCT_LEN : i])
+    prev_sl_now = min(x.l for x in c[i - STRUCT_LEN : i])
+    prev_sh_prev = max(x.h for x in c[i - 2 * STRUCT_LEN : i - STRUCT_LEN])
+    prev_sl_prev = min(x.l for x in c[i - 2 * STRUCT_LEN : i - STRUCT_LEN])
+
+    prev_structure_bull = prev_sh_now > prev_sh_prev and prev_sl_now > prev_sl_prev
+    prev_structure_bear = prev_sh_now < prev_sh_prev and prev_sl_now < prev_sl_prev
+
+    bull_choch = bull_bos and prev_structure_bear
+    bear_choch = bear_bos and prev_structure_bull
     retest_tol = ai * 0.20
 
     bull_retest = (bull_bos or bull_choch) and c[i].l <= bos_ref_high + retest_tol
@@ -823,14 +811,12 @@ def signal(c, ef, es, atr, htf, i):
     sstop_m = max(x.h for x in c[i - 2 : i + 1]) + ai * ATR_BUF
 
     if long_ok:
-        sl = lstop_m if (lm or ltc) else lstop_br if lb else lstop_turn
+        sl = lstop_m if lm else lstop_br if lb else lstop_turn
         risk = c[i].c - sl
 
         if MINTICK < risk <= ai * MAX_RISK_ATR:
             typ = (
-                "TREND-FORTSETZUNG"
-                if ltc
-                else "MOMENTUM-WENDE"
+                "MOMENTUM-WENDE"
                 if lm
                 else "AUSBRUCH"
                 if lb
@@ -838,7 +824,7 @@ def signal(c, ef, es, atr, htf, i):
                 if le
                 else ("TRENDFOLGE / " + bull_name)
             )
-            pat = "Trend-Fortsetzung" if ltc else "Momentum-Wende" if lm else "Ausbruch" if lb else bull_name
+            pat = "Momentum-Wende" if lm else "Ausbruch" if lb else bull_name
 
             detail = (
                 f"1H={'LONG' if htf_bull else ('Uebergang +' + str(htf_long_points)) if htf_long_points else 'neutral'} | "
@@ -1208,7 +1194,7 @@ def wait_seconds():
 
 def main():
     print(
-        f"Gold Signal Bot V3.9 gestartet – keine automatischen Orders. "
+        f"Gold Signal Bot V3.9.3 gestartet – keine automatischen Orders. "
         f"MIN_SCORE={MIN_SCORE}"
     )
 
