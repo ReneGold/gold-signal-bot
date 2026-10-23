@@ -1,0 +1,36 @@
+
+name: Gold Bot V3.9.5 Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Repository laden
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Abhaengigkeiten installieren
+        run: pip install -r requirements.txt
+
+      - name: Python-Syntax pruefen
+        run: python -m py_compile gold_signal_bot_v3_9_5_test.py
+
+      - name: Gold-Bot Testlauf
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+          STATE_FILE: /tmp/gold-v395-test-state.json
+          RUN_ONCE: "true"
+        run: |
+          python gold_signal_bot_v3_9_5_test.py
