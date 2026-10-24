@@ -80,7 +80,25 @@ with open("gold_pilot_backtest_trades.csv","w",newline="",encoding="utf-8") as f
 print("PILOT: 1000 geschlossene 15min-Kerzen; ohne TP1/TP2/Trailing, Folgkerzen-Open, SL zuerst")
 print("Modellierte Preis-Kosten USD/oz je Roundtrip:",cost)
 for threshold in (60,65,70):
-    x=[r["net_r"] for r in results if r["threshold"]==threshold]
-    print(f"Score {threshold}: abgeschlossene Trades={len(x)}, Netto-R gesamt={sum(x):.2f}, Treffer={sum(v>0 for v in x)}")
+    trades = sorted((r for r in results if r["threshold"] == threshold), key=lambda r: r["exit_time"])
+    x = [r["net_r"] for r in trades]
+    wins = sum(v for v in x if v > 0)
+    losses = -sum(v for v in x if v < 0)
+    pf = f"{wins / losses:.2f}" if losses else ("inf" if wins else "n/a")
+    balance = 0.0
+    peak = 0.0
+    max_drawdown = 0.0
+    losing_streak = 0
+    max_losing_streak = 0
+    for value in x:
+        balance += value
+        peak = max(peak, balance)
+        max_drawdown = max(max_drawdown, peak - balance)
+        losing_streak = losing_streak + 1 if value < 0 else 0
+        max_losing_streak = max(max_losing_streak, losing_streak)
+    print(f"Score {threshold}: Trades={len(x)}, Siege={sum(v>0 for v in x)}, "
+          f"Netto-R={sum(x):.2f}, Mittel-R={(sum(x)/len(x) if x else 0):.3f}, "
+          f"Profit-Faktor={pf}, max. geschlossener Drawdown={max_drawdown:.2f} R, "
+          f"max. Verlustserie={max_losing_streak}")
 print("CSV: gold_pilot_backtest_trades.csv")
 print("ACHTUNG: begrenzte Stichprobe, vereinfachte Exit-Logik und Kostenannahme: kein Nachweis der Profitabilitaet.")
