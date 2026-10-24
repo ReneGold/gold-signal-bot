@@ -18,7 +18,7 @@ snap_fields=list(snap[0]) if snap else list(old[0]) if old else []
 if snap_fields:write(history,[data[k] for k in sorted(data)],snap_fields)
 ledger=P/"gold_forward_bc_paper_trades.csv"
 existing=read(ledger)
-fields=["id","variant","signal_candle_utc","side","score","entry_time_utc","entry","initial_sl","tp1","tp2","tp3","stage","exit_time_utc","exit","status","net_R","notes"]
+fields=["id","variant","signal_candle_utc","side","score","entry_time_utc","entry","initial_sl","tp1","tp2","tp3","stage","exit_time_utc","exit","status","net_R","notes","last_checked_utc"]
 positions={r["id"]:r for r in existing}
 # Import complete recent 15-minute candles, without seeing into the future.
 source=P/"gold_signal_bot_v3_9_5_diagnose (2).py"
@@ -35,7 +35,7 @@ for r in [data[k] for k in sorted(data)]:
         key=variant+"|"+r["signal_candle_utc"]
         if key in positions:continue
         expected=datetime.fromisoformat(r["signal_candle_utc"])+timedelta(minutes=15)
-        positions[key]=dict(id=key,variant=variant,signal_candle_utc=r["signal_candle_utc"],side=r["side"],score=r["score"],entry_time_utc=expected.isoformat(),entry="",initial_sl=r["stop"],tp1=r["tp1"],tp2=r["tp2"],tp3=r["tp3"],stage="0",exit_time_utc="",exit="",status="AWAIT_ENTRY",net_R="",notes="indicative 15m OHLC only; no real broker execution")
+        positions[key]=dict(id=key,variant=variant,signal_candle_utc=r["signal_candle_utc"],side=r["side"],score=r["score"],entry_time_utc=expected.isoformat(),entry="",initial_sl=r["stop"],tp1=r["tp1"],tp2=r["tp2"],tp3=r["tp3"],stage="0",exit_time_utc="",exit="",status="AWAIT_ENTRY",net_R="",notes="indicative 15m OHLC only; no real broker execution",last_checked_utc="")
 for position in positions.values():
     if position["status"]=="CLOSED":continue
     entry_time=position["entry_time_utc"]
@@ -53,8 +53,9 @@ for position in positions.values():
         position["status"]="INVALID";position["notes"]="non-positive initial risk after next bar open gap";continue
     stage=int(position["stage"])
     for ts in times:
-        if ts<entry_time:continue
+        if ts<entry_time or (position.get("last_checked_utc") and ts<=position["last_checked_utc"]):continue
         bar=by_time[ts]
+        position["last_checked_utc"]=ts
         protect=val(position["tp1"]) if stage>=2 else entry if stage>=1 else sl
         gap=(bar.o<=protect if sign==1 else bar.o>=protect)
         touched_stop=(bar.l<=protect if sign==1 else bar.h>=protect)
@@ -70,6 +71,6 @@ for position in positions.values():
         if hit2:stage=2
         elif hit1:stage=max(stage,1)
     position["stage"]=str(stage)
-write(ledger,[positions[k] for k in sorted(positions)],fields)
+write(ledger,[{k:r.get(k,"") for k in fields} for r in (positions[k] for k in sorted(positions))],fields)
 print(f"Historical observation rows={len(data)} unique; paper trades={len(positions)} closed={sum(r['status']=='CLOSED' for r in positions.values())} open={sum(r['status']=='OPEN' for r in positions.values())}")
 print("CAVEAT: rough paper OHLC model; limited 320-bar price lookback, non-broker prices, target order ambiguous, synthetic cost 0.5 USD/oz.")
