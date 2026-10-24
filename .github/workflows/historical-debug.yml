@@ -10,7 +10,7 @@ permissions:
 jobs:
   historical-debug:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 60
 
     steps:
       - name: Repository laden
@@ -55,3 +55,15 @@ jobs:
           path: gold_historical_data/*.csv
           if-no-files-found: error
           retention-days: 14
+
+      - name: Gold Langzeit Backtest Score 60 65 70
+        run: python gold_long_backtest.py
+
+      - name: Langzeit Backtest CSV exportieren
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-long-backtest-results
+          path: gold_long_backtest_trades.csv
+          if-no-files-found: error
+          retention-days: 30
