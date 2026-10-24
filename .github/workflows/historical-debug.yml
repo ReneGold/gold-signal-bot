@@ -33,3 +33,12 @@ jobs:
           STATE_FILE: /tmp/gold-v395-test-state.json
           RUN_ONCE: "true"
         run: python gold_v395_100_kerzen_analyse.py
+
+      - name: CSV-Bericht bereitstellen
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-v395-100-kerzen-bericht
+          path: gold_v395_100_kerzen_bericht.csv
+          if-no-files-found: error
+          retention-days: 30
