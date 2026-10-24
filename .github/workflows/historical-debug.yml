@@ -25,11 +25,11 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Python-Syntax pruefen
-        run: python -m py_compile "gold_signal_bot_v3_9_5_diagnose (2).py"
-
+        run: python -m py_compile gold_v395_100_kerzen_analyse.py
+      
       - name: Gold Bot V3.9.5 Diagnose
         env:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
           STATE_FILE: /tmp/gold-v395-test-state.json
           RUN_ONCE: "true"
-        run: python "gold_signal_bot_v3_9_5_diagnose (2).py"
+        run: python gold_v395_100_kerzen_analyse.py
