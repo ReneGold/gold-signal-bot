@@ -42,3 +42,16 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      - name: Historische Gold-Daten August bis Oktober abrufen
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: python gold_historical_fetch.py
+
+      - name: Historische Kursdaten als ZIP bereitstellen
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-historical-2026-08-to-10
+          path: gold_historical_data/*.csv
+          if-no-files-found: error
+          retention-days: 14
