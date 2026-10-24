@@ -91,3 +91,15 @@ jobs:
           path: gold_trade_timing_audit.csv
           if-no-files-found: error
           retention-days: 30
+
+      - name: Gold V3.9.6 konservativen Backtest ausfuehren
+        run: python gold_long_backtest_v396.py && mv gold_long_backtest_trades.csv gold_long_backtest_v396_trades.csv
+
+      - name: V3.9.6 Vergleichs-Trades exportieren
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-backtest-v396-results
+          path: gold_long_backtest_v396_trades.csv
+          if-no-files-found: error
+          retention-days: 30
