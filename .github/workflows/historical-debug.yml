@@ -127,3 +127,15 @@ jobs:
           path: gold_ab_score65_trades.csv
           if-no-files-found: error
           retention-days: 30
+
+      - name: Score 65 A-B Monatsstabilitaet pruefen
+        run: python gold_ab_score65_stability.py
+
+      - name: Score 65 Stabilitaetsbericht exportieren
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-score65-monthly-stability
+          path: gold_ab_score65_stability.csv
+          if-no-files-found: error
+          retention-days: 30
