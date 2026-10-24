@@ -67,3 +67,15 @@ jobs:
           path: gold_long_backtest_trades.csv
           if-no-files-found: error
           retention-days: 30
+
+      - name: Langzeit Backtest Verluste analysieren
+        run: python gold_long_diagnostics.py
+
+      - name: Verlustanalyse CSV exportieren
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-long-backtest-diagnostics
+          path: gold_long_backtest_diagnostics.csv
+          if-no-files-found: error
+          retention-days: 30
