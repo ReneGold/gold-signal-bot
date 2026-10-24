@@ -79,3 +79,15 @@ jobs:
           path: gold_long_backtest_diagnostics.csv
           if-no-files-found: error
           retention-days: 30
+
+      - name: Timing und Same-Candle-Ausstiege pruefen
+        run: python gold_trade_timing_audit.py
+
+      - name: Timing-Pruefbericht exportieren
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-trade-timing-audit
+          path: gold_trade_timing_audit.csv
+          if-no-files-found: error
+          retention-days: 30
