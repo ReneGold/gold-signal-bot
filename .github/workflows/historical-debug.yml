@@ -10,7 +10,7 @@ permissions:
 jobs:
   historical-debug:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
 
     steps:
       - name: Repository laden
