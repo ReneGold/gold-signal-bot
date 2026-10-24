@@ -28,10 +28,11 @@ for i in range(max(85,len(c)-6),len(c)):
     if len(eligible_h)<40:continue
     with contextlib.redirect_stdout(io.StringIO()):
         sig=bot.signal(c[:i+1],ef[:i+1],es[:i+1],atr[:i+1],eligible_h,i)
-    side="NONE";score="";b=False;variant_c=False;strength=""
+    side="NONE";score="";b=False;variant_c=False;strength="";stop="";tp1="";tp2="";tp3=""
     if sig:
         side="LONG" if sig[0]==1 else "SHORT"
         score=sig[8]
+        stop,tp1,tp2,tp3=sig[2:6]
         bull,bear,_,_=bot.htf_context_at(eligible_h,bar.t)
         momentum=(ef[i]>ef[i-1] and bar.c>c[i-1].c) if sig[0]==1 else (ef[i]<ef[i-1] and bar.c<c[i-1].c)
         b=bool(momentum and (bull if sig[0]==1 else bear))
@@ -41,7 +42,7 @@ for i in range(max(85,len(c)-6),len(c)):
     rows.append(dict(signal_candle_utc=bar.t.isoformat(),closed_at_utc=closed_at.isoformat(),
         assessed_at_utc=now.isoformat(),side=side,score=score,
         b_accepted=int(b),c_accepted=int(variant_c),ema_spread_over_atr=round(strength,4) if strength!="" else "",
-        bar_close=bar.c,signal_only_no_orders=1))
+        bar_close=bar.c,stop=stop,tp1=tp1,tp2=tp2,tp3=tp3,signal_only_no_orders=1))
 if not rows:raise RuntimeError("No fresh completed candles inside 75-minute observation window")
 path=P/"gold_forward_bc_snapshot.csv"
 with path.open("w",newline="",encoding="utf-8") as o:
