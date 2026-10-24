@@ -29,8 +29,18 @@ def fetch(interval, days):
             "end_date": stop.strftime("%Y-%m-%dT%H:%M:%S"),
             "outputsize": 5000, "timezone": "UTC", "format": "JSON",
         }
-        response = requests.get("https://api.twelvedata.com/time_series", params=params, timeout=40)
-        response.raise_for_status()
+        response = None
+        for attempt in range(4):
+            response = requests.get("https://api.twelvedata.com/time_series", params=params, timeout=40)
+            if response.status_code == 429:
+                if attempt == 3:
+                    response.raise_for_status()
+                wait_seconds = 65
+                print(f"{interval}: rate limit 429, retry {attempt+1}/3 after {wait_seconds}s", flush=True)
+                time.sleep(wait_seconds)
+                continue
+            response.raise_for_status()
+            break
         payload = response.json()
         if payload.get("status") == "error" or payload.get("code"):
             raise RuntimeError(f"{interval} {cur.date()}: provider error {payload.get('code')}: {payload.get('message')}")
@@ -45,7 +55,7 @@ def fetch(interval, days):
         segments += 1
         print(f"{interval}: segment {segments}, new candles={len(candles)}, total unique={len(rows)}", flush=True)
         cur = stop
-        time.sleep(1.5)
+        time.sleep(3)
     dest = OUT / f"xauusd_{interval}_20260801_20261024.csv"
     with dest.open("w", newline="", encoding="utf-8") as stream:
         writer = csv.writer(stream)
@@ -59,8 +69,8 @@ def fetch(interval, days):
 
 if __name__ == "__main__":
     try:
-        count15 = fetch("15min", 7)
-        count1h = fetch("1h", 14)
+        count15 = fetch("15min", 40)
+        count1h = fetch("1h", 80)
         print(f"DATA READY: 15min={count15}, 1h={count1h}. Data availability and gaps require review.")
     except Exception as exc:
         print(f"DATA FETCH FAILED: {type(exc).__name__}: {exc}", file=sys.stderr)
