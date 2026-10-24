@@ -53,7 +53,7 @@ MOM_BODY = 0.35
 MINTICK = 0.01
 
 # --- V3.9 Score-Einstellungen ---
-MIN_SCORE = int(os.getenv("MIN_SCORE", "70"))
+MIN_SCORE = int(os.getenv("MIN_SCORE", "65"))
 OBSERVE_SCORE = int(os.getenv("OBSERVE_SCORE", "65"))
 HTF_INTERVAL = os.getenv("HTF_INTERVAL", "1h")
 STRUCT_LEN = int(os.getenv("STRUCT_LEN", "6"))
