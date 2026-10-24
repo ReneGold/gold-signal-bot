@@ -19,12 +19,12 @@ bot.save_state = lambda *_: None
 bot.TG_TOKEN = ""
 bot.TG_CHAT = ""
 
-candles = bot.candles("15min", 320)
-htf = bot.candles(bot.HTF_INTERVAL, 220)
+candles = bot.candles("15min", 1500)
+htf = bot.candles(bot.HTF_INTERVAL, 500)
 ef, es, atr = bot.indicators(candles)
 end = [i for i,c in enumerate(candles) if c.t + timedelta(minutes=15,seconds=20) <= datetime.now(timezone.utc)]
-indices = end[-100:]
-if len(indices) != 100 or indices[0] < 80:
+indices = end[-1000:]
+if len(indices) != 1000 or indices[0] < 80:
     raise RuntimeError("Zu wenig abgeschlossene Kerzen")
 
 # Konservatives Modell: Signal auf Kerzenschluss, Ausführung erst zur nächsten Kerzeneröffnung.
@@ -68,12 +68,16 @@ for threshold in (60, 65, 70):
         tp = entry + sign * bot.TP3_R * risk
         active = (sign,entry,sl,tp,next_candle.t.isoformat(),s[8])
     if active:
-        print("OFFEN zum Ende des Fensters, nicht gewertet:",threshold,active[5])
+        sign, entry, sl, tp, opened, score = active
+        last_close = candles[indices[-1]].c
+        risk = abs(entry-sl)
+        open_r = ((last_close-entry)*sign-cost)/risk
+        print(f"OFFEN Score={threshold}, Entry={opened}, Scorepunkte={score}, indikatives unrealisiertes Netto-R={open_r:.3f}; NICHT in realisierte Statistik gerechnet")
 
 fields = ["threshold","entry_time","exit_time","direction","score","entry","sl","tp3","exit","outcome","net_r"]
 with open("gold_pilot_backtest_trades.csv","w",newline="",encoding="utf-8") as f:
     out=csv.DictWriter(f,fieldnames=fields);out.writeheader();out.writerows(results)
-print("PILOT: 100 geschlossene 15min-Kerzen; ohne TP1/TP2/Trailing, Folgkerzen-Open, SL zuerst")
+print("PILOT: 1000 geschlossene 15min-Kerzen; ohne TP1/TP2/Trailing, Folgkerzen-Open, SL zuerst")
 print("Modellierte Preis-Kosten USD/oz je Roundtrip:",cost)
 for threshold in (60,65,70):
     x=[r["net_r"] for r in results if r["threshold"]==threshold]
