@@ -1,0 +1,28 @@
+name: Gold Backtest Pilot
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Pilot Backtest ausfuehren
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: python gold_pilot_backtest.py
+      - name: CSV Export
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-pilot-backtest-trades
+          path: gold_pilot_backtest_trades.csv
+          if-no-files-found: error
