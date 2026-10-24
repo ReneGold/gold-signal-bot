@@ -25,7 +25,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Python-Syntax pruefen
-       run: python -m py_compile gold_pilot_backtest.py
+        run: python -m py_compile gold_pilot_backtest.py
       
       
       - name: Gold Backtest Pilot ausfuehren
