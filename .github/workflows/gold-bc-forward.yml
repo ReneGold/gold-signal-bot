@@ -1,0 +1,46 @@
+name: Gold B-C Forward Observation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-bc-shadow-observation
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Test-Branch lesen - keine Aenderung am Hauptbot
+        uses: actions/checkout@v4
+        with:
+          ref: gold-bot-v3-9-5-test
+          persist-credentials: false
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Abhaengigkeiten
+        run: pip install -r requirements.txt
+
+      - name: Nur neue abgeschlossene Gold-Kerzen B und C protokollieren
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: python gold_forward_bc_shadow.py
+
+      - name: Beobachtungs-Snapshot exportieren
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bc-forward-${{ github.run_id }}
+          path: gold_forward_bc_snapshot.csv
+          retention-days: 30
+          if-no-files-found: error
