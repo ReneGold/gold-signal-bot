@@ -103,3 +103,15 @@ jobs:
           path: gold_long_backtest_v396_trades.csv
           if-no-files-found: error
           retention-days: 30
+
+      - name: V3.9.6 Zeitraumvergleich August September Oktober
+        run: python gold_v396_chronological_report.py
+
+      - name: Zeitraumvergleich als CSV bereitstellen
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-v396-period-comparison
+          path: gold_v396_chronological_report.csv
+          if-no-files-found: error
+          retention-days: 30
