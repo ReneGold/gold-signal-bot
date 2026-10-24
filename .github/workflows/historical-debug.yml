@@ -25,20 +25,20 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Python-Syntax pruefen
-        run: python -m py_compile gold_v395_100_kerzen_analyse.py
+       run: python -m py_compile gold_pilot_backtest.py
       
-      - name: Gold Bot V3.9.5 Diagnose
+      
+      - name: Gold Backtest Pilot ausfuehren
         env:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
-          STATE_FILE: /tmp/gold-v395-test-state.json
-          RUN_ONCE: "true"
-        run: python gold_v395_100_kerzen_analyse.py
+        run: python gold_pilot_backtest.py
 
-      - name: CSV-Bericht bereitstellen
+      - name: Backtest-CSV bereitstellen
         if: ${{ success() }}
         uses: actions/upload-artifact@v4
         with:
-          name: gold-v395-100-kerzen-bericht
-          path: gold_v395_100_kerzen_bericht.csv
+          name: gold-pilot-backtest-trades
+          path: gold_pilot_backtest_trades.csv
           if-no-files-found: error
           retention-days: 30
+
