@@ -54,6 +54,9 @@ jobs:
       - name: Kostenlosen US-Kalender live abfragen (nur Diagnose)
         run: python gold_v4_free_calendar.py
 
+      - name: V4 US-Nachrichtensperre Grenzwerte testen
+        run: python -m unittest -v test_gold_v4_news_blackout.py
+
       - name: Python-Syntax pruefen
         run: python -m py_compile gold_pilot_backtest.py
       
