@@ -30,6 +30,9 @@ jobs:
       - name: Time Machine Unit-Tests
         run: python -m unittest -v test_gold_time_machine.py
 
+      - name: Entry Timer Unit-Tests
+        run: python -m unittest -v test_gold_entry_timer.py
+
       - name: Python-Syntax pruefen
         run: python -m py_compile gold_pilot_backtest.py
       
