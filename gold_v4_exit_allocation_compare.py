@@ -45,7 +45,7 @@ def simulate_alloc(trade,candles,index,allocation):
     targets,parts=ALLOCATIONS[allocation]
     plan=Plan(entry,sl,direction,target_r=targets,portions=parts)
     state=new_position(plan)
-    for b in candles[index[trade["opened"]:]:
+    for b in candles[index[trade["opened"]]:]:
         on_bar(plan,state,open_price=float(b["open"]),high=float(b["high"]),
                low=float(b["low"]),close=float(b["close"]))
         if state["closed"]:
