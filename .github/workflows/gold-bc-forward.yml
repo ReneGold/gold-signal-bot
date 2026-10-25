@@ -36,6 +36,13 @@ jobs:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
         run: python gold_forward_bc_shadow.py
 
+      - name: V4 Marktbeobachtung und Sicherheitstests
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: |
+          python -m unittest -v test_gold_v4_market_observer.py
+          python gold_v4_market_observer.py
+
       - name: Beobachtungen deduplizieren und Paper-Trades verfolgen
         env:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
@@ -58,6 +65,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bc-forward-${{ github.run_id }}
-          path: gold_forward_bc_snapshot.csv
+          path: |
+            gold_forward_bc_snapshot.csv
+            gold_v4_market_observation.json
           retention-days: 30
           if-no-files-found: error
