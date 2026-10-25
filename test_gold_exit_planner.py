@@ -23,7 +23,7 @@ class ExitTests(unittest.TestCase):
         self.assertTrue(s["closed"]);self.assertAlmostEqual(s["gross_R"],0.225)
     def test_tp1_stop_after_tp2(self):
         s=self.bar(self.p,new_position(self.p),3995,4016)
-        s=self.bar(self.p,s,4007,4010)
+        s=self.bar(self.p,s,4007,4010,op=4008,cl=4008)
         self.assertTrue(s["closed"]);self.assertAlmostEqual(s["gross_R"],0.975)
     def test_short(self):
         p=Plan(4000,4010,-1)
