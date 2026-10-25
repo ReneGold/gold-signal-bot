@@ -39,6 +39,9 @@ jobs:
       - name: News- und Volatilitaetsfilter Unit-Tests
         run: python -m unittest -v test_gold_news_volatility_filter.py
 
+      - name: V4 Integration Unit-Tests
+        run: python -m unittest -v test_gold_v4_research_pipeline.py
+
       - name: Python-Syntax pruefen
         run: python -m py_compile gold_pilot_backtest.py
       
