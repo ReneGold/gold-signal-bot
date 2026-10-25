@@ -176,6 +176,9 @@ jobs:
       - name: Score 65 Marktphasenfilter A-B-C vergleichen
         run: python gold_market_phase_score65.py
 
+      - name: V4 Backtest Rechenpruefung
+        run: python -m unittest -v test_gold_v4_paired_exit_backtest.py
+
       - name: V4 Teilgewinn-Backtest gegen B und C
         run: python gold_v4_paired_exit_backtest.py
 
