@@ -48,6 +48,9 @@ jobs:
       - name: V4 Wirtschaftskalender Unit-Tests
         run: python -m unittest -v test_gold_v4_calendar.py
 
+      - name: Kostenloser Wirtschaftskalender Unit-Tests
+        run: python -m unittest -v test_gold_v4_free_calendar.py
+
       - name: Python-Syntax pruefen
         run: python -m py_compile gold_pilot_backtest.py
       
