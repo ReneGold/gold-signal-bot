@@ -33,6 +33,9 @@ jobs:
       - name: Entry Timer Unit-Tests
         run: python -m unittest -v test_gold_entry_timer.py
 
+      - name: Exit Planner Unit-Tests
+        run: python -m unittest -v test_gold_exit_planner.py
+
       - name: Python-Syntax pruefen
         run: python -m py_compile gold_pilot_backtest.py
       
