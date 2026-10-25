@@ -24,6 +24,9 @@ jobs:
       - name: Abhaengigkeiten installieren
         run: pip install -r requirements.txt
 
+      - name: Risk Manager Unit-Tests
+        run: python -m unittest -v test_gold_risk_manager.py
+
       - name: Python-Syntax pruefen
         run: python -m py_compile gold_pilot_backtest.py
       
