@@ -12,7 +12,7 @@ ATTRIBUTION="Economic calendar: https://www.financecalendar.com"
 def normalize(payload,now):
     if not isinstance(payload,dict) or not isinstance(payload.get("events"),list):
         raise ValueError("Invalid calendar payload")
-    items=payload["events"]
+    items=payload["events"]\n    if payload.get("error"):raise ValueError("Provider error response")
     total=payload.get("total")
     if not isinstance(total,int) or total>len(items):
         raise ValueError("Incomplete paginated calendar")
@@ -30,7 +30,7 @@ def normalize(payload,now):
         stamp=datetime.fromisoformat(str(dt).replace("Z","+00:00"))
         if stamp.tzinfo is None:raise ValueError("Naive event timestamp")
         stamp=stamp.astimezone(timezone.utc)
-        name=str(r.get("name") or r.get("series_code") or "").strip()
+        name=str(r.get("name") or r.get("title") or r.get("series_code") or "").strip()
         if not name:raise ValueError("Unnamed US event")
         if now-timedelta(hours=1)<=stamp<=now+timedelta(days=2):
             output.append(Event(stamp,name,"HIGH","USD"))
@@ -61,4 +61,5 @@ def retrieve(now=None,opener=None):
 if __name__=="__main__":
     result=retrieve()
     print(json.dumps({"verified":result["verified"],"status":result["status"],
-      "events":len(result["events"]),"attribution":result["attribution"]}))
+      "events":len(result["events"]),"uncertain":len(result["uncertain"]),
+      "attribution":result["attribution"]}))
