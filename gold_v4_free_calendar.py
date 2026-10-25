@@ -42,7 +42,9 @@ def normalize(payload,now):
 def retrieve(now=None,opener=None):
     now=now or datetime.now(timezone.utc)
     if now.tzinfo is None:raise ValueError("Aware now required")
-    # Diagnose mit dem im Browser erfolgreich getesteten Länderfilter.\n    # Fehlende Treffer sind KEINE Freigabe; keine automatische Order.\n    params={"country":"US"}
+    # Diagnose mit dem im Browser erfolgreich getesteten Länderfilter.
+    # Fehlende Treffer sind KEINE Freigabe; keine automatische Order.
+    params={"country":"US"}
     url=BASE+"?"+urllib.parse.urlencode(params)
     try:
         req=urllib.request.Request(url,headers={"Accept":"application/json","User-Agent":"ReneGoldResearchV4/1.0"})
