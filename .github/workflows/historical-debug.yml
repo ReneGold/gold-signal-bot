@@ -176,6 +176,20 @@ jobs:
       - name: Score 65 Marktphasenfilter A-B-C vergleichen
         run: python gold_market_phase_score65.py
 
+      - name: V4 Teilgewinn-Backtest gegen B und C
+        run: python gold_v4_paired_exit_backtest.py
+
+      - name: V4 Vergleichsergebnisse exportieren
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-v4-exit-comparison
+          path: |
+            gold_v4_paired_exit_trades.csv
+            gold_v4_paired_exit_summary.csv
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Score 65 Marktphasenvergleich CSV exportieren
         if: ${{ success() }}
         uses: actions/upload-artifact@v4
