@@ -48,11 +48,18 @@ jobs:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
         run: python gold_forward_bc_ledger.py
 
+      - name: B C 20-80 Paper Exit Vergleich
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: |
+          python -m unittest -v test_gold_forward_bc_exit_20_80.py
+          python gold_forward_bc_exit_20_80.py
+
       - name: Nur Test-Branch-Historie speichern
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gold_forward_bc_history.csv gold_forward_bc_paper_trades.csv
+          git add gold_forward_bc_history.csv gold_forward_bc_paper_trades.csv gold_forward_bc_exit_20_80.csv
           if ! git diff --cached --quiet; then
             git commit -m "Update B-C observation history [skip ci]"
             git push origin HEAD:gold-bot-v3-9-5-test
@@ -68,5 +75,6 @@ jobs:
           path: |
             gold_forward_bc_snapshot.csv
             gold_v4_market_observation.json
+            gold_forward_bc_exit_20_80.csv
           retention-days: 30
           if-no-files-found: error
