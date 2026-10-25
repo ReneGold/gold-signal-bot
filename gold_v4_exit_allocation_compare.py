@@ -27,7 +27,7 @@ def simulate_alloc(trade,candles,index,allocation):
         if risk<=0:raise ValueError("Invalid trade risk")
         targets=[entry+direction*0.75*risk,entry+direction*2.25*risk]
         left=1.0;gain=0.0;stage=0;events=[]
-        for b in candles[index[trade["opened"]:]:
+        for b in candles[index[trade["opened"]]:]:
             o,h,l=(float(b[x]) for x in ("open","high","low"))
             protect=sl if stage==0 else entry
             stopped=l<=protect if direction==1 else h>=protect
