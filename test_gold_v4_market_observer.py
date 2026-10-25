@@ -20,6 +20,14 @@ class MarketObservationTests(unittest.TestCase):
         rows=scan([self.row],self.bars,self.five,[8]*105)
         self.assertEqual(len(rows),2)
         self.assertTrue(all(x["status"]=="NOT_READY" for x in rows))
+    def test_calendar_never_approves_without_broker(self):
+        from gold_news_volatility_filter import Event
+        result=scan([self.row],self.bars,self.five,[8]*105,
+            {"verified":False,"status":"UNVERIFIED_FREE_CALENDAR_COVERAGE",
+             "events":[Event(T+timedelta(minutes=15*104+20),"US CPI")]})
+        self.assertEqual(len(result),2)
+        self.assertTrue(all(x["status"]=="NOT_READY" for x in result))
+        self.assertTrue(all(x["calendar_verified"] is False for x in result))
     def test_no_5min(self):
         rows=scan([self.row],self.bars,[],[8]*105)
         self.assertTrue(all(x["status"]=="NOT_READY" for x in rows))
