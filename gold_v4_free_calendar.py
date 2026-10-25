@@ -12,7 +12,8 @@ ATTRIBUTION="Economic calendar: https://www.financecalendar.com"
 def normalize(payload,now):
     if not isinstance(payload,dict) or not isinstance(payload.get("events"),list):
         raise ValueError("Invalid calendar payload")
-    items=payload["events"]\n    if payload.get("error"):raise ValueError("Provider error response")
+    items=payload["events"]
+    if payload.get("error"):raise ValueError("Provider error response")
     total=payload.get("total")
     if not isinstance(total,int) or total>len(items):
         raise ValueError("Incomplete paginated calendar")
