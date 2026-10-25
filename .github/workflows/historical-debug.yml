@@ -182,6 +182,9 @@ jobs:
       - name: V4 Teilgewinn-Backtest gegen B und C
         run: python gold_v4_paired_exit_backtest.py
 
+      - name: V4 Teilgewinnvarianten Python-Syntax
+        run: python -m py_compile gold_v4_exit_allocation_compare.py test_gold_v4_exit_allocation_compare.py
+
       - name: V4 Teilgewinnvarianten Rechenpruefung
         run: python -m unittest -v test_gold_v4_exit_allocation_compare.py
 
