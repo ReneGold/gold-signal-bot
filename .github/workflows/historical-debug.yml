@@ -36,6 +36,9 @@ jobs:
       - name: Exit Planner Unit-Tests
         run: python -m unittest -v test_gold_exit_planner.py
 
+      - name: News- und Volatilitaetsfilter Unit-Tests
+        run: python -m unittest -v test_gold_news_volatility_filter.py
+
       - name: Python-Syntax pruefen
         run: python -m py_compile gold_pilot_backtest.py
       
