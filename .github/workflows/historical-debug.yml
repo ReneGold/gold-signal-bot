@@ -45,6 +45,9 @@ jobs:
       - name: V4 Marktdaten-Anbindung Unit-Tests
         run: python -m unittest -v test_gold_v4_market_observer.py
 
+      - name: V4 Wirtschaftskalender Unit-Tests
+        run: python -m unittest -v test_gold_v4_calendar.py
+
       - name: Python-Syntax pruefen
         run: python -m py_compile gold_pilot_backtest.py
       
