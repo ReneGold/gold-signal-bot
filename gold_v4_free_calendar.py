@@ -35,7 +35,9 @@ def normalize(payload,now):
         if not name:raise ValueError("Unnamed US event")
         if now-timedelta(hours=1)<=stamp<=now+timedelta(days=2):
             output.append(Event(stamp,name,"HIGH","USD"))
-    return {"events":sorted(output,key=lambda x:x.time_utc),"uncertain":uncertain}
+    return {"events":sorted(output,key=lambda x:x.time_utc),"uncertain":uncertain,
+            "raw_total":total,"raw_count":len(items),
+            "us_high_count":sum(1 for r in items if isinstance(r,dict) and str(r.get("country","")).upper()=="US" and str(r.get("impact","")).lower()=="high")}
 
 def retrieve(now=None,opener=None):
     now=now or datetime.now(timezone.utc)
@@ -54,6 +56,7 @@ def retrieve(now=None,opener=None):
         # before treating news gate as verified and allowing trade eligibility.
         return {"verified":False,"status":"UNVERIFIED_FREE_CALENDAR_COVERAGE",
                 "events":info["events"],"uncertain":info["uncertain"],
+                "raw_count":info["raw_count"],"raw_total":info["raw_total"],"us_high_count":info["us_high_count"],
                 "fetched_at_utc":now.isoformat(),"attribution":ATTRIBUTION}
     except Exception as exc:
         return {"verified":False,"status":"CALENDAR_UNAVAILABLE_"+type(exc).__name__,
@@ -63,4 +66,6 @@ if __name__=="__main__":
     result=retrieve()
     print(json.dumps({"verified":result["verified"],"status":result["status"],
       "events":len(result["events"]),"uncertain":len(result["uncertain"]),
+      "raw_count":result.get("raw_count"),"raw_total":result.get("raw_total"),
+      "us_high_count":result.get("us_high_count"),
       "attribution":result["attribution"]}))
