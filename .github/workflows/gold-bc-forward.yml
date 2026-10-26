@@ -55,11 +55,20 @@ jobs:
           python -m unittest -v test_gold_forward_bc_exit_20_80.py
           python gold_forward_bc_exit_20_80.py
 
+      - name: Gold B-C Telegram Tests
+        run: python -m unittest -v test_gold_forward_bc_telegram.py
+
+      - name: Neue Gold B-C Testsignale an Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python gold_forward_bc_telegram.py
+
       - name: Nur Test-Branch-Historie speichern
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gold_forward_bc_history.csv gold_forward_bc_paper_trades.csv gold_forward_bc_exit_20_80.csv
+          git add gold_forward_bc_history.csv gold_forward_bc_paper_trades.csv gold_forward_bc_exit_20_80.csv gold_forward_bc_telegram_sent.csv
           if ! git diff --cached --quiet; then
             git commit -m "Update B-C observation history [skip ci]"
             git push origin HEAD:gold-bot-v3-9-5-test
