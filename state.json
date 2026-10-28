@@ -1,6 +1,20 @@
 {
-  "last_processed": "2026-10-27T20:15:00+00:00",
-  "plan": null,
+  "last_processed": "2026-10-27T23:45:00+00:00",
+  "plan": {
+    "direction": 1,
+    "signal_time": "2026-10-27T23:45:00+00:00",
+    "entry": 4062.92239,
+    "sl": 4056.786538348237,
+    "tp1": 4067.5242787388224,
+    "tp2": 4072.1261674776447,
+    "tp3": 4076.728056216467,
+    "signal_type": "TRENDFOLGE / HAMMER",
+    "pattern": "HAMMER",
+    "score": 65,
+    "score_detail": "1H=LONG | Struktur=HH/HL | BOS/CHoCH=nein | Retest=nein | Sweep=nein | FVG=nein | Fib=nein | ADX=28.8 (stark) | Range=nein | Zone=0/100 (D)",
+    "tp1_hit": false,
+    "tp2_hit": false
+  },
   "trade_history": [
     {
       "signal_time": "2026-10-09T18:00:00+00:00",
