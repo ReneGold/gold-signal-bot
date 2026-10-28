@@ -1,22 +1,17 @@
-name: Gold Signal Bot
+# Alter Gold V3.9 Workflow archiviert: keine Zeitplanung und keine Telegram-Secrets.
+# Manuell weiter als Konsolen-Diagnose nutzbar, ohne Benachrichtigungen.
+name: Gold Signal Bot (V3.9 archiviert - ohne Telegram)
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "4,19,34,49 * * * *"
 
 permissions:
-  contents: write
-
-concurrency:
-  group: gold-signal-bot
-  cancel-in-progress: false
+  contents: read
 
 jobs:
-  run-bot:
+  diagnose:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-
     steps:
       - name: Repository laden
         uses: actions/checkout@v4
@@ -26,50 +21,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Abhängigkeiten installieren
+      - name: Abhaengigkeiten installieren
         run: pip install -r requirements.txt
 
-      - name: Gold-Bot einmal ausführen
+      - name: Alter Gold-Bot nur im Konsolenmodus - kein Telegram
         env:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ""
+          TELEGRAM_CHAT_ID: ""
           GITHUB_ACTIONS: "true"
+          STATE_FILE: "/tmp/gold-v39-diagnostic-state.json"
         run: python gold_signal_bot.py
-      - name: Telegram Cloud-Test
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          python - <<'PY'
-          import os, requests
-
-          token = os.environ["TELEGRAM_BOT_TOKEN"]
-          chat_id = os.environ["TELEGRAM_CHAT_ID"]
-
-          r = requests.post(
-              f"https://api.telegram.org/bot{token}/sendMessage",
-              json={
-                  "chat_id": chat_id,
-                  "text": "✅ GOLD DEMO V3.8 – Cloud-Test erfolgreich\nGitHub Actions → Telegram → Handy funktioniert."
-              },
-              timeout=20
-          )
-
-          r.raise_for_status()
-          print("Telegram Cloud-Test: OK")
-          PY
-      - name: Bot-Zustand speichern
-        run: |
-          if [ -f state.json ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add state.json
-            if ! git diff --cached --quiet; then
-              git commit -m "Update bot state [skip ci]"
-              git push
-            else
-              echo "Keine Zustandsänderung."
-            fi
-          fi
