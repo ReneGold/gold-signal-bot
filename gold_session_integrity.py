@@ -60,7 +60,7 @@ for t,o,h,l,c in x1h:
             "hourly_ohlc":[o,h,l,c],"from_15m":[ao,ah,al,ac]})
 result={"source":"Twelve Data gold_data_quality_audit.py outputs",
     "recommendation":"REVIEW_BEFORE_BACKTEST",
-    "fifteen_minute":r15,"one_hour":r1h,
+    "fifteen_minute":r15,"one_hour":r1,
     "cross_interval":{"compared_complete_hours":checked,
         "mismatches_over_0_05_usd_examples":cross,
         "example_count_is_capped":True},
