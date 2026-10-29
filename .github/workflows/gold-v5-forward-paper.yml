@@ -1,0 +1,48 @@
+name: Gold V5 Forward Paper Beobachtung
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '9,24,39,54 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: gold-v5-forward-ledger
+  cancel-in-progress: false
+jobs:
+  forward:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Ausschliesslich Gold Test-Branch laden
+        uses: actions/checkout@v4
+        with:
+          ref: gold-bot-v3-9-5-test
+          persist-credentials: true
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Abhaengigkeiten installieren
+        run: pip install -r requirements.txt
+      - name: Neue Gold Signale beobachten und Papier-Trades fortschreiben
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: python gold_v5_forward_observe.py
+      - name: Nur Paper-Ledger im Test-Branch speichern
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gold_v5_forward_ledger.csv gold_v5_forward_summary.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update Gold V5 paper-forward observations"
+            git push origin HEAD:gold-bot-v3-9-5-test
+          fi
+      - name: Paper-Ergebnisse archivieren
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-v5-forward-${{ github.run_id }}
+          path: |
+            gold_v5_forward_ledger.csv
+            gold_v5_forward_summary.json
+          if-no-files-found: warn
