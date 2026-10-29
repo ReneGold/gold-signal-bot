@@ -56,13 +56,16 @@ added=closed=0
 # Inspect only last 80 completed bars, no backfill before freeze, never produce hypothetical historic live alerts
 for i in range(max(60,len(c)-80),len(c)-1):
  close_time=c[i].t+timedelta(minutes=15)
- if close_time<START or close_time>now:continue\n if now-close_time>LIVE_MAX_DELAY:continue
+ if close_time<START or close_time>now:continue
+ if now-close_time>LIVE_MAX_DELAY:continue
  if not session(close_time) or not session(c[i+1].t):continue
  if not sideways(close_time):continue
  d=pullback(i)
  if not d:continue
  key=c[i].t.isoformat()
- if key in known:continue\n # One new V5 paper position at a time: prevent overlapping positions.\n if any(x.get("cohort")=="FORWARD" and datetime.fromisoformat(x["entry_utc"])<=close_time < datetime.fromisoformat(x["entry_utc"])+timedelta(hours=4) for x in rows):continue
+ if key in known:continue
+ # One new V5 paper position at a time: prevent overlapping positions.
+ if any(x.get("cohort")=="FORWARD" and datetime.fromisoformat(x["entry_utc"])<=close_time < datetime.fromisoformat(x["entry_utc"])+timedelta(hours=4) for x in rows):continue
  entry=c[i+1].o;risk=1.5*atr[i]
  stop=entry-d*risk;target=entry+d*2*risk
  rows.append(dict(signal_utc=key,entry_utc=c[i+1].t.isoformat(),side="LONG" if d==1 else "SHORT",
