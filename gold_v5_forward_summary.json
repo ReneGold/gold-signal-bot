@@ -1,11 +1,16 @@
 {
-  "as_of_utc": "2026-10-29T14:38:27.920293+00:00",
+  "forward_signals": 0,
+  "backfilled_or_recovered": 5,
+  "forward_closed": 0,
+  "forward_net_R_closed": 0,
+  "note": "Original initial manually backfilled signals excluded from forward performance.",
+  "as_of_utc": "2026-10-29T20:31:00.966988+00:00",
   "candidate": "RANGE_PULLBACK_ONLY frozen 2026-10-29",
   "total": 5,
-  "open": 1,
-  "closed": 4,
-  "added_this_run": 5,
-  "closed_this_run": 4,
-  "sum_net_R_closed": -1.2806,
+  "open": 0,
+  "closed": 5,
+  "added_this_run": 0,
+  "closed_this_run": 1,
+  "sum_net_R_closed": -0.9155,
   "cautions": "Forward paper simulations only. Limited provider window, possible scheduled-run delays; actual broker spreads and market hours unverified. Missing bars do not imply no market signals."
 }
