@@ -10,7 +10,9 @@ from zoneinfo import ZoneInfo
 import gold_signal_bot as bot
 P=Path(__file__).resolve().parent
 LEDGER=P/"gold_v5_forward_ledger.csv"
-START=datetime(2026,10,29,14,38,28,tzinfo=timezone.utc)\n# The first manually run observation backfilled earlier candles. Preserve, but never count as forward.\nLIVE_MAX_DELAY=timedelta(minutes=45)
+START=datetime(2026,10,29,14,38,28,tzinfo=timezone.utc)
+# The first manually run observation backfilled earlier candles. Preserve, but never count as forward.
+LIVE_MAX_DELAY=timedelta(minutes=45)
 CT=ZoneInfo("America/Chicago")
 FIELDS=["signal_utc","entry_utc","side","phase","entry","stop","target","risk","status","exit_utc","exit_price","exit_reason","net_R","cohort"]
 now=datetime.now(timezone.utc)
