@@ -73,7 +73,7 @@ path.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="ut
 print("GOLD SESSION REPORT")
 print("15m weekend Saturday",r15["bars_saturday_utc"],"Sunday",r15["bars_sunday_utc"],
       "flat",r15["flat_ohlc_bars"],"equal-close",r15["close_unchanged_from_previous"])
-print("1h weekend Saturday",r1h["bars_saturday_utc"],"Sunday",r1h["bars_sunday_utc"],
-      "flat",r1h["flat_ohlc_bars"],"equal-close",r1h["close_unchanged_from_previous"])
+print("1h weekend Saturday",r1["bars_saturday_utc"],"Sunday",r1["bars_sunday_utc"],
+      "flat",r1["flat_ohlc_bars"],"equal-close",r1["close_unchanged_from_previous"])
 print("Cross-timeframe checked",checked,"mismatch examples",len(cross))
 print("REVIEW REQUIRED: provider and gold sessions before backtesting.")
