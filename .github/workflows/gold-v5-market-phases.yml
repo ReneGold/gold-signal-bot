@@ -1,0 +1,37 @@
+name: Gold V5 Marktphasenanalyse (manuell)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Test-Branch laden
+        uses: actions/checkout@v4
+        with:
+          ref: gold-bot-v3-9-5-test
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Abhaengigkeiten installieren
+        run: pip install -r requirements.txt
+      - name: Historische Daten laden
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: python gold_data_quality_audit.py
+      - name: Basis-Trades simulieren
+        run: python gold_v5_session_ab.py
+      - name: Vergangene Marktphase ohne Zukunftsdaten bestimmen
+        run: python gold_v5_market_phase_analysis.py
+      - name: Berichte exportieren
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-v5-market-phases-${{ github.run_id }}
+          path: |
+            gold_data_audit/gold_v5_market_phase_summary.json
+            gold_data_audit/gold_v5_market_phase_trades.csv
+          if-no-files-found: warn
