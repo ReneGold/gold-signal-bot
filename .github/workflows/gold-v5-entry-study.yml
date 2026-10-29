@@ -1,0 +1,35 @@
+name: Gold V5 Einstiegsqualitaet (manuell)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Nur Gold Test-Branch laden
+        uses: actions/checkout@v4
+        with:
+          ref: gold-bot-v3-9-5-test
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Abhaengigkeiten
+        run: pip install -r requirements.txt
+      - name: Historische Gold-Kerzen laden
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: python gold_data_quality_audit.py
+      - name: Einstiegsfilter kontrolliert vergleichen
+        run: python gold_v5_entry_filter_study.py
+      - name: Forschungsbericht exportieren
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-v5-entry-filter-${{ github.run_id }}
+          path: |
+            gold_data_audit/gold_v5_entry_filter_trades.csv
+            gold_data_audit/gold_v5_entry_filter_summary.json
+          if-no-files-found: warn
