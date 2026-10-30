@@ -1,0 +1,22 @@
+{
+  "as_of_utc": "2026-10-30T15:20:58.099935+00:00",
+  "status": "PASS",
+  "errors": [],
+  "warnings": [],
+  "metrics": {
+    "15min": {
+      "bars": 319,
+      "latest_completed_open_utc": "2026-10-30T15:00:00+00:00",
+      "minutes_since_last_close": 5.97,
+      "session_gaps": []
+    },
+    "1h": {
+      "bars": 219,
+      "latest_completed_open_utc": "2026-10-30T14:00:00+00:00",
+      "minutes_since_last_close": 20.97,
+      "session_gaps": []
+    }
+  },
+  "policy": "Only hard failures block paper entries; gaps are warnings pending session-calendar validation.",
+  "limitations": "CME GC reference calendar is approximate for XAUUSD spot; not an executable quote or broker reconciliation."
+}
