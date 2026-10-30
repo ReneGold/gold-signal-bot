@@ -1,0 +1,9 @@
+{
+  "generated_utc": "2026-10-30T13:06:14.535263+00:00",
+  "rows": 6,
+  "forward_rows": 1,
+  "errors": [],
+  "warnings": [],
+  "status": "PASS",
+  "note": "Integrity checks are not market-data quality, strategy profitability, or execution validation"
+}
