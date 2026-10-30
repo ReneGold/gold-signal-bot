@@ -25,7 +25,9 @@ jobs:
       - name: Abhaengigkeiten installieren
         run: pip install -r requirements.txt
       - name: Python-Code vor Ausfuehrung pruefen
-        run: python -m py_compile gold_v5_forward_observe.py gold_v5_integrity_audit.py gold_v5_forward_performance.py gold_v5_feed_quality.py gold_v5_risk_overlay.py
+        run: python -m py_compile gold_v5_forward_observe.py gold_v5_integrity_audit.py gold_v5_forward_performance.py gold_v5_feed_quality.py gold_v5_risk_overlay.py gold_v5_risk_gate.py test_gold_v5_risk_gate.py
+      - name: Paper-Risikosperre mit Tests verifizieren
+        run: python -m unittest -v test_gold_v5_risk_gate.py
       - name: Kursdaten auf Luecken und veraltete Kerzen pruefen
         env:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
