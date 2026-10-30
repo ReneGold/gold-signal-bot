@@ -1,6 +1,6 @@
 {
   "status": "DIAGNOSTIC_ONLY",
-  "missing_slots": 0,
+  "missing_slots": 2,
   "historically_detectable_candidates": [],
   "limitations": [
     "These signals were NOT observed or tradable live.",
