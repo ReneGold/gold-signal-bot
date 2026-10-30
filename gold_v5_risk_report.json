@@ -1,0 +1,30 @@
+{
+  "generated_utc": "2026-10-30T18:31:29.695320+00:00",
+  "mode": "READ_ONLY_PAPER_RISK_OVERLAY",
+  "example_account_eur": 5000.0,
+  "illustrative_risk_fraction": 0.0025,
+  "illustrative_max_loss_per_trade_eur": 12.5,
+  "limits": {
+    "daily_closed_loss_R": 2.0,
+    "max_consecutive_losses": 3,
+    "max_closed_drawdown_R": 6.0,
+    "max_open_positions": 1
+  },
+  "observed": {
+    "closed_trades": 1,
+    "open_and_pending": 0,
+    "today_closed_net_R": 1.90306,
+    "loss_streak": 0,
+    "closed_drawdown_R": 0.0
+  },
+  "paper_gate": "NO_LIMIT_BREACH",
+  "breach_reasons": [],
+  "position_size_lots": null,
+  "important": [
+    "Risk thresholds are research examples, NOT approved real trading limits.",
+    "Position size must be withheld until PU Prime contract size, lot step, FX rate, margin and actual spread are verified.",
+    "Daily realized and closed-trade drawdown do not account for intratrade unrealized losses.",
+    "This read-only overlay does not actually stop the observer from recording new signals or block broker orders.",
+    "No broker integration, orders or Telegram messages are sent."
+  ]
+}
