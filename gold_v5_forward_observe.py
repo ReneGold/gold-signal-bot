@@ -10,6 +10,7 @@ from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 import gold_signal_bot as bot
+from gold_v5_risk_gate import risk_gate
 
 P=Path(__file__).resolve().parent
 LEDGER=P/"gold_v5_forward_ledger.csv"
@@ -110,7 +111,8 @@ if fresh and c[i].t.isoformat() not in signal_seen and session(close_t) and side
  # One active or pending forward position at a time. Earlier closed backfill trades
  # never block fresh signals.
  active=any(r.get("cohort")=="FORWARD" and r["status"] in ("OPEN_PAPER","PENDING_ENTRY") for r in rows)
- if d and not active:
+ gate=risk_gate(rows,close_t)
+ if d and not active and gate['decision']=='ALLOW':
   risk=1.5*atr[i]
   rows.append(dict(signal_utc=c[i].t.isoformat(),entry_utc=close_t.isoformat(),
     side="LONG" if d==1 else "SHORT",phase="RANGE_OR_WEAK",entry="",stop="",target="",
@@ -122,7 +124,8 @@ with LEDGER.open("w",newline="",encoding="utf-8") as f:
  w=csv.DictWriter(f,fieldnames=FIELDS);w.writeheader();w.writerows(rows)
 forward=[r for r in rows if r["cohort"]=="FORWARD"]
 completed=[r for r in forward if r["status"]=="CLOSED_PAPER"]
-result=dict(as_of_utc=now.isoformat(),candidate="Gold V5 frozen sideways pullback",
+final_gate=risk_gate(rows,now)
+result=dict(risk_gate=final_gate,as_of_utc=now.isoformat(),candidate="Gold V5 frozen sideways pullback",
  forward_signals=len(forward),forward_pending=sum(r["status"]=="PENDING_ENTRY" for r in forward),
  forward_open=sum(r["status"]=="OPEN_PAPER" for r in forward),
  forward_closed=len(completed),forward_net_R_closed=round(sum(float(r["net_R"]) for r in completed),5),
