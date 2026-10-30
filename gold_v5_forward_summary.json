@@ -1,16 +1,15 @@
 {
+  "as_of_utc": "2026-10-30T06:29:04.517806+00:00",
+  "candidate": "Gold V5 frozen sideways pullback",
   "forward_signals": 1,
-  "backfilled_or_recovered": 5,
+  "forward_pending": 0,
+  "forward_open": 0,
   "forward_closed": 1,
-  "forward_net_R_closed": 1.9031,
-  "note": "Original initial manually backfilled signals excluded from forward performance.",
-  "as_of_utc": "2026-10-30T02:54:14.486615+00:00",
-  "candidate": "RANGE_PULLBACK_ONLY frozen 2026-10-29",
-  "total": 6,
-  "open": 0,
-  "closed": 6,
-  "added_this_run": 0,
-  "closed_this_run": 1,
-  "sum_net_R_closed": 0.9875,
-  "cautions": "Forward paper simulations only. Limited provider window, possible scheduled-run delays; actual broker spreads and market hours unverified. Missing bars do not imply no market signals."
+  "forward_net_R_closed": 1.90306,
+  "initial_backfill_count": 5,
+  "new_signals_this_run": 0,
+  "entries_recorded_this_run": 0,
+  "positions_closed_this_run": 0,
+  "unresolved_missing_data": 0,
+  "caveat": "Observational paper fill at next bar open; not executable broker data. No lookahead signal candidates; schedule may be delayed or miss signals."
 }
