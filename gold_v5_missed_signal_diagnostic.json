@@ -1,0 +1,11 @@
+{
+  "status": "DIAGNOSTIC_ONLY",
+  "missing_slots": 0,
+  "historically_detectable_candidates": [],
+  "limitations": [
+    "These signals were NOT observed or tradable live.",
+    "Only available provider lookback scanned; cannot prove absence of omitted signals.",
+    "Trading session uses approximate CME GC reference, not PU Prime verified hours.",
+    "No trades are reconstructed and no positions are entered."
+  ]
+}

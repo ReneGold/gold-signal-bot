@@ -1,22 +1,23 @@
 {
-  "observed_at_utc": "2026-10-30T20:16:55.666589+00:00",
-  "previous_observer_at_utc": "2026-10-30T18:50:05.490781+00:00",
-  "minutes_since_previous_observer": 86.84,
+  "observed_at_utc": "2026-10-30T20:27:58.064353+00:00",
+  "previous_observer_at_utc": "2026-10-30T20:16:56.453691+00:00",
+  "minutes_since_previous_observer": 11.03,
   "nominal_schedule_minutes_utc": [
     9,
     24,
     39,
     54
   ],
-  "minutes_since_most_recent_nominal_slot": 7.92,
-  "status": "WARN",
-  "warnings": [
-    "OBSERVER_GAP_OVER_25_MINUTES"
-  ],
+  "minutes_since_most_recent_nominal_slot": 3.97,
+  "active_reference_candle_closes_since_previous_run": 0,
+  "possibly_unobserved_candle_closes_utc": [],
+  "unverified_signals": true,
+  "status": "PASS",
+  "warnings": [],
   "notes": [
     "This is a heartbeat/coverage warning only; no historical alert can be declared an actual realtime signal.",
     "Only successful runs that saved the summary are visible to this local report; to discover failed GitHub jobs independently, inspect Actions history or scheduled monitor.",
-    "Weekend/session downtime may generate benign warnings.",
+    "Chicago reference trading session is an approximation, not a verified PU Prime trading calendar.",
     "The forward signal observer intentionally does not reconstruct missed historical entries."
   ]
 }
