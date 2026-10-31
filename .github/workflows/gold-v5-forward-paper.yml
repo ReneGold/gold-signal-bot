@@ -25,7 +25,7 @@ jobs:
       - name: Abhaengigkeiten installieren
         run: pip install -r requirements.txt
       - name: Python-Code vor Ausfuehrung pruefen
-        run: python -m py_compile gold_v5_forward_observe.py gold_v5_integrity_audit.py gold_v5_forward_performance.py gold_v5_feed_quality.py gold_v5_risk_overlay.py gold_v5_risk_gate.py test_gold_v5_risk_gate.py gold_v5_broker_readiness.py gold_v5_coverage_monitor.py gold_v5_missed_signal_diagnostic.py gold_v5_evidence_review.py
+        run: python -m py_compile gold_v5_forward_observe.py gold_v5_integrity_audit.py gold_v5_forward_performance.py gold_v5_feed_quality.py gold_v5_risk_overlay.py gold_v5_risk_gate.py test_gold_v5_risk_gate.py gold_v5_broker_readiness.py gold_v5_coverage_monitor.py gold_v5_missed_signal_diagnostic.py gold_v5_evidence_review.py gold_v5_signal_quality_review.py
       - name: Paper-Risikosperre mit Tests verifizieren
         run: python -m unittest -v test_gold_v5_risk_gate.py
       - name: GitHub Beobachtungsluecken protokollieren
@@ -48,6 +48,8 @@ jobs:
         run: python gold_v5_forward_performance.py
       - name: Aussagekraft der Forward-Stichprobe bewerten
         run: python gold_v5_evidence_review.py
+      - name: Signalqualitaet nach Richtung Marktphase und Uhrzeit beschreiben
+        run: python gold_v5_signal_quality_review.py
       - name: Konservative Risikoauswertung ohne Echtgeld
         run: python gold_v5_risk_overlay.py
       - name: PU Prime Kontospezifikationen und Ausfuehrungsbereitschaft kontrollieren
@@ -56,7 +58,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gold_v5_forward_ledger.csv gold_v5_forward_summary.json gold_v5_forward_performance.json gold_v5_integrity_report.json gold_v5_feed_quality.json gold_v5_risk_report.json gold_v5_broker_readiness.json gold_v5_coverage_report.json gold_v5_missed_signal_diagnostic.json gold_v5_evidence_report.json
+          git add gold_v5_forward_ledger.csv gold_v5_forward_summary.json gold_v5_forward_performance.json gold_v5_integrity_report.json gold_v5_feed_quality.json gold_v5_risk_report.json gold_v5_broker_readiness.json gold_v5_coverage_report.json gold_v5_missed_signal_diagnostic.json gold_v5_evidence_report.json gold_v5_signal_quality_report.json
           if ! git diff --cached --quiet; then
             git commit -m "Update Gold V5 paper-forward observations"
             git push origin HEAD:gold-bot-v3-9-5-test
@@ -77,4 +79,5 @@ jobs:
             gold_v5_coverage_report.json
             gold_v5_missed_signal_diagnostic.json
             gold_v5_evidence_report.json
+            gold_v5_signal_quality_report.json
           if-no-files-found: warn
