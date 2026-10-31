@@ -14,17 +14,22 @@ approved={(e["category"],e["release_utc"]) for e in calendar.get("events",[])
           if e.get("verification")=="MATCHES_SNAPSHOT"}
 events=[e for e in source.get("future_events",[])
         if (e.get("category"),e.get("release_utc")) in approved]
+fomc=json.loads((P/"gold_v5_fomc_reference.json").read_text(encoding="utf-8"))
+# Fixed FOMC schedule reference, independently maintained and not a live source.
+events += [{**e, "source":"FED_FIXED_REFERENCE"} for e in fomc.get("events",[])]
+events.sort(key=lambda e:e["release_utc"])
 windows=[15,30,60]
 results={}
 for window in windows:
  flagged=[];outside=[]
  for row in rows:
   decision=datetime.fromisoformat(row["entry_utc"])
-  nearest=next((event for event in events
-      if abs((decision-datetime.fromisoformat(event["release_utc"])).total_seconds())<=window*60),None)
-  if nearest:
+  matches=[event for event in events
+      if abs((decision-datetime.fromisoformat(event["release_utc"])).total_seconds())<=window*60]
+  if matches:
    flagged.append({"signal_utc":row["signal_utc"],"status":row["status"],
-                   "category":nearest["category"],"release_utc":nearest["release_utc"],
+                   "categories":sorted({event["category"] for event in matches}),
+                   "release_times_utc":sorted({event["release_utc"] for event in matches}),
                    "net_R_if_closed":float(row["net_R"]) if row["status"]=="CLOSED_PAPER" else None})
   else:outside.append(row)
  results[str(window)]={"flagged_signals":len(flagged),"flagged":flagged,
@@ -34,8 +39,8 @@ status=("CALENDAR_INCOMPLETE" if calendar.get("third_party_status") not in ("THI
    or not calendar.get("reference_valid") or calendar.get("missing_categories") else "LIMITED_VERIFIED_SNAPSHOT")
 report={"generated_utc":datetime.now(timezone.utc).isoformat(),
  "status":status,"scope":"FORWARD paper signals only","observed_forward_signal_count":len(rows),
- "verified_reference_event_count":len(events),"blackout_comparisons_minutes_each_side":results,
+ "reference_event_count_including_fomc":len(events),"blackout_comparisons_minutes_each_side":results,
  "filter_active":False,"strategy_or_ledger_modified":False,
- "limitation":"Not a historical calendar backtest. Only the CURRENT limited upcoming calendar is available; past event coverage is missing. Zero flagged signals cannot establish news-filter value. Missing FOMC and revisions possible. No replacement trades are simulated."}
+ "limitation":"Not a historical calendar backtest. Only the CURRENT limited upcoming calendar is available; past event coverage is missing. Zero flagged signals cannot establish news-filter value. FOMC is included as a fixed December 2026 reference, not an automatically verified live schedule. Revisions and uncovered dates remain possible. No replacement trades are simulated."}
 (P/"gold_v5_news_blackout_comparison.json").write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
 print(json.dumps(report,indent=2,ensure_ascii=False))
