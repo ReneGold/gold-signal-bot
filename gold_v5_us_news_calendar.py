@@ -1,90 +1,78 @@
 #!/usr/bin/env python3
-"""Official BLS economic-calendar watcher (diagnostic only, no trading decisions).
-Reads the BLS public ICS feed; reports unavailable rather than guessing if fetch fails.
+"""Read-only US high-impact macro calendar via public XOOMAR JSON endpoint.
+Calendar does NOT alter paper signals and is NOT a verified execution gate.
+Fail unknown on network/schema/staleness/coverage errors. No false 'all clear'.
 """
-import json, re, urllib.request
+import json, urllib.request, math
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 ROOT=Path(__file__).resolve().parent
-URL="https://www.bls.gov/schedule/news_release/bls.ics"
-NY=ZoneInfo("America/New_York")
-now=datetime.now(timezone.utc)
-report={"generated_utc":now.isoformat(),"mode":"OBSERVATION_ONLY",
-        "provider":"US Bureau of Labor Statistics",
-        "source_url":URL,"source_status":"UNAVAILABLE",
-        "selected_categories":["Employment Situation (NFP)","Consumer Price Index (CPI)","Producer Price Index (PPI)"],
-        "coverage_scope":"BLS releases only. Does not cover FOMC, BEA/PCE, speeches or unexpected news.",
-        "future_events":[],"near_release_window":None,
-        "time_window_minutes":{"before":30,"after":30},
-        "trading_filter_active":False,"errors":[],
-        "caution":"Missing or incomplete calendar must never imply no news risk."}
-
-def unfold(data):
-    out=[]
-    for line in data.replace("\r\n","\n").split("\n"):
-        if line.startswith((" ","\t")) and out:
-            out[-1]+=line[1:]
-        else:out.append(line)
-    return out
-
-def parse_start(value,field):
-    match=re.match(r"^(\d{8})(?:T(\d{6})(Z)?)?$",value)
-    if not match:raise ValueError("Unknown ICS DTSTART")
-    ymd,clock,zulu=match.groups()
-    if not clock:raise ValueError("All-day calendar item, time not verified")
-    dt=datetime.strptime(ymd+clock,"%Y%m%d%H%M%S")
-    if zulu:return dt.replace(tzinfo=timezone.utc)
-    zone=NY
-    m=re.search(r"TZID=([^;:]+)",field)
-    if m:
-        tz=m.group(1)
-        try:zone=ZoneInfo(tz)
-        except Exception:raise ValueError("Unrecognized ICS timezone "+tz)
-    return dt.replace(tzinfo=zone).astimezone(timezone.utc)
-
+URL="https://xoomar.com/api/markets/calendar?importance=high"
+NOW=datetime.now(timezone.utc)
+TARGETS={
+    "NFP":("nonfarm payroll","employment situation"),
+    "CPI":("consumer price index","cpi"),
+    "PPI":("producer price index","ppi"),
+    "PCE":("personal income and outlays","pce"),
+    "FOMC":("fomc","federal funds","fed rate decision","interest rate decision"),
+}
+result={"generated_utc":NOW.isoformat(),"mode":"OBSERVATION_ONLY",
+    "provider":"XOOMAR (third-party aggregation of agency schedules)",
+    "source_url":URL,"source_status":"UNAVAILABLE",
+    "selected_categories":list(TARGETS),"future_events":[],
+    "near_release_window":None,"time_window_minutes":{"before":30,"after":30},
+    "trading_filter_active":False,"errors":[],
+    "coverage_scope":"Selected US high-impact releases only; surprises or schedule changes possible.",
+    "caution":"Third-party unverified calendar. Empty list or outage NEVER means no news risk."}
 try:
-    req=urllib.request.Request(URL,headers={"User-Agent":"GoldV5-ResearchCalendar/1.0 (read-only)"})
-    with urllib.request.urlopen(req,timeout=15) as f:
-        raw=f.read(1_500_001)
-    if len(raw)>1_500_000:raise ValueError("ICS response exceeded size limit")
-    text=raw.decode("utf-8-sig")
-    if "BEGIN:VCALENDAR" not in text:raise ValueError("No valid VCALENDAR header")
-    parts=[]
-    item=None
-    for line in unfold(text):
-        if line=="BEGIN:VEVENT":item={}
-        elif line=="END:VEVENT":
-            if item is not None:parts.append(item)
-            item=None
-        elif item is not None and ":" in line:
-            key,value=line.split(":",1)
-            if key.startswith("SUMMARY"):item["summary"]=value
-            elif key.startswith("DTSTART"):item["start_field"]=key;item["start"]=value
-    for item in parts:
-        title=item.get("summary","")
-        low=title.lower()
-        if "employment situation" in low:cat="Employment Situation (NFP)"
-        elif "consumer price index" in low:cat="Consumer Price Index (CPI)"
-        elif "producer price index" in low:cat="Producer Price Index (PPI)"
-        else:continue
-        try:start=parse_start(item["start"],item["start_field"])
-        except (ValueError,KeyError) as exc:
-            report["errors"].append("Event time not verified: "+cat+" ("+str(exc)+")")
+    req=urllib.request.Request(URL,headers={
+        "User-Agent":"GoldV5-Research-Calendar/1.0",
+        "Accept":"application/json"})
+    with urllib.request.urlopen(req,timeout=12) as f:
+        data=f.read(750001)
+    if len(data)>750000:raise ValueError("Response too large")
+    payload=json.loads(data.decode("utf-8"))
+    rows=payload.get("data") if isinstance(payload,dict) else None
+    if not isinstance(rows,list) or not rows:raise ValueError("Missing/nonempty calendar data list")
+    seen=set()
+    for event in rows:
+        if not isinstance(event,dict):continue
+        name=event.get("eventName")
+        stamp=event.get("scheduledAt")
+        if not isinstance(name,str) or not isinstance(stamp,str):continue
+        lo=name.lower()
+        cat=next((key for key,terms in TARGETS.items() if any(t in lo for t in terms)),None)
+        if not cat:continue
+        try:
+            dt=datetime.fromisoformat(stamp.replace("Z","+00:00"))
+            if dt.tzinfo is None:raise ValueError("Time missing UTC offset")
+            dt=dt.astimezone(timezone.utc)
+        except ValueError:
+            result["errors"].append("Invalid timestamp for "+cat)
             continue
-        if now-timedelta(minutes=30)<=start<=now+timedelta(days=45):
-            report["future_events"].append({"category":cat,"title":title,
-                "release_utc":start.isoformat(),
-                "release_berlin":start.astimezone(ZoneInfo("Europe/Berlin")).isoformat(),
-                "minutes_until":round((start-now).total_seconds()/60,1),
-                "source":"BLS"})
-    report["future_events"].sort(key=lambda x:x["release_utc"])
-    report["source_status"]="PARTIAL" if report["errors"] else "OK_BLS_ONLY"
-    report["near_release_window"]=any(-30<=x["minutes_until"]<=30 for x in report["future_events"])
-    if not report["future_events"]:report["errors"].append("No matching upcoming BLS items found in selected window; coverage uncertain.")
+        if NOW-timedelta(minutes=30)<=dt<=NOW+timedelta(days=32):
+            key=(cat,dt.isoformat())
+            if key in seen:continue
+            seen.add(key)
+            result["future_events"].append({"category":cat,"title":name,
+                 "release_utc":dt.isoformat(),
+                 "release_berlin":dt.astimezone(ZoneInfo("Europe/Berlin")).isoformat(),
+                 "minutes_until":round((dt-NOW).total_seconds()/60,1),
+                 "source":"XOOMAR; confirm with original agency"})
+    result["future_events"].sort(key=lambda e:e["release_utc"])
+    # A valid response without relevant events is not an all-clear.
+    if not result["future_events"]:
+        result["source_status"]="UNCERTAIN_NO_MATCHING_EVENTS"
+        result["errors"].append("No matching events; cannot verify news-free window")
+    elif result["errors"]:
+        result["source_status"]="PARTIAL_UNVERIFIED"
+    else:
+        result["source_status"]="THIRD_PARTY_UNVERIFIED"
+    result["near_release_window"]=any(-30<=e["minutes_until"]<=30 for e in result["future_events"])
 except Exception as exc:
-    report["errors"].append(type(exc).__name__+": "+str(exc)[:180])
+    result["errors"].append(type(exc).__name__+": "+str(exc)[:170])
 (ROOT/"gold_v5_us_news_calendar.json").write_text(
-    json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-print(json.dumps(report,indent=2,ensure_ascii=False))
+    json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+print(json.dumps(result,ensure_ascii=False,indent=2))
