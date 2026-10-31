@@ -1,0 +1,24 @@
+{
+  "source": "US Federal Reserve",
+  "checked_on": "2026-10-31",
+  "source_urls": [
+    "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+    "https://www.federalreserve.gov/newsevents/2026-december.htm"
+  ],
+  "time_zone": "America/New_York",
+  "events": [
+    {
+      "category": "FOMC_STATEMENT",
+      "release_utc": "2026-12-09T19:00:00+00:00",
+      "release_berlin": "2026-12-09T20:00:00+01:00",
+      "meeting_dates": "2026-12-08/2026-12-09"
+    },
+    {
+      "category": "FOMC_PRESS_CONFERENCE",
+      "release_utc": "2026-12-09T19:30:00+00:00",
+      "release_berlin": "2026-12-09T20:30:00+01:00",
+      "meeting_dates": "2026-12-08/2026-12-09"
+    }
+  ],
+  "caveat": "Fixed reference for December 2026 only. Future schedule changes must be reviewed; not an automatically verified live calendar."
+}
