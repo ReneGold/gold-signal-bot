@@ -1,0 +1,15 @@
+{
+  "generated_utc": "2026-10-31T07:57:45.216440+00:00",
+  "status": "WAITING_FOR_NEW_SIGNALS",
+  "forward_signals": 1,
+  "snapshots": 0,
+  "validated_snapshots": 0,
+  "unmatched_forward_signals": [
+    "2026-10-29T23:00:00+00:00"
+  ],
+  "errors": [],
+  "warnings": [
+    "1 pre-existing or undocumented FORWARD signals; do not infer indicator history."
+  ],
+  "note": "No backfilling. A green check with zero snapshots verifies wiring only, not signal data completeness."
+}
