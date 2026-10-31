@@ -1,0 +1,74 @@
+{
+  "generated_utc": "2026-10-31T07:43:40.001921+00:00",
+  "scope": "Only closed FORWARD paper trades; INITIAL_BACKFILL excluded",
+  "all_closed_forward": {
+    "trades": 1,
+    "wins": 1,
+    "losses_or_flat": 0,
+    "net_R": 1.90306,
+    "average_R": 1.90306
+  },
+  "segments": {
+    "direction": {
+      "SHORT": {
+        "trades": 1,
+        "wins": 1,
+        "losses_or_flat": 0,
+        "net_R": 1.90306,
+        "average_R": 1.90306
+      }
+    },
+    "recorded_phase": {
+      "RANGE_OR_WEAK": {
+        "trades": 1,
+        "wins": 1,
+        "losses_or_flat": 0,
+        "net_R": 1.90306,
+        "average_R": 1.90306
+      }
+    },
+    "exit_reason": {
+      "TP": {
+        "trades": 1,
+        "wins": 1,
+        "losses_or_flat": 0,
+        "net_R": 1.90306,
+        "average_R": 1.90306
+      }
+    },
+    "signal_time_utc": {
+      "18-24 UTC": {
+        "trades": 1,
+        "wins": 1,
+        "losses_or_flat": 0,
+        "net_R": 1.90306,
+        "average_R": 1.90306
+      }
+    }
+  },
+  "coverage": {
+    "forward_signals": 1,
+    "closed": 1,
+    "open_or_pending": 0,
+    "unresolved": 0
+  },
+  "research_limits": [
+    "Segmentation is descriptive, not a predictive model or trade recommendation.",
+    "One winning trade or a small subgroup cannot establish a favorable market condition.",
+    "Historical indicator values, signal-score, spread, fill latency and actual broker execution are not available in the ledger.",
+    "UTC time buckets are not verified broker sessions and may mix market regimes.",
+    "Broker-verified fills, out-of-sample performance and independent observation are required before considering live trading."
+  ],
+  "signal_evidence_available": {
+    "signal_timestamp": true,
+    "direction": true,
+    "recorded_phase": true,
+    "stop_and_target": true,
+    "exit_reason": true,
+    "ema_at_signal": false,
+    "atr_at_signal": false,
+    "broker_bid_ask": false,
+    "slippage": false,
+    "signal_score": false
+  }
+}
