@@ -20,6 +20,9 @@ jobs:
     steps:
       - name: GitHub Run-Historie unabhaengig kontrollieren
         uses: actions/github-script@v7
+        env:
+          GOLD_V5_ALERT_BOT_TOKEN: ${{ secrets.GOLD_V5_ALERT_BOT_TOKEN }}
+          GOLD_V5_ALERT_CHAT_ID: ${{ secrets.GOLD_V5_ALERT_CHAT_ID }}
         with:
           script: |
             const workflow_id = "gold-v5-forward-paper.yml";
@@ -59,6 +62,24 @@ jobs:
             core.info(JSON.stringify(report,null,2));
             await core.summary.addHeading("Gold V5 independent workflow watchdog")
               .addCodeBlock(JSON.stringify(report,null,2),"json").write();
+            // Separate technical alert bot, optional until its own secrets are configured.
+            const notify=async(message)=>{
+              const token=process.env.GOLD_V5_ALERT_BOT_TOKEN;
+              const chat=process.env.GOLD_V5_ALERT_CHAT_ID;
+              if(!token || !chat){
+                core.notice("Gold V5 technical Telegram alert skipped: separate secrets not configured.");
+                return;
+              }
+              try {
+                const response=await fetch("https://api.telegram.org/bot"+token+"/sendMessage",{
+                  method:"POST",
+                  headers:{"Content-Type":"application/json"},
+                  body:JSON.stringify({chat_id:chat,text:message,disable_web_page_preview:true})
+                });
+                if(!response.ok) core.warning("Gold V5 technical Telegram delivery HTTP "+response.status);
+                else core.info("Gold V5 technical Telegram alert delivered.");
+              }catch(e){core.warning("Gold V5 Telegram technical alert unavailable: "+e.name);}
+            };
             // Open/update one persistent issue per current incident to avoid repeat spam.
             const simulation = context.eventName === "workflow_dispatch" && context.payload.inputs?.test_incident === "true";
             const title = simulation ? "[Gold V5 TEST] Simulierte Stoerung" : "[Gold V5] Forward-Workflow Stoerung";
@@ -80,6 +101,7 @@ jobs:
               } else {
                 await github.rest.issues.create({owner:context.repo.owner,
                   repo:context.repo.repo,title,body});
+                if(!simulation) await notify("WARNUNG Gold V5: Technische Stoerung erkannt. KEIN Handelssignal. Gruende: "+reasons.join("; ")+" | Details: "+context.serverUrl+"/"+context.repo.owner+"/"+context.repo.repo+"/actions/runs/"+context.runId);
               }
               if(simulation) {
                 const current = prior || (await github.rest.issues.listForRepo({owner:context.repo.owner,repo:context.repo.repo,state:"open",per_page:100})).data.find(i=>i.title===title && !i.pull_request);
@@ -94,4 +116,5 @@ jobs:
                 body:"Automatische Entwarnung: Workflow-Waechter meldet OK. Zeit: "+now.toISOString()});
               await github.rest.issues.update({owner:context.repo.owner,
                 repo:context.repo.repo,issue_number:prior.number,state:"closed"});
+              await notify("ENTWARNUNG Gold V5: Der unabhaengige Waechter meldet wieder OK. KEIN Handelssignal.");
             }
