@@ -1,0 +1,33 @@
+name: Gold V5 Stoerungsmeldung Selbsttest
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  incident-selftest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Simulierte Teststoerung erstellen und schliessen
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner=context.repo.owner, repo=context.repo.repo;
+            const title="[Gold V5 TEST] Simulierte Stoerung";
+            const body="AUTOMATISCHER SELBSTTEST – KEINE ECHTE STOERUNG, KEIN TRADING-SIGNAL.\n\n"+
+              "Testlauf: "+context.serverUrl+"/"+owner+"/"+repo+"/actions/runs/"+context.runId;
+            const created=await github.rest.issues.create({owner,repo,title,body});
+            const number=created.data.number;
+            core.info("Test-Issue erstellt: #"+number);
+            await github.rest.issues.createComment({owner,repo,issue_number:number,
+              body:"SELBSTTEST ERFOLGREICH: Simulierte Stoerung wurde erkannt. Entwarnung; Issue wird geschlossen."});
+            await github.rest.issues.update({owner,repo,issue_number:number,state:"closed"});
+            const checked=await github.rest.issues.get({owner,repo,issue_number:number});
+            if(checked.data.state!=="closed") core.setFailed("Test-Issue wurde nicht geschlossen");
+            else {
+              const url=checked.data.html_url;
+              core.info("SELBSTTEST PASS – erstellt und geschlossen: "+url);
+              await core.summary.addHeading("Gold V5 – Stoerungsmeldung Selbsttest")
+                .addRaw("PASS: Test-Issue erstellt und geschlossen: "+url).write();
+            }
