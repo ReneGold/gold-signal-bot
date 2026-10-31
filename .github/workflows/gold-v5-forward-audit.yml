@@ -1,0 +1,41 @@
+name: Gold V5 Forward Audit (read-only)
+on:
+  push:
+    branches:
+      - gold-bot-v3-9-5-test
+    paths:
+      - gold_v5_forward_ledger.csv
+      - gold_v5_forward_audit.py
+      - test_gold_v5_forward_audit.py
+      - .github/workflows/gold-v5-forward-audit.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-v5-forward-audit-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Audit-Tests durchfuehren
+        run: python -m unittest -v test_gold_v5_forward_audit.py
+      - name: Forward-Ledger auswerten
+        run: python gold_v5_forward_audit.py --output gold_v5_forward_audit.json
+      - name: Bericht als Workflow-Artefakt sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-v5-forward-audit-${{ github.run_number }}
+          path: gold_v5_forward_audit.json
+          if-no-files-found: warn
+          retention-days: 30
