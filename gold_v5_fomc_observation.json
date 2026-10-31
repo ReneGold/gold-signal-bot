@@ -1,5 +1,5 @@
 {
-  "checked_utc": "2026-10-31T09:22:41.523300+00:00",
+  "checked_utc": "2026-10-31T09:42:01.871169+00:00",
   "mode": "OBSERVATION_ONLY",
   "official_reference_source": [
     "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
@@ -12,7 +12,7 @@
       "release_utc": "2026-12-09T19:00:00+00:00",
       "release_berlin": "2026-12-09T20:00:00+01:00",
       "meeting_dates": "2026-12-08/2026-12-09",
-      "minutes_until": 56737.31,
+      "minutes_until": 56717.97,
       "inside_proposed_30_minute_window": false,
       "forward_signal_matches_within_60_minutes": []
     },
@@ -21,7 +21,7 @@
       "release_utc": "2026-12-09T19:30:00+00:00",
       "release_berlin": "2026-12-09T20:30:00+01:00",
       "meeting_dates": "2026-12-08/2026-12-09",
-      "minutes_until": 56767.31,
+      "minutes_until": 56747.97,
       "inside_proposed_30_minute_window": false,
       "forward_signal_matches_within_60_minutes": []
     }
