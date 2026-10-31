@@ -1,0 +1,30 @@
+{
+  "generated_utc": "2026-10-31T08:33:33.284739+00:00",
+  "status": "LIMITED_VERIFIED_SNAPSHOT",
+  "scope": "FORWARD paper signals only",
+  "observed_forward_signal_count": 1,
+  "verified_reference_event_count": 4,
+  "blackout_comparisons_minutes_each_side": {
+    "15": {
+      "flagged_signals": 0,
+      "flagged": [],
+      "unflagged_closed_net_R": 1.90306,
+      "unflagged_closed_count": 1
+    },
+    "30": {
+      "flagged_signals": 0,
+      "flagged": [],
+      "unflagged_closed_net_R": 1.90306,
+      "unflagged_closed_count": 1
+    },
+    "60": {
+      "flagged_signals": 0,
+      "flagged": [],
+      "unflagged_closed_net_R": 1.90306,
+      "unflagged_closed_count": 1
+    }
+  },
+  "filter_active": false,
+  "strategy_or_ledger_modified": false,
+  "limitation": "Not a historical calendar backtest. Only the CURRENT limited upcoming calendar is available; past event coverage is missing. Zero flagged signals cannot establish news-filter value. Missing FOMC and revisions possible. No replacement trades are simulated."
+}

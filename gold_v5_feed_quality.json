@@ -1,19 +1,19 @@
 {
-  "as_of_utc": "2026-10-31T08:27:49.009652+00:00",
+  "as_of_utc": "2026-10-31T08:33:33.417323+00:00",
   "status": "PASS",
   "errors": [],
   "warnings": [],
   "metrics": {
     "15min": {
       "bars": 319,
-      "latest_completed_open_utc": "2026-10-31T08:00:00+00:00",
-      "minutes_since_last_close": 12.82,
+      "latest_completed_open_utc": "2026-10-31T08:15:00+00:00",
+      "minutes_since_last_close": 3.56,
       "session_gaps": []
     },
     "1h": {
       "bars": 219,
       "latest_completed_open_utc": "2026-10-31T07:00:00+00:00",
-      "minutes_since_last_close": 27.82,
+      "minutes_since_last_close": 33.56,
       "session_gaps": []
     }
   },
