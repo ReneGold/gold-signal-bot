@@ -6,6 +6,7 @@ on:
 permissions:
   actions: read
   contents: read
+  issues: write
 jobs:
   watchdog:
     runs-on: ubuntu-latest
@@ -52,4 +53,31 @@ jobs:
             core.info(JSON.stringify(report,null,2));
             await core.summary.addHeading("Gold V5 independent workflow watchdog")
               .addCodeBlock(JSON.stringify(report,null,2),"json").write();
-            if(reasons.length) core.setFailed(reasons.join("; "));
+            // Open/update one persistent issue per current incident to avoid repeat spam.
+            const title = "[Gold V5] Forward-Workflow Stoerung";
+            const issues = await github.paginate(github.rest.issues.listForRepo,{
+              owner:context.repo.owner,repo:context.repo.repo,state:"open",per_page:100
+            });
+            const prior = issues.find(i=>i.title===title && !i.pull_request);
+            if(reasons.length) {
+              const body = "Automatischer technischer Alarm (KEIN Trading-Signal).\\n\\n"
+                + "Pruefung: "+now.toISOString()+"\\n"
+                + "Fehler: "+reasons.join(", ")+"\\n"
+                + "Letzter erfolgreicher Lauf: "+(latest?.html_url||"nicht gefunden")+"\\n"
+                + "Pruefbericht siehe: "+context.serverUrl+"/"+context.repo.owner+"/"+context.repo.repo+"/actions/runs/"+context.runId;
+              if(prior) {
+                await github.rest.issues.createComment({
+                  owner:context.repo.owner,repo:context.repo.repo,issue_number:prior.number,body
+                });
+              } else {
+                await github.rest.issues.create({owner:context.repo.owner,
+                  repo:context.repo.repo,title,body});
+              }
+              core.setFailed(reasons.join("; "));
+            } else if(prior) {
+              await github.rest.issues.createComment({owner:context.repo.owner,
+                repo:context.repo.repo,issue_number:prior.number,
+                body:"Automatische Entwarnung: Workflow-Waechter meldet OK. Zeit: "+now.toISOString()});
+              await github.rest.issues.update({owner:context.repo.owner,
+                repo:context.repo.repo,issue_number:prior.number,state:"closed"});
+            }
