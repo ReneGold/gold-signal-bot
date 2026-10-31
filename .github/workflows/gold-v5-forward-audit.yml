@@ -8,6 +8,7 @@ on:
       - gold_v5_forward_audit.py
       - test_gold_v5_forward_audit.py
       - .github/workflows/gold-v5-forward-audit.yml
+      - gold_v5_telegram_notify.py
   workflow_dispatch:
 
 permissions:
@@ -31,6 +32,29 @@ jobs:
         run: python -m unittest -v test_gold_v5_forward_audit.py
       - name: Forward-Ledger auswerten
         run: python gold_v5_forward_audit.py --output gold_v5_forward_audit.json
+      - name: Bisherige Telegram-Signal-IDs laden
+        uses: actions/cache/restore@v4
+        with:
+          path: gold_v5_telegram_sent.json
+          key: gold-v5-telegram-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            gold-v5-telegram-${{ github.ref_name }}-
+      - name: Neue Paper-Signale an Telegram senden
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "::warning::Telegram-Secrets fehlen. Kein Versand."
+          else
+            python gold_v5_telegram_notify.py
+          fi
+      - name: Telegram-Sendeprotokoll fuer naechsten Lauf sichern
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: gold_v5_telegram_sent.json
+          key: gold-v5-telegram-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Bericht als Workflow-Artefakt sichern
         if: always()
         uses: actions/upload-artifact@v4
