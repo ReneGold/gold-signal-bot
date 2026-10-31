@@ -11,18 +11,35 @@ jobs:
     steps:
       - name: Simulierte Teststoerung erstellen und schliessen
         uses: actions/github-script@v7
+        env:
+          GOLD_V5_ALERT_BOT_TOKEN: ${{ secrets.GOLD_V5_ALERT_BOT_TOKEN }}
+          GOLD_V5_ALERT_CHAT_ID: ${{ secrets.GOLD_V5_ALERT_CHAT_ID }}
         with:
           script: |
             const owner=context.repo.owner, repo=context.repo.repo;
+            const token=process.env.GOLD_V5_ALERT_BOT_TOKEN;
+            const chat=process.env.GOLD_V5_ALERT_CHAT_ID;
+            if(!token || !chat) throw new Error("Telegram test requires both separate alert secrets");
+            const notify=async(message)=>{
+              const res=await fetch("https://api.telegram.org/bot"+token+"/sendMessage",{
+                method:"POST",headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({chat_id:chat,text:message})
+              });
+              // Never log the response body (it might contain bot-specific details).
+              if(!res.ok) throw new Error("Telegram test send failed (HTTP "+res.status+")");
+              core.info("Telegram test message delivered by API.");
+            };
             const title="[Gold V5 TEST] Simulierte Stoerung";
             const body="AUTOMATISCHER SELBSTTEST – KEINE ECHTE STOERUNG, KEIN TRADING-SIGNAL.\n\n"+
               "Testlauf: "+context.serverUrl+"/"+owner+"/"+repo+"/actions/runs/"+context.runId;
+            await notify("TEST Gold V5 Technik Alarm: Simulierte Stoerung erkannt. KEIN Handelssignal. Bitte keine Handelsaktion ausfuehren.");
             const created=await github.rest.issues.create({owner,repo,title,body});
             const number=created.data.number;
             core.info("Test-Issue erstellt: #"+number);
             await github.rest.issues.createComment({owner,repo,issue_number:number,
               body:"SELBSTTEST ERFOLGREICH: Simulierte Stoerung wurde erkannt. Entwarnung; Issue wird geschlossen."});
             await github.rest.issues.update({owner,repo,issue_number:number,state:"closed"});
+            await notify("TEST ENDE Gold V5 Technik Alarm: Entwarnung. Die simulierte Stoerung wurde beendet.");
             const checked=await github.rest.issues.get({owner,repo,issue_number:number});
             if(checked.data.state!=="closed") core.setFailed("Test-Issue wurde nicht geschlossen");
             else {
