@@ -1,14 +1,14 @@
 {
-  "observed_at_utc": "2026-10-31T00:11:06.164913+00:00",
-  "previous_observer_at_utc": "2026-10-30T20:52:57.920155+00:00",
-  "minutes_since_previous_observer": 198.14,
+  "observed_at_utc": "2026-10-31T05:54:26.596543+00:00",
+  "previous_observer_at_utc": "2026-10-31T00:11:06.840636+00:00",
+  "minutes_since_previous_observer": 343.33,
   "nominal_schedule_minutes_utc": [
     9,
     24,
     39,
     54
   ],
-  "minutes_since_most_recent_nominal_slot": 2.1,
+  "minutes_since_most_recent_nominal_slot": 0.43,
   "active_reference_candle_closes_since_previous_run": 0,
   "possibly_unobserved_candle_closes_utc": [],
   "unverified_signals": true,
