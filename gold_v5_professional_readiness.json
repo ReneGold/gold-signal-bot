@@ -1,0 +1,63 @@
+{
+  "generated_utc": "2026-10-31T08:09:10.760590+00:00",
+  "mode": "RESEARCH_ONLY_NO_TRADE_GATE_CHANGES",
+  "modules": {
+    "news_blackout": {
+      "status": "NOT_VERIFIED",
+      "source": "NONE",
+      "high_impact_usd_events": null,
+      "release_time_timezone_verified": false,
+      "proposed_blackout_before_minutes": 30,
+      "proposed_blackout_after_minutes": 30,
+      "enforced_for_existing_signals": false,
+      "note": "No licensed/reliable verified economic-calendar feed is connected. Proposed window is NOT applied to paper entries."
+    },
+    "spread_volatility": {
+      "status": "NOT_VERIFIED",
+      "verified_live_bid_ask": false,
+      "broker_quote_available": false,
+      "illustrative_quote_spread_usd": null,
+      "actual_spread_limit": null,
+      "execution_filter_active": false,
+      "recent_signal_atr14_15m": null,
+      "volatility_guard_active": false,
+      "note": "ATR diagnostics exist for future snapshots; no validated broker spread, session or empirical volatility thresholds."
+    },
+    "entry_exit": {
+      "status": "PAPER_RULES_PRESENT_NOT_EXECUTION_VALIDATED",
+      "pending_entry_count": 0,
+      "open_paper_count": 0,
+      "unresolved_data_gap_count": 0,
+      "closed_exit_reasons": {
+        "TP": 1,
+        "STOP": 0,
+        "TIME": 0
+      },
+      "planned_reward_to_risk": 2.0,
+      "max_observation_bars": 16,
+      "stop_first_if_both_hit": true,
+      "broker_order_manager_active": false,
+      "intrabar_fill_order_verified": false,
+      "note": "Paper logic uses completed OHLC candles and an assumed fixed 0.8 USD cost; no broker stop, latency, partial fills, or realistic gap simulation."
+    },
+    "realistic_validation": {
+      "status": "INSUFFICIENT_FORWARD_SAMPLE",
+      "forward_closed_count": 1,
+      "backfill_excluded": true,
+      "forward_net_R_at_existing_assumed_cost": 1.90306,
+      "extra_adverse_price_cost_usd_per_trade_to_total_net_R": {
+        "0.0": 1.90306,
+        "0.5": 1.84247,
+        "1.0": 1.78188,
+        "2.0": 1.6607
+      },
+      "independent_out_of_sample_validated": false,
+      "verified_broker_execution": false,
+      "ready_for_live_trading": false,
+      "note": "Sensitivity is not a broker execution backtest. No confidence in profitability from sparse forward observations."
+    }
+  },
+  "forward_ledger_count": 1,
+  "matched_signal_snapshots": 0,
+  "critical": "No live order capability. News and spread data missing; do not claim filters are operational."
+}
