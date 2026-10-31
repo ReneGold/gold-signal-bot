@@ -25,11 +25,13 @@ jobs:
       - name: Abhaengigkeiten installieren
         run: pip install -r requirements.txt
       - name: Python-Code vor Ausfuehrung pruefen
-        run: python -m py_compile gold_v5_forward_observe.py gold_v5_integrity_audit.py gold_v5_forward_performance.py gold_v5_feed_quality.py gold_v5_risk_overlay.py gold_v5_risk_gate.py test_gold_v5_risk_gate.py gold_v5_broker_readiness.py gold_v5_coverage_monitor.py gold_v5_missed_signal_diagnostic.py gold_v5_evidence_review.py gold_v5_signal_quality_review.py gold_v5_snapshot_audit.py gold_v5_professional_readiness.py gold_v5_us_news_calendar.py gold_v5_calendar_verification.py gold_v5_news_blackout_comparison.py gold_v5_calendar_history.py gold_v5_fomc_observation.py gold_v5_news_window_logic.py test_gold_v5_news_window_logic.py
+        run: python -m py_compile gold_v5_forward_observe.py gold_v5_integrity_audit.py gold_v5_forward_performance.py gold_v5_feed_quality.py gold_v5_risk_overlay.py gold_v5_risk_gate.py test_gold_v5_risk_gate.py gold_v5_broker_readiness.py gold_v5_coverage_monitor.py gold_v5_missed_signal_diagnostic.py gold_v5_evidence_review.py gold_v5_signal_quality_review.py gold_v5_snapshot_audit.py gold_v5_professional_readiness.py gold_v5_us_news_calendar.py gold_v5_calendar_verification.py gold_v5_news_blackout_comparison.py gold_v5_calendar_history.py gold_v5_fomc_observation.py gold_v5_news_window_logic.py test_gold_v5_news_window_logic.py test_gold_v5_snapshot_arithmetic.py
       - name: Paper-Risikosperre mit Tests verifizieren
         run: python -m unittest -v test_gold_v5_risk_gate.py
       - name: Synthetische FOMC Nachrichtenfenster Regressionstests
         run: python -m unittest -v test_gold_v5_news_window_logic.py
+      - name: Synthetische EMA ATR und Kerzen Regressionstests
+        run: python -m unittest -v test_gold_v5_snapshot_arithmetic.py
       - name: GitHub Beobachtungsluecken protokollieren
         run: python gold_v5_coverage_monitor.py
       - name: Eventuell verpasste Signale nur diagnostisch kennzeichnen
