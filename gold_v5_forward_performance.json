@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-31T05:54:27.791898+00:00",
+  "generated_utc": "2026-10-31T07:37:29.259087+00:00",
   "scope": "Only FORWARD cohort; excludes all INITIAL_BACKFILL and recovered records",
   "sample_size": 1,
   "forward_signals_total": 1,

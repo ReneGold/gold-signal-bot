@@ -1,0 +1,21 @@
+{
+  "generated_utc": "2026-10-31T07:37:29.297419+00:00",
+  "scope": "FORWARD CLOSED_PAPER only; INITIAL_BACKFILL excluded",
+  "closed_forward_trades": 1,
+  "forward_open_or_pending": 0,
+  "observed_wins": 1,
+  "observed_net_R": 1.90306,
+  "win_rate_wilson_95_pct": [
+    20.65,
+    100.0
+  ],
+  "evidence_stage": "INSUFFICIENT",
+  "interpretation": "Fewer than 30 closed observed FORWARD trades; no strategy-quality inference.",
+  "thresholds_are": "Illustrative research milestones, NOT statistical proof or trading approval.",
+  "critical_limits": [
+    "Win-rate confidence interval is not a profitability confidence interval and assumes independent comparable trades.",
+    "Trading outcomes may be dependent or regime-specific; historical results cannot guarantee future results.",
+    "Fills are indicative next-bar OHLC, not executable broker bid/ask or verified spread/slippage.",
+    "Market session and missed executions may bias observed sample; no live-money readiness assertion."
+  ]
+}
