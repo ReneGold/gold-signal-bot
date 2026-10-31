@@ -1,0 +1,55 @@
+name: Gold V5 Unabhaengiger Workflow Waechter
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '13,43 * * * *'
+permissions:
+  actions: read
+  contents: read
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: GitHub Run-Historie unabhaengig kontrollieren
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workflow_id = "gold-v5-forward-paper.yml";
+            const now = new Date();
+            const response = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner, repo: context.repo.repo,
+              workflow_id, per_page: 50
+            });
+            const runs = response.data.workflow_runs || [];
+            const successes = runs.filter(r => r.conclusion === "success");
+            const latest = successes.length ? successes.reduce((a,b) =>
+              new Date(a.updated_at) > new Date(b.updated_at) ? a : b) : null;
+            const minutes = latest ? (now - new Date(latest.updated_at))/60000 : null;
+            // Conservative time-based suppression for the approximate Friday-close
+            // through Sunday-open market reference. Not broker-verified.
+            const chi = new Intl.DateTimeFormat("en-US",{
+              timeZone:"America/Chicago",weekday:"short",hour:"2-digit",
+              minute:"2-digit",hourCycle:"h23"
+            }).formatToParts(now).reduce((o,x)=>{o[x.type]=x.value;return o;},{});
+            const m = Number(chi.hour)*60+Number(chi.minute);
+            const day=chi.weekday;
+            const paused = day==="Sat" || (day==="Fri" && m>=960) ||
+              (day==="Sun" && m<1020) ||
+              (["Mon","Tue","Wed","Thu"].includes(day) && m>=960 && m<1020);
+            // A recent failed attempt is actionable even during trading pauses.
+            const recentFailure = runs.find(r=>["failure","timed_out","cancelled"].includes(r.conclusion)
+              && now-new Date(r.updated_at)<90*60000);
+            let reasons=[];
+            if (recentFailure) reasons.push("RECENT_FAILED_JOB:"+recentFailure.html_url);
+            if (!paused && (minutes===null || minutes>75)) reasons.push("NO_RECENT_SUCCESS_IN_ACTIVE_SESSION");
+            const report={checked_at_utc:now.toISOString(),approximate_reference_market_paused:paused,
+              latest_success_url:latest?.html_url||null,
+              minutes_since_success:minutes===null?null:Math.round(minutes*10)/10,
+              recent_failure_url:recentFailure?.html_url||null,
+              status:reasons.length?"ALERT":"OK",reasons,
+              caveat:"This check is independent of the forward workflow but depends on scheduled GitHub Actions itself; market hours approximate, may flag holidays or delayed schedules."};
+            core.info(JSON.stringify(report,null,2));
+            await core.summary.addHeading("Gold V5 independent workflow watchdog")
+              .addCodeBlock(JSON.stringify(report,null,2),"json").write();
+            if(reasons.length) core.setFailed(reasons.join("; "));
