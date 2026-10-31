@@ -17,9 +17,9 @@ Unabhängige, **nur lesende** Auswertung. Die Handelsstrategie, Signalerzeugung,
 ## Anwendung
 ```bash
 python3 -m unittest test_gold_v5_forward_audit.py
-python3 gold_v5_forward_audit.py --csv forward_closed_trades.csv --output gold_v5_forward_audit.json
+python3 gold_v5_forward_audit.py --output gold_v5_forward_audit.json
 ```
-Das CSV benötigt die Spalten `cohort,status,net_R`; empfohlen sind `trade_id,signal_time_utc,regime` und Indikator-Snapshots. Beispielstruktur:
+Standardmäßig liest das Tool `gold_v5_forward_ledger.csv`. Es erkennt `CLOSED_PAPER` sowie `CLOSED` und verwendet `signal_utc` zur Duplikatprüfung, `exit_utc` für die zeitliche Sortierung sowie `phase` für die Marktaufteilung. Die Pflichtspalten sind `cohort,status,net_R`. Beispielstruktur:
 
 ```csv
 cohort,status,net_R,trade_id,signal_time_utc,regime
