@@ -1,24 +1,57 @@
 {
-  "generated_utc": "2026-10-31T08:13:47.545943+00:00",
+  "generated_utc": "2026-10-31T08:18:55.269378+00:00",
   "mode": "OBSERVATION_ONLY",
-  "provider": "US Bureau of Labor Statistics",
-  "source_url": "https://www.bls.gov/schedule/news_release/bls.ics",
-  "source_status": "UNAVAILABLE",
+  "provider": "XOOMAR (third-party aggregation of agency schedules)",
+  "source_url": "https://xoomar.com/api/markets/calendar?importance=high",
+  "source_status": "THIRD_PARTY_UNVERIFIED",
   "selected_categories": [
-    "Employment Situation (NFP)",
-    "Consumer Price Index (CPI)",
-    "Producer Price Index (PPI)"
+    "NFP",
+    "CPI",
+    "PPI",
+    "PCE",
+    "FOMC"
   ],
-  "coverage_scope": "BLS releases only. Does not cover FOMC, BEA/PCE, speeches or unexpected news.",
-  "future_events": [],
-  "near_release_window": null,
+  "future_events": [
+    {
+      "category": "NFP",
+      "title": "Nonfarm Payrolls (Employment Situation)",
+      "release_utc": "2026-11-06T13:30:00+00:00",
+      "release_berlin": "2026-11-06T14:30:00+01:00",
+      "minutes_until": 8951.1,
+      "source": "XOOMAR; confirm with original agency"
+    },
+    {
+      "category": "CPI",
+      "title": "CPI (Consumer Price Index)",
+      "release_utc": "2026-11-10T13:30:00+00:00",
+      "release_berlin": "2026-11-10T14:30:00+01:00",
+      "minutes_until": 14711.1,
+      "source": "XOOMAR; confirm with original agency"
+    },
+    {
+      "category": "PPI",
+      "title": "PPI (Producer Price Index)",
+      "release_utc": "2026-11-13T13:30:00+00:00",
+      "release_berlin": "2026-11-13T14:30:00+01:00",
+      "minutes_until": 19031.1,
+      "source": "XOOMAR; confirm with original agency"
+    },
+    {
+      "category": "PCE",
+      "title": "Personal Income and Outlays (PCE)",
+      "release_utc": "2026-11-25T13:30:00+00:00",
+      "release_berlin": "2026-11-25T14:30:00+01:00",
+      "minutes_until": 36311.1,
+      "source": "XOOMAR; confirm with original agency"
+    }
+  ],
+  "near_release_window": false,
   "time_window_minutes": {
     "before": 30,
     "after": 30
   },
   "trading_filter_active": false,
-  "errors": [
-    "HTTPError: HTTP Error 403: Forbidden"
-  ],
-  "caution": "Missing or incomplete calendar must never imply no news risk."
+  "errors": [],
+  "coverage_scope": "Selected US high-impact releases only; surprises or schedule changes possible.",
+  "caution": "Third-party unverified calendar. Empty list or outage NEVER means no news risk."
 }
