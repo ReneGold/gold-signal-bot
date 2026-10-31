@@ -14,6 +14,7 @@ from gold_v5_risk_gate import risk_gate
 
 P=Path(__file__).resolve().parent
 LEDGER=P/"gold_v5_forward_ledger.csv"
+SNAPSHOTS=P/"gold_v5_signal_snapshots.json"
 FREEZE=datetime(2026,10,29,14,38,28,tzinfo=timezone.utc)
 CT=ZoneInfo("America/Chicago")
 FIELDS=["signal_utc","entry_utc","side","phase","entry","stop","target","risk",
@@ -62,6 +63,8 @@ for r in rows:
 signal_seen={r["signal_utc"] for r in rows}
 bar_at={x.t:x for x in c}
 added=entered=closed=missed=0
+snapshots=json.loads(SNAPSHOTS.read_text(encoding="utf-8")) if SNAPSHOTS.exists() else []
+snapshot_keys={r["signal_utc"] for r in snapshots}
 # First update previously recorded pending entries. Do not enter if data provider has
 # lost the next candle; never invent an entry price.
 for r in rows:
@@ -118,7 +121,34 @@ if fresh and c[i].t.isoformat() not in signal_seen and session(close_t) and side
     side="LONG" if d==1 else "SHORT",phase="RANGE_OR_WEAK",entry="",stop="",target="",
     risk=f"{risk:.5f}",status="PENDING_ENTRY",exit_utc="",exit_price="",
     exit_reason="",net_R="",cohort="FORWARD"))
+  # Diagnostic snapshot at actual signal time; no historical reconstruction.
+  if c[i].t.isoformat() not in snapshot_keys:
+   hi=max(j for j,z in enumerate(h) if z.t+timedelta(hours=1)<=close_t)
+   bar=c[i];prev=c[i-1]
+   snapshots.append({
+    "signal_utc":bar.t.isoformat(),"decision_utc":close_t.isoformat(),
+    "cohort":"FORWARD","side":"LONG" if d==1 else "SHORT",
+    "phase":"RANGE_OR_WEAK",
+    "trigger":"EMA trend, EMA20 pullback touch, closed-candle breakout",
+    "ema20_15m":round(ef[i],5),"ema50_15m":round(es[i],5),
+    "ema20_previous_15m":round(ef[i-1],5),"atr14_15m":round(atr[i],5),
+    "ema20_1h":round(hf[hi],5),"ema50_1h":round(hs[hi],5),
+    "atr14_1h":round(ha[hi],5),
+    "ema_gap_1h_over_atr":round(abs(hf[hi]-hs[hi])/ha[hi],5),
+    "candle":{"open":bar.o,"high":bar.h,"low":bar.l,"close":bar.c,
+      "body":round(abs(bar.c-bar.o),5),
+      "upper_wick":round(bar.h-max(bar.o,bar.c),5),
+      "lower_wick":round(min(bar.o,bar.c)-bar.l,5)},
+    "previous_high":prev.h,"previous_low":prev.l,
+    "signal_ema20_distance_atr":round((bar.c-ef[i])/atr[i],5),
+    "risk_distance":round(risk,5),
+    "captured_at_decision":True,
+    "broker_bid_ask":None,"spread":None,"slippage":None,
+    "support_resistance_zone":None,
+    "limitations":"No verified broker quote, spread, or support/resistance zones available."
+   })
   added+=1
+SNAPSHOTS.write_text(json.dumps(snapshots,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
 rows.sort(key=lambda r:r["signal_utc"])
 with LEDGER.open("w",newline="",encoding="utf-8") as f:
  w=csv.DictWriter(f,fieldnames=FIELDS);w.writeheader();w.writerows(rows)
