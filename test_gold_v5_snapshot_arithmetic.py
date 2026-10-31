@@ -36,7 +36,7 @@ def diagnostic_candle(open_,high,low,close):
 class GoldV5SnapshotArithmetic(unittest.TestCase):
     def test_flat_ema(self):
         for period in (20,50):
-            self.assertTrue(all(v==4000 for v in ema([4000.0]*80,period)))
+            self.assertTrue(all(math.isclose(v,4000.0,rel_tol=0,abs_tol=1e-9) for v in ema([4000.0]*80,period)))
     def test_ema_rising_vs_falling(self):
         rising=ema([3900+i for i in range(90)],20)
         falling=ema([4000-i for i in range(90)],20)
