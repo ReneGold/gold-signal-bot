@@ -1,0 +1,24 @@
+{
+  "generated_utc": "2026-10-31T08:13:47.545943+00:00",
+  "mode": "OBSERVATION_ONLY",
+  "provider": "US Bureau of Labor Statistics",
+  "source_url": "https://www.bls.gov/schedule/news_release/bls.ics",
+  "source_status": "UNAVAILABLE",
+  "selected_categories": [
+    "Employment Situation (NFP)",
+    "Consumer Price Index (CPI)",
+    "Producer Price Index (PPI)"
+  ],
+  "coverage_scope": "BLS releases only. Does not cover FOMC, BEA/PCE, speeches or unexpected news.",
+  "future_events": [],
+  "near_release_window": null,
+  "time_window_minutes": {
+    "before": 30,
+    "after": 30
+  },
+  "trading_filter_active": false,
+  "errors": [
+    "HTTPError: HTTP Error 403: Forbidden"
+  ],
+  "caution": "Missing or incomplete calendar must never imply no news risk."
+}
