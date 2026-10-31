@@ -2,11 +2,11 @@
   "risk_gate": {
     "decision": "ALLOW",
     "reasons": [],
-    "daily_R": 1.90306,
+    "daily_R": 0,
     "loss_streak": 0,
     "max_closed_dd_R": 0.0
   },
-  "as_of_utc": "2026-10-30T20:52:57.920155+00:00",
+  "as_of_utc": "2026-10-31T00:11:06.840636+00:00",
   "candidate": "Gold V5 frozen sideways pullback",
   "forward_signals": 1,
   "forward_pending": 0,
