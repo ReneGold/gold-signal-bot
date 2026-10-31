@@ -1,0 +1,39 @@
+{
+  "checked_utc": "2026-10-31T08:27:48.893242+00:00",
+  "mode": "OBSERVATION_ONLY",
+  "third_party_status": "THIRD_PARTY_UNVERIFIED",
+  "reference_valid": true,
+  "source_reference_date": "2026-10-31",
+  "events": [
+    {
+      "category": "NFP",
+      "release_utc": "2026-11-06T13:30:00+00:00",
+      "verification": "MATCHES_SNAPSHOT",
+      "source_url": "https://www.bls.gov/schedule/2026/11_sched_list.htm"
+    },
+    {
+      "category": "CPI",
+      "release_utc": "2026-11-10T13:30:00+00:00",
+      "verification": "MATCHES_SNAPSHOT",
+      "source_url": "https://www.bls.gov/schedule/2026/11_sched_list.htm"
+    },
+    {
+      "category": "PPI",
+      "release_utc": "2026-11-13T13:30:00+00:00",
+      "verification": "MATCHES_SNAPSHOT",
+      "source_url": "https://www.bls.gov/schedule/2026/11_sched_list.htm"
+    },
+    {
+      "category": "PCE",
+      "release_utc": "2026-11-25T13:30:00+00:00",
+      "verification": "MATCHES_SNAPSHOT",
+      "source_url": "https://www.bea.gov/news/schedule/"
+    }
+  ],
+  "confirmed_matches": 4,
+  "matched_event_count": 4,
+  "fully_verified_live_calendar": false,
+  "missing_categories": [],
+  "trading_filter_active": false,
+  "warning": "Manual snapshot comparison is not live official verification; missing and rescheduled data may remain unrecognized. Do not change trades."
+}
