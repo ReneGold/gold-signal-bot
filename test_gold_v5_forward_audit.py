@@ -25,6 +25,12 @@ class ForwardAuditTests(unittest.TestCase):
         self.assertEqual(result["sample_size"], 1)
         self.assertEqual(len(result["row_errors"]), 2)
 
+    def test_actual_ledger_format(self):
+        result = audit([{"cohort":"FORWARD","status":"CLOSED_PAPER","net_R":"1.90306","signal_utc":"2026-10-29T23:00:00+00:00","exit_utc":"2026-10-30T01:00:00+00:00","phase":"RANGE_OR_WEAK"}])
+        self.assertEqual(result["sample_size"], 1)
+        self.assertEqual(result["base"]["net_R"], 1.90306)
+        self.assertEqual(result["regime_breakdown"]["RANGE_OR_WEAK"]["n"], 1)
+
     def test_empty_sample_is_not_success(self):
         result = audit([])
         self.assertEqual(result["sample_size"], 0)
