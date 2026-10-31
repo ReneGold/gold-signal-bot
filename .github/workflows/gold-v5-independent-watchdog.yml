@@ -60,12 +60,12 @@ jobs:
             await core.summary.addHeading("Gold V5 independent workflow watchdog")
               .addCodeBlock(JSON.stringify(report,null,2),"json").write();
             // Open/update one persistent issue per current incident to avoid repeat spam.
-            const title = "[Gold V5] Forward-Workflow Stoerung";
+            const simulation = context.eventName === "workflow_dispatch" && context.payload.inputs?.test_incident === "true";
+            const title = simulation ? "[Gold V5 TEST] Simulierte Stoerung" : "[Gold V5] Forward-Workflow Stoerung";
             const issues = await github.paginate(github.rest.issues.listForRepo,{
               owner:context.repo.owner,repo:context.repo.repo,state:"open",per_page:100
             });
             const prior = issues.find(i=>i.title===title && !i.pull_request);
-            const simulation = context.eventName === "workflow_dispatch" && context.payload.inputs?.test_incident === "true";
             if(simulation) reasons=["SIMULATED_WATCHDOG_TEST"]; 
             if(reasons.length) {
               const body = "Automatischer technischer Alarm (KEIN Trading-Signal).\\n\\n"
