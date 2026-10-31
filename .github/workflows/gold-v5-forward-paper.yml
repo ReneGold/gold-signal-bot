@@ -58,7 +58,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gold_v5_forward_ledger.csv gold_v5_forward_summary.json gold_v5_forward_performance.json gold_v5_integrity_report.json gold_v5_feed_quality.json gold_v5_risk_report.json gold_v5_broker_readiness.json gold_v5_coverage_report.json gold_v5_missed_signal_diagnostic.json gold_v5_evidence_report.json gold_v5_signal_quality_report.json
+          git add gold_v5_forward_ledger.csv gold_v5_forward_summary.json gold_v5_forward_performance.json gold_v5_integrity_report.json gold_v5_feed_quality.json gold_v5_risk_report.json gold_v5_broker_readiness.json gold_v5_coverage_report.json gold_v5_missed_signal_diagnostic.json gold_v5_evidence_report.json gold_v5_signal_quality_report.json gold_v5_signal_snapshots.json
           if ! git diff --cached --quiet; then
             git commit -m "Update Gold V5 paper-forward observations"
             git push origin HEAD:gold-bot-v3-9-5-test
@@ -80,4 +80,5 @@ jobs:
             gold_v5_missed_signal_diagnostic.json
             gold_v5_evidence_report.json
             gold_v5_signal_quality_report.json
+            gold_v5_signal_snapshots.json
           if-no-files-found: warn
