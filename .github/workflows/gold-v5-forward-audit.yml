@@ -10,6 +10,12 @@ on:
       - .github/workflows/gold-v5-forward-audit.yml
       - gold_v5_telegram_notify.py
   workflow_dispatch:
+    inputs:
+      telegram_test:
+        description: "Telegram-Testnachricht senden (kein Handelssignal)"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -41,6 +47,11 @@ jobs:
           key: gold-v5-telegram-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             gold-v5-telegram-${{ github.ref_name }}-
+      - name: Sendeprotokoll sicherstellen
+        run: |
+          if [ ! -f gold_v5_telegram_sent.json ]; then
+            printf '{"sent":[]}\n' > gold_v5_telegram_sent.json
+          fi
       - name: Neue Paper-Signale an Telegram senden
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -49,7 +60,11 @@ jobs:
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
             echo "::warning::Telegram-Secrets fehlen. Kein Versand."
           else
-            python gold_v5_telegram_notify.py
+            if [ "${{ inputs.telegram_test }}" = "true" ]; then
+              python gold_v5_telegram_notify.py --test
+            else
+              python gold_v5_telegram_notify.py
+            fi
           fi
       - name: Telegram-Sendeprotokoll fuer naechsten Lauf sichern
         if: always()
