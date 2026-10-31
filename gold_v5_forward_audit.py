@@ -27,7 +27,7 @@ def audit(rows):
         if cohort != "FORWARD":
             excluded["backfill_or_recovered"] += 1
             continue
-        if str(r.get("status", "")).strip().upper() not in ("CLOSED", "CLOSE"):
+        if str(r.get("status", "")).strip().upper() not in ("CLOSED", "CLOSE", "CLOSED_PAPER"):
             excluded["not_closed"] += 1
             continue
         try:
@@ -37,14 +37,14 @@ def audit(rows):
         except (KeyError, ValueError, TypeError):
             errors.append("line %d: missing/invalid net_R" % line)
             continue
-        tid = str(r.get("trade_id", "")).strip()
+        tid = str(r.get("trade_id") or r.get("signal_utc") or "").strip()
         if tid:
             if tid in duplicates:
                 errors.append("line %d: duplicate trade_id %s" % (line, tid))
                 continue
             duplicates.add(tid)
         eligible.append(dict(r, _r=val, _line=line))
-    eligible.sort(key=lambda r: (str(r.get("signal_time_utc", "")), r["_line"]))
+    eligible.sort(key=lambda r: (str(r.get("exit_utc") or r.get("signal_time_utc") or r.get("signal_utc") or ""), r["_line"]))
     values = [r["_r"] for r in eligible]
 
     def metrics(v):
@@ -72,7 +72,7 @@ def audit(rows):
     by_regime = defaultdict(list)
     missing = {field: 0 for field in SNAPSHOT}
     for r in eligible:
-        by_regime[str(r.get("regime", "")).strip() or "UNKNOWN"].append(r["_r"])
+        by_regime[str(r.get("regime") or r.get("phase") or "").strip() or "UNKNOWN"].append(r["_r"])
         for field in SNAPSHOT:
             if str(r.get(field, "")).strip() == "":
                 missing[field] += 1
@@ -106,7 +106,7 @@ def audit(rows):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--csv", required=True, type=Path)
+    p.add_argument("--csv", type=Path, default=Path(__file__).resolve().parent / "gold_v5_forward_ledger.csv", help="Gold V5 forward ledger (default: repository ledger)")
     p.add_argument("--output", type=Path)
     args = p.parse_args()
     with args.csv.open(newline="", encoding="utf-8-sig") as f:
