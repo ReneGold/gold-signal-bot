@@ -1,0 +1,16 @@
+{
+  "checked_utc": "2026-10-31T09:04:37.871427+00:00",
+  "source_status": "THIRD_PARTY_UNVERIFIED",
+  "new_unique_category_time_pairs": 4,
+  "archived_pairs": 4,
+  "current_feed_usable": true,
+  "schedule_changes_proven": false,
+  "fomc_currently_seen": false,
+  "uncertainties": [
+    "Calendar events have no stable unique release identifier; apparent date changes cannot be confidently detected.",
+    "Missing events or provider outages do not mean cancellation or a news-free trading session.",
+    "Only events observed after archive installation are captured, not missing historical news.",
+    "FOMC dates, official updates and unexpected news are not guaranteed by this feed.",
+    "Trading rules remain unchanged; no active news filter."
+  ]
+}

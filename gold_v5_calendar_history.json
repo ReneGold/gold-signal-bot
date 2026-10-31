@@ -1,0 +1,44 @@
+{
+  "observations": [
+    {
+      "category": "NFP",
+      "release_utc": "2026-11-06T13:30:00+00:00",
+      "title": "Nonfarm Payrolls (Employment Situation)",
+      "first_seen_utc": "2026-10-31T09:04:37.871427+00:00",
+      "last_seen_utc": "2026-10-31T09:04:37.871427+00:00",
+      "seen_count": 1,
+      "reference_match_seen": true,
+      "source": "XOOMAR third-party calendar"
+    },
+    {
+      "category": "CPI",
+      "release_utc": "2026-11-10T13:30:00+00:00",
+      "title": "CPI (Consumer Price Index)",
+      "first_seen_utc": "2026-10-31T09:04:37.871427+00:00",
+      "last_seen_utc": "2026-10-31T09:04:37.871427+00:00",
+      "seen_count": 1,
+      "reference_match_seen": true,
+      "source": "XOOMAR third-party calendar"
+    },
+    {
+      "category": "PPI",
+      "release_utc": "2026-11-13T13:30:00+00:00",
+      "title": "PPI (Producer Price Index)",
+      "first_seen_utc": "2026-10-31T09:04:37.871427+00:00",
+      "last_seen_utc": "2026-10-31T09:04:37.871427+00:00",
+      "seen_count": 1,
+      "reference_match_seen": true,
+      "source": "XOOMAR third-party calendar"
+    },
+    {
+      "category": "PCE",
+      "release_utc": "2026-11-25T13:30:00+00:00",
+      "title": "Personal Income and Outlays (PCE)",
+      "first_seen_utc": "2026-10-31T09:04:37.871427+00:00",
+      "last_seen_utc": "2026-10-31T09:04:37.871427+00:00",
+      "seen_count": 1,
+      "reference_match_seen": true,
+      "source": "XOOMAR third-party calendar"
+    }
+  ]
+}
