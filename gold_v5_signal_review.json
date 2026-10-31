@@ -1,0 +1,41 @@
+{
+  "generated_utc": "2026-10-31T12:50:37.171518+00:00",
+  "mode": "READ_ONLY_FORWARD_REVIEW",
+  "forward_signal_count": 1,
+  "captured_snapshots": 0,
+  "historical_missing_snapshots": 1,
+  "observations": [
+    {
+      "signal_utc": "2026-10-29T23:00:00+00:00",
+      "direction": "SHORT",
+      "phase": "RANGE_OR_WEAK",
+      "entry_utc": "2026-10-29T23:15:00+00:00",
+      "entry": "4013.34623",
+      "stop": "4021.59857",
+      "target": "3996.84155",
+      "risk": "8.25234",
+      "status": "CLOSED_PAPER",
+      "exit_reason": "TP",
+      "net_R": 1.90306,
+      "indicators_captured_at_signal": false,
+      "ema20_15m": null,
+      "ema50_15m": null,
+      "atr14_15m": null,
+      "ema20_1h": null,
+      "ema50_1h": null,
+      "atr14_1h": null,
+      "signal_candle": null,
+      "snapshot_note": "MISSING_HISTORICAL_NOT_RECONSTRUCTED",
+      "reference_news_within_60_minutes": [],
+      "calendar_coverage": "PARTIAL_ONLY_UNKNOWN_OTHER_EVENTS"
+    }
+  ],
+  "news_filter_active": false,
+  "strategy_modified": false,
+  "limitations": [
+    "Historical snapshots cannot be reconstructed without lookahead risk.",
+    "Limited static news calendar is not an exhaustive historical verification.",
+    "Paper entries and outcomes do not represent executable broker fills.",
+    "One closed FORWARD trade is insufficient to infer profitability."
+  ]
+}
