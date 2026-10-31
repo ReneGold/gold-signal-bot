@@ -1,0 +1,37 @@
+{
+  "checked_utc": "2026-10-31T09:22:41.523300+00:00",
+  "mode": "OBSERVATION_ONLY",
+  "official_reference_source": [
+    "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+    "https://www.federalreserve.gov/newsevents/2026-december.htm"
+  ],
+  "calendar_type": "FIXED_VERIFIED_REFERENCE_NOT_LIVE_FEED",
+  "events": [
+    {
+      "category": "FOMC_STATEMENT",
+      "release_utc": "2026-12-09T19:00:00+00:00",
+      "release_berlin": "2026-12-09T20:00:00+01:00",
+      "meeting_dates": "2026-12-08/2026-12-09",
+      "minutes_until": 56737.31,
+      "inside_proposed_30_minute_window": false,
+      "forward_signal_matches_within_60_minutes": []
+    },
+    {
+      "category": "FOMC_PRESS_CONFERENCE",
+      "release_utc": "2026-12-09T19:30:00+00:00",
+      "release_berlin": "2026-12-09T20:30:00+01:00",
+      "meeting_dates": "2026-12-08/2026-12-09",
+      "minutes_until": 56767.31,
+      "inside_proposed_30_minute_window": false,
+      "forward_signal_matches_within_60_minutes": []
+    }
+  ],
+  "future_covered_event_count": 2,
+  "trading_filter_active": false,
+  "limitations": [
+    "FOMC includes both statement and press conference; overlapping windows must be combined if activated in later research.",
+    "December 2026 only; dates can change, and an unobserved calendar change would not be detected automatically.",
+    "A historical signal with no match does not establish a news-free session.",
+    "No paper entries are blocked or modified."
+  ]
+}
