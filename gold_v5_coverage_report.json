@@ -1,19 +1,25 @@
 {
-  "observed_at_utc": "2026-11-01T20:35:22.167461+00:00",
-  "previous_observer_at_utc": "2026-11-01T16:18:33.960788+00:00",
-  "minutes_since_previous_observer": 256.8,
+  "observed_at_utc": "2026-11-01T23:50:39.842273+00:00",
+  "previous_observer_at_utc": "2026-11-01T20:35:23.928267+00:00",
+  "minutes_since_previous_observer": 195.27,
   "nominal_schedule_minutes_utc": [
     9,
     24,
     39,
     54
   ],
-  "minutes_since_most_recent_nominal_slot": 11.37,
-  "active_reference_candle_closes_since_previous_run": 0,
-  "possibly_unobserved_candle_closes_utc": [],
+  "minutes_since_most_recent_nominal_slot": 11.65,
+  "active_reference_candle_closes_since_previous_run": 4,
+  "possibly_unobserved_candle_closes_utc": [
+    "2026-11-01T23:00:00+00:00",
+    "2026-11-01T23:15:00+00:00",
+    "2026-11-01T23:30:00+00:00",
+    "2026-11-01T23:45:00+00:00"
+  ],
   "unverified_signals": true,
   "status": "WARN",
   "warnings": [
+    "ACTIVE_SESSION_CANDLE_COVERAGE_GAP",
     "START_OFFSET_OVER_10_MINUTES_FROM_CRON_SLOT"
   ],
   "notes": [
