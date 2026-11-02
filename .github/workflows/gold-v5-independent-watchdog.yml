@@ -10,7 +10,7 @@ on:
   schedule:
     - cron: '13,43 * * * *'
 permissions:
-  actions: read
+  actions: write
   contents: read
   issues: write
 jobs:
@@ -32,6 +32,20 @@ jobs:
               workflow_id, per_page: 50
             });
             const runs = response.data.workflow_runs || [];
+            // Backup trigger: an overdue schedule gets one dispatch, never a retrospective trade.
+            // GitHub schedules are best-effort; this is a second best-effort trigger.
+            const latestStarted = runs.length ? runs.reduce((a,b) =>
+              new Date(a.created_at) > new Date(b.created_at) ? a : b) : null;
+            const minutesSinceStart = latestStarted ? (now-new Date(latestStarted.created_at))/60000 : null;
+            const running = runs.some(r => ["queued","in_progress","waiting","requested","pending"].includes(r.status));
+            const simulationOnly = context.eventName==="workflow_dispatch" && context.payload.inputs?.test_incident==="true";
+            if (!simulationOnly && !running && (minutesSinceStart===null || minutesSinceStart>35)) {
+              await github.rest.actions.createWorkflowDispatch({
+                owner:context.repo.owner,repo:context.repo.repo,workflow_id,
+                ref:"main"
+              });
+              core.warning("Forward schedule overdue: backup dispatch requested; no historical signals replayed.");
+            }
             const successes = runs.filter(r => r.conclusion === "success");
             const latest = successes.length ? successes.reduce((a,b) =>
               new Date(a.updated_at) > new Date(b.updated_at) ? a : b) : null;
