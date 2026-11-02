@@ -88,6 +88,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ ! -f gold_v5_telegram_sent.json ]; then touch gold_v5_telegram_sent.json; fi
           git add gold_v5_telegram_sent.json gold_v5_forward_ledger.csv gold_v5_forward_summary.json gold_v5_forward_performance.json gold_v5_integrity_report.json gold_v5_feed_quality.json gold_v5_risk_report.json gold_v5_broker_readiness.json gold_v5_coverage_report.json gold_v5_missed_signal_diagnostic.json gold_v5_evidence_report.json gold_v5_signal_quality_report.json gold_v5_signal_snapshots.json gold_v5_snapshot_audit.json gold_v5_professional_readiness.json gold_v5_us_news_calendar.json gold_v5_calendar_verification.json gold_v5_news_blackout_comparison.json gold_v5_calendar_history.json gold_v5_calendar_history_audit.json gold_v5_fomc_observation.json gold_v5_signal_review.json
           if ! git diff --cached --quiet; then
             git commit -m "Update Gold V5 paper-forward observations"
