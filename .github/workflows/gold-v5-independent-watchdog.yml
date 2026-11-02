@@ -2,6 +2,11 @@ name: Gold V5 Unabhaengiger Workflow Waechter
 on:
   workflow_dispatch:
     inputs:
+      test_backup_dry_run:
+        description: 'Ersatzstart simulieren ohne echten Workflow-Start'
+        required: false
+        type: boolean
+        default: false
       test_incident:
         description: 'Nur Test: Stoerung erzeugen und danach automatisch schliessen'
         required: false
@@ -60,6 +65,16 @@ jobs:
                 ref:"main"
               });
               core.warning("Forward schedule overdue: backup dispatch requested; no historical signals replayed.");
+            }
+            const dryRun = context.eventName === "workflow_dispatch" && context.payload.inputs?.test_backup_dry_run === "true";
+            if (dryRun) {
+              core.info("BACKUP_DRY_RUN_OK: Simulation einer 40-Minuten-Luecke, Handel aktiv, kein laufender Job.");
+              core.info("Entscheidung: Ersatzstart wuerde angefordert; KEIN Workflow wurde gestartet.");
+              await core.summary.addHeading("Gold V5 Ersatzstart – sicherer Trockenlauf")
+                .addCodeBlock(JSON.stringify({simulation:true,assumed_minutes_since_start:40,
+                  assumed_market_active:true,assumed_running_job:false,
+                  would_request_backup:true,actual_dispatch:false},null,2),"json").write();
+              return;
             }
             // A recent failed attempt is actionable even during trading pauses.
             const recentFailure = runs.find(r=>["failure","timed_out","cancelled"].includes(r.conclusion)
