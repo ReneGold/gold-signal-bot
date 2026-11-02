@@ -39,13 +39,6 @@ jobs:
             const minutesSinceStart = latestStarted ? (now-new Date(latestStarted.created_at))/60000 : null;
             const running = runs.some(r => ["queued","in_progress","waiting","requested","pending"].includes(r.status));
             const simulationOnly = context.eventName==="workflow_dispatch" && context.payload.inputs?.test_incident==="true";
-            if (!simulationOnly && !running && (minutesSinceStart===null || minutesSinceStart>35)) {
-              await github.rest.actions.createWorkflowDispatch({
-                owner:context.repo.owner,repo:context.repo.repo,workflow_id,
-                ref:"main"
-              });
-              core.warning("Forward schedule overdue: backup dispatch requested; no historical signals replayed.");
-            }
             const successes = runs.filter(r => r.conclusion === "success");
             const latest = successes.length ? successes.reduce((a,b) =>
               new Date(a.updated_at) > new Date(b.updated_at) ? a : b) : null;
@@ -61,6 +54,13 @@ jobs:
             const paused = day==="Sat" || (day==="Fri" && m>=960) ||
               (day==="Sun" && m<1020) ||
               (["Mon","Tue","Wed","Thu"].includes(day) && m>=960 && m<1020);
+            if (!simulationOnly && !paused && !running && (minutesSinceStart===null || minutesSinceStart>35)) {
+              await github.rest.actions.createWorkflowDispatch({
+                owner:context.repo.owner,repo:context.repo.repo,workflow_id,
+                ref:"main"
+              });
+              core.warning("Forward schedule overdue: backup dispatch requested; no historical signals replayed.");
+            }
             // A recent failed attempt is actionable even during trading pauses.
             const recentFailure = runs.find(r=>["failure","timed_out","cancelled"].includes(r.conclusion)
               && now-new Date(r.updated_at)<90*60000);
