@@ -59,7 +59,7 @@ jobs:
             const paused = day==="Sat" || (day==="Fri" && m>=960) ||
               (day==="Sun" && m<1020) ||
               (["Mon","Tue","Wed","Thu"].includes(day) && m>=960 && m<1020);
-            if (!simulationOnly && !paused && !running && (minutesSinceStart===null || minutesSinceStart>35)) {
+            if (!simulationOnly && context.payload.inputs?.test_backup_dry_run !== "true" && !paused && !running && (minutesSinceStart===null || minutesSinceStart>35)) {
               await github.rest.actions.createWorkflowDispatch({
                 owner:context.repo.owner,repo:context.repo.repo,workflow_id,
                 ref:"main"
