@@ -11,6 +11,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 import gold_signal_bot as bot
 from gold_v5_risk_gate import risk_gate
+from gold_v5_decision_explain import decide, make_report, save_observation
 
 P=Path(__file__).resolve().parent
 LEDGER=P/"gold_v5_forward_ledger.csv"
@@ -109,6 +110,22 @@ for r in rows:
 i=len(c)-1
 close_t=c[i].t+timedelta(minutes=15)
 fresh=(FREEZE<=close_t<=now and now-close_t<=timedelta(minutes=15))
+# Read-only explanation of the frozen V5 checks, using only closed candles.
+# Capture position state before an optional new paper signal is created.
+pre_dir=-1 if ef[i]<es[i] and ef[i]<ef[i-1] else 1 if ef[i]>es[i] and ef[i]>ef[i-1] else 0
+pre_prev=c[i-1];pre_bar=c[i]
+pre_touched=(pre_prev.h>=ef[i-1] if pre_dir==-1 else
+             pre_prev.l<=ef[i-1] if pre_dir==1 else False)
+pre_confirmed=((pre_bar.c<ef[i] and pre_bar.c<pre_prev.l and pre_bar.c<pre_bar.o)
+               if pre_dir==-1 else
+               (pre_bar.c>ef[i] and pre_bar.c>pre_prev.h and pre_bar.c>pre_bar.o)
+               if pre_dir==1 else False)
+pre_active=any(r.get("cohort")=="FORWARD" and r["status"] in ("OPEN_PAPER","PENDING_ENTRY") for r in rows)
+pre_risk_allowed=risk_gate(rows,close_t)["decision"]=="ALLOW"
+decision=decide(fresh=fresh,market_open=session(close_t),
+    sideways=bool(sideways(close_t)),trend=bool(pre_dir and atr[i]),
+    touched=pre_touched,confirmed=pre_confirmed,active=pre_active,
+    risk_allowed=pre_risk_allowed,already_seen=c[i].t.isoformat() in signal_seen)
 if fresh and c[i].t.isoformat() not in signal_seen and session(close_t) and sideways(close_t):
  d=pullback(i)
  # One active or pending forward position at a time. Earlier closed backfill trades
@@ -148,6 +165,20 @@ if fresh and c[i].t.isoformat() not in signal_seen and session(close_t) and side
     "limitations":"No verified broker quote, spread, or support/resistance zones available."
    })
   added+=1
+# Only actually inspected, fresh, completed candles enter quality statistics.
+observed_path=P/"gold_v5_decisions_observed.json"
+if fresh:
+ item=dict(candle_utc=c[i].t.isoformat(),decision_utc=close_t.isoformat(),
+           observed_at_utc=now.isoformat(),side="SHORT" if pre_dir==-1 else
+           "LONG" if pre_dir==1 else "NONE",fresh=True,**decision)
+ observed=save_observation(observed_path,item)
+else:
+ observed=json.loads(observed_path.read_text(encoding="utf-8")) if observed_path.exists() else []
+quality=make_report(observed)
+quality.update(as_of_utc=now.isoformat(),latest_candle_close_utc=close_t.isoformat(),
+  latest_candle_was_fresh=fresh,latest_decision=decision,
+  note="Read-only explanation; V5 entry rules and trade decisions remain frozen.")
+(P/"gold_v5_decision_report.json").write_text(json.dumps(quality,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
 SNAPSHOTS.write_text(json.dumps(snapshots,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
 rows.sort(key=lambda r:r["signal_utc"])
 with LEDGER.open("w",newline="",encoding="utf-8") as f:
