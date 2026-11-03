@@ -1,13 +1,13 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 1,
+  "observed_closed_candles": 2,
   "reason_counts": {
-    "MARKET_PHASE_BLOCKED": 1
+    "MARKET_PHASE_BLOCKED": 2
   },
   "latest": {
-    "candle_utc": "2026-11-03T06:15:00+00:00",
-    "decision_utc": "2026-11-03T06:30:00+00:00",
-    "observed_at_utc": "2026-11-03T06:39:46.695073+00:00",
+    "candle_utc": "2026-11-03T09:30:00+00:00",
+    "decision_utc": "2026-11-03T09:45:00+00:00",
+    "observed_at_utc": "2026-11-03T09:57:25.528850+00:00",
     "side": "SHORT",
     "fresh": true,
     "qualified": false,
@@ -32,15 +32,15 @@
     "score_note": "Frozen Gold V5 uses Boolean rules, NOT the V3.9 65-point score."
   },
   "last_96": {
-    "MARKET_PHASE_BLOCKED": 1
+    "MARKET_PHASE_BLOCKED": 2
   },
   "limitations": [
     "No V3.9 score is calculated in the frozen V5 strategy.",
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-03T06:39:46.695073+00:00",
-  "latest_candle_close_utc": "2026-11-03T06:30:00+00:00",
+  "as_of_utc": "2026-11-03T09:57:25.528850+00:00",
+  "latest_candle_close_utc": "2026-11-03T09:45:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
