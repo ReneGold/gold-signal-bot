@@ -1,0 +1,10 @@
+{
+  "name": "gold-v5-external-trigger",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "triggers": {
+    "crons": ["3,18,33,48 * * * *"]
+  },
+  "observability": {"enabled": true}
+}
