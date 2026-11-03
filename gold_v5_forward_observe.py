@@ -173,7 +173,9 @@ if fresh:
            "LONG" if pre_dir==1 else "NONE",fresh=True,**decision)
  observed=save_observation(observed_path,item)
 else:
- observed=json.loads(observed_path.read_text(encoding="utf-8")) if observed_path.exists() else []
+ if not observed_path.exists():
+  observed_path.write_text(json.dumps([])+"\n",encoding="utf-8")
+ observed=json.loads(observed_path.read_text(encoding="utf-8"))
 quality=make_report(observed)
 quality.update(as_of_utc=now.isoformat(),latest_candle_close_utc=close_t.isoformat(),
   latest_candle_was_fresh=fresh,latest_decision=decision,
