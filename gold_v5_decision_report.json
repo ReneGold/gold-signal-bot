@@ -1,26 +1,26 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 2,
+  "observed_closed_candles": 3,
   "reason_counts": {
-    "MARKET_PHASE_BLOCKED": 2
+    "MARKET_PHASE_BLOCKED": 2,
+    "NO_PULLBACK_TOUCH": 1
   },
   "latest": {
-    "candle_utc": "2026-11-03T09:30:00+00:00",
-    "decision_utc": "2026-11-03T09:45:00+00:00",
-    "observed_at_utc": "2026-11-03T09:57:25.528850+00:00",
-    "side": "SHORT",
+    "candle_utc": "2026-11-03T14:15:00+00:00",
+    "decision_utc": "2026-11-03T14:30:00+00:00",
+    "observed_at_utc": "2026-11-03T14:38:58.416446+00:00",
+    "side": "LONG",
     "fresh": true,
     "qualified": false,
-    "primary_reason": "MARKET_PHASE_BLOCKED",
+    "primary_reason": "NO_PULLBACK_TOUCH",
     "all_reasons": [
-      "MARKET_PHASE_BLOCKED",
       "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
       "reference_session_open": true,
-      "weak_or_sideways_1h": false,
+      "weak_or_sideways_1h": true,
       "ema20_ema50_trend": true,
       "ema20_pullback_touched": false,
       "closed_candle_breakout": false,
@@ -32,28 +32,28 @@
     "score_note": "Frozen Gold V5 uses Boolean rules, NOT the V3.9 65-point score."
   },
   "last_96": {
-    "MARKET_PHASE_BLOCKED": 2
+    "MARKET_PHASE_BLOCKED": 2,
+    "NO_PULLBACK_TOUCH": 1
   },
   "limitations": [
     "No V3.9 score is calculated in the frozen V5 strategy.",
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-03T09:57:25.528850+00:00",
-  "latest_candle_close_utc": "2026-11-03T09:45:00+00:00",
+  "as_of_utc": "2026-11-03T14:38:58.416446+00:00",
+  "latest_candle_close_utc": "2026-11-03T14:30:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
-    "primary_reason": "MARKET_PHASE_BLOCKED",
+    "primary_reason": "NO_PULLBACK_TOUCH",
     "all_reasons": [
-      "MARKET_PHASE_BLOCKED",
       "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
       "reference_session_open": true,
-      "weak_or_sideways_1h": false,
+      "weak_or_sideways_1h": true,
       "ema20_ema50_trend": true,
       "ema20_pullback_touched": false,
       "closed_candle_breakout": false,
