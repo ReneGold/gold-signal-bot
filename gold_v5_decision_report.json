@@ -1,19 +1,21 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 3,
+  "observed_closed_candles": 4,
   "reason_counts": {
     "MARKET_PHASE_BLOCKED": 2,
+    "NO_EMA_TREND": 1,
     "NO_PULLBACK_TOUCH": 1
   },
   "latest": {
-    "candle_utc": "2026-11-03T14:15:00+00:00",
-    "decision_utc": "2026-11-03T14:30:00+00:00",
-    "observed_at_utc": "2026-11-03T14:38:58.416446+00:00",
-    "side": "LONG",
+    "candle_utc": "2026-11-03T17:15:00+00:00",
+    "decision_utc": "2026-11-03T17:30:00+00:00",
+    "observed_at_utc": "2026-11-03T17:43:08.739315+00:00",
+    "side": "NONE",
     "fresh": true,
     "qualified": false,
-    "primary_reason": "NO_PULLBACK_TOUCH",
+    "primary_reason": "NO_EMA_TREND",
     "all_reasons": [
+      "NO_EMA_TREND",
       "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
@@ -21,7 +23,7 @@
       "fresh_closed_candle": true,
       "reference_session_open": true,
       "weak_or_sideways_1h": true,
-      "ema20_ema50_trend": true,
+      "ema20_ema50_trend": false,
       "ema20_pullback_touched": false,
       "closed_candle_breakout": false,
       "no_active_position": true,
@@ -33,6 +35,7 @@
   },
   "last_96": {
     "MARKET_PHASE_BLOCKED": 2,
+    "NO_EMA_TREND": 1,
     "NO_PULLBACK_TOUCH": 1
   },
   "limitations": [
@@ -40,13 +43,14 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-03T14:38:58.416446+00:00",
-  "latest_candle_close_utc": "2026-11-03T14:30:00+00:00",
+  "as_of_utc": "2026-11-03T17:43:08.739315+00:00",
+  "latest_candle_close_utc": "2026-11-03T17:30:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
-    "primary_reason": "NO_PULLBACK_TOUCH",
+    "primary_reason": "NO_EMA_TREND",
     "all_reasons": [
+      "NO_EMA_TREND",
       "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
@@ -54,7 +58,7 @@
       "fresh_closed_candle": true,
       "reference_session_open": true,
       "weak_or_sideways_1h": true,
-      "ema20_ema50_trend": true,
+      "ema20_ema50_trend": false,
       "ema20_pullback_touched": false,
       "closed_candle_breakout": false,
       "no_active_position": true,
