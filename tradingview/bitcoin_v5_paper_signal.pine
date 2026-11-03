@@ -1,0 +1,87 @@
+//@version=6
+indicator("Bitcoin V5 – Paper Signal (Chart-Vergleich)", overlay=true, max_labels_count=300)
+
+// READ ONLY: Bitcoin adaptation of the Gold V5 chart candidate rules.
+// No live Python BTC V5 bot is created by this chart script. Risk gate and
+// position state are NOT available inside TradingView. Markers are only candidates.
+// Use on 15-minute BTCUSD/BTCUSDT; exchanges and spot/CFD feeds may differ.
+
+showPanel = input.bool(true, "Erklärungs-Tabelle anzeigen")
+showEMAs = input.bool(true, "EMA 20/50 anzeigen")
+showLevels = input.bool(true, "Theoretische SL/TP-Abstände anzeigen")
+showMarkers = input.bool(true, "Historische Kandidaten markieren")
+is15m = timeframe.isminutes and timeframe.multiplier == 15
+isBTC = str.contains(str.upper(syminfo.ticker), "BTC")
+
+ema20 = ta.ema(close, 20)
+ema50 = ta.ema(close, 50)
+atr14 = ta.atr(14)
+trendLong = ema20 > ema50 and ema20 > ema20[1]
+trendShort = ema20 < ema50 and ema20 < ema20[1]
+touchLong = low[1] <= ema20[1]
+touchShort = high[1] >= ema20[1]
+confirmLong = close > ema20 and close > high[1] and close > open
+confirmShort = close < ema20 and close < low[1] and close < open
+
+// Only completed hourly candles. This safe anti-lookahead method uses the
+// *previous* H1 candle at H1 boundaries, so a few timings can differ from Python.
+h1Gap = request.security(syminfo.tickerid, "60", math.abs(ta.ema(close,20) - ta.ema(close,50))[1], lookahead=barmerge.lookahead_on)
+h1ATR = request.security(syminfo.tickerid, "60", ta.atr(14)[1], lookahead=barmerge.lookahead_on)
+weakMarket = not na(h1ATR) and h1ATR > 0 and h1Gap / h1ATR < 0.5
+
+// Bitcoin typically trades 24/7. No Chicago reference pause.
+sessionOpen = true
+
+warm = not na(ema50) and not na(atr14) and not na(h1Gap) and not na(h1ATR)
+longBasic = trendLong and touchLong and confirmLong
+shortBasic = trendShort and touchShort and confirmShort
+longCandidate = is15m and isBTC and warm and barstate.isconfirmed and sessionOpen and weakMarket and longBasic
+shortCandidate = is15m and warm and barstate.isconfirmed and sessionOpen and weakMarket and shortBasic
+
+plot(showEMAs ? ema20 : na, "EMA 20", color=color.orange, linewidth=2)
+plot(showEMAs ? ema50 : na, "EMA 50", color=color.blue, linewidth=2)
+plotshape(showMarkers and longCandidate, title="V5 LONG Kandidat", style=shape.labelup, location=location.belowbar,
+     color=color.new(color.green, 0), text="V5 LONG", textcolor=color.white, size=size.tiny)
+plotshape(showMarkers and shortCandidate, title="V5 SHORT Kandidat", style=shape.labeldown, location=location.abovebar,
+     color=color.new(color.red, 0), text="V5 SHORT", textcolor=color.white, size=size.tiny)
+
+// Levels are *indicative distances* from the signal close for visibility.
+// Python actually uses the next bar OPEN for its paper entry.
+signalRisk = atr14 * 1.5
+plot(showLevels and (longCandidate or shortCandidate) ? close : na, title="Signal-Schlusskurs (kein Fill)", color=color.gray, style=plot.style_circles, linewidth=2)
+plot(showLevels and longCandidate ? close - signalRisk : showLevels and shortCandidate ? close + signalRisk : na,
+     title="Indikativer Stop-Abstand", color=color.red, style=plot.style_circles, linewidth=2)
+plot(showLevels and longCandidate ? close + 2*signalRisk : showLevels and shortCandidate ? close - 2*signalRisk : na,
+     title="Indikativer TP-Abstand", color=color.green, style=plot.style_circles, linewidth=2)
+
+// No orders, no alerts, no Telegram; informational Bitcoin chart candidate only.
+var table info = table.new(position.top_right, 2, 8, border_width=1)
+if barstate.islast and showPanel
+    string direction = trendLong ? "LONG" : trendShort ? "SHORT" : "KEIN TREND"
+    bool touch = trendLong ? touchLong : trendShort ? touchShort : false
+    bool conf = trendLong ? confirmLong : trendShort ? confirmShort : false
+    string reason = not is15m ? "Bitte 15-Minuten-Chart verwenden" :
+         not isBTC ? "Bitte BTCUSD/BTCUSDT waehlen" :
+         not warm ? "Noch nicht genug Kerzen" :
+         not weakMarket ? "1H-Marktphase nicht geeignet" :
+         not (trendLong or trendShort) ? "Kein EMA-Trend" :
+         not touch ? "Kein EMA20-Ruecksetzer" :
+         not conf ? "Keine Kerzenbestaetigung" :
+         (longCandidate or shortCandidate) ? "Kandidat erkannt (nicht bestaetigter Paper-Trade)" :
+         "Offene Kerze / noch kein Kandidat"
+    table.cell(info, 0, 0, "Bitcoin V5 – Chart-Vergleich", text_color=color.white, bgcolor=color.new(color.navy, 20))
+    table.cell(info, 1, 0, "KEIN 65er-Score", text_color=color.white, bgcolor=color.new(color.navy, 20))
+    table.cell(info, 0, 1, "Zeitrahmen")
+    table.cell(info, 1, 1, is15m ? "15m OK" : "NICHT 15m")
+    table.cell(info, 0, 2, "BTC-Handelszeiten")
+    table.cell(info, 1, 2, "24/7 (feedabhaengig)")
+    table.cell(info, 0, 3, "1H seitwaerts / schwach")
+    table.cell(info, 1, 3, weakMarket ? "JA" : "NEIN")
+    table.cell(info, 0, 4, "EMA-Trend")
+    table.cell(info, 1, 4, direction)
+    table.cell(info, 0, 5, "EMA20-Ruecksetzer")
+    table.cell(info, 1, 5, touch ? "JA" : "NEIN")
+    table.cell(info, 0, 6, "Kerzenbestaetigung")
+    table.cell(info, 1, 6, conf ? "JA" : "NEIN")
+    table.cell(info, 0, 7, "Ergebnis / Grund")
+    table.cell(info, 1, 7, reason, text_color=color.white, bgcolor=color.new(color.gray, 45))
