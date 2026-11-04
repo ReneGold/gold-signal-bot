@@ -37,8 +37,10 @@ def load(path, step):
             out.append(Bar(t,o,h,l,c))
     out.sort(key=lambda b:b.t)
     if len(set(x.t for x in out))!=len(out): raise ValueError("duplicate timestamps")
-    if any((b.t-a.t).total_seconds()!=step*60 for a,b in zip(out,out[1:])):
-        raise ValueError("non-contiguous bars: supply gap-free candles, do not manufacture prices")
+    # Real gold history has weekend and daily trading-session gaps. Keep the gaps
+    # rather than filling them with fabricated prices; signal/exit logic handles them.
+    if any((b.t-a.t).total_seconds()<step*60 or (b.t-a.t).total_seconds()%(step*60)!=0 for a,b in zip(out,out[1:])):
+        raise ValueError("timestamps must progress in whole timeframe steps")
     return out
 
 def ema(vals,n):
@@ -78,9 +80,12 @@ def simulate(b15,b60,market,regime,half_spread=0.0,slippage=0.0,cost=0.8):
         if i<next_free or a15[i] is None:continue
         candle,previous=b15[i],b15[i-1]
         decision=candle.t+timedelta(minutes=15)
+        if candle.t-previous.t!=timedelta(minutes=15):continue
+        if b15[i+1].t!=decision:continue  # no invented entry after a session/data gap
         if market=="gold" and not gold_session(decision):continue
         j=bisect_right(hcloses,decision)-1
         if j<55 or not a60[j] or a60[j]<=0:continue
+        if decision-hcloses[j]>timedelta(hours=1):continue # reject stale H1 context
         strength=abs(h20[j]-h50[j])/a60[j]
         if regime=="frozen":
             if strength>=0.5:continue
@@ -99,7 +104,10 @@ def simulate(b15,b60,market,regime,half_spread=0.0,slippage=0.0,cost=0.8):
         stop=entry-direction*risk
         target=entry+direction*2*risk
         exit_price=None;reason=None;last=None
+        gap_found=False
         for z in range(k,min(k+16,len(b15))):
+            if z>k and b15[z].t-b15[z-1].t!=timedelta(minutes=15):
+                gap_found=True;break
             b=b15[z]
             hit_stop=(b.l<=stop if direction==1 else b.h>=stop)
             hit_tp=(b.h>=target if direction==1 else b.l<=target)
@@ -108,6 +116,10 @@ def simulate(b15,b60,market,regime,half_spread=0.0,slippage=0.0,cost=0.8):
                 reason="STOP";last=z;break
             if hit_tp:
                 exit_price=target;reason="TP";last=z;break
+        if gap_found:
+            # Outcome cannot safely be modelled across missing/session candles.
+            # Stop this market comparison instead of silently cherry-picking trades.
+            raise ValueError("Price data gap during open simulated position; no defensible fill model")
         if reason is None:
             if k+15>=len(b15):break
             last=k+15
