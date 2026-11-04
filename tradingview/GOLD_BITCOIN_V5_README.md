@@ -31,3 +31,19 @@ Der Gold-Python-Forward-Bot verwendet weiterhin eigene feste Eintrittsregeln und
 - Pine-v6-Compile in TradingView auf beiden Symbolen. GitHub speichert Text, fuehrt aber keinen TradingView-Compiler aus.
 - Vergleich historischer Kandidaten mit altem gemeinsamen V5 vor und nach der Aenderung: die V5-Signalbedingungen sind unveraendert; dies muss mit echten gleichen Chart-Daten verifiziert werden.
 - Messung der beobachteten Forward-Ergebnisse je Scoregruppe erst bei ausreichender Stichprobe. Ein einziger abgeschlossener Gold-Forward-Trade reicht nicht.
+
+
+## Vergleich des 1H-Marktphasenfilters (Schattenmodus)
+
+Ein neuer **rein diagnostischer** Vergleich stellt zwei REGIME gegenüber:
+
+- **Bisheriger V5:** EMA20/EMA50-Abstand des zuletzt geschlossenen 1H-Balkens **unter 0,5 x ATR**.
+- **Alternative Testvariante:** derselbe Abstand **ab 0,5 x ATR** und 1H-EMA-Trend in Richtung des 15m-Signals.
+
+Die beiden Varianten verlangen weiterhin dieselben 15m-Bedingungen (Trend, EMA20-Ruecksetzer, abgeschlossene bestaetigende Kerze); Gold-Referenzpause bleibt erhalten, Bitcoin bleibt 24/7.
+
+Die Tabelle zeigt fuer ein konfigurierbares Fenster (Standard 500 x 15m) die Anzahl von **Chart-Setups** und den mittleren gerichteten 4-Kerzen-Kursschritt in ATR-Einheiten. **Dies ist KEIN Trade-Backtest**: Die Rechnung verwendet den Schlusskurs der Signalkerze bis zum Schlusskurs vier Kerzen spaeter, ohne Entry-Open, Stop-Loss, Take-Profit, Slippage, Spread, Gebuehren und Positionssperren. Auch koennen sich Signale zeitlich ueberlappen.
+
+Die Markierungen der unveraenderten Gold-/Bitcoin-V5-Strategie bleiben identisch. Alternative Dreiecksmarker erscheinen nur, wenn die Option `Alternative Trend-Kandidaten im Chart markieren` aktiviert wird. Das allein erzeugt KEINE Handelssignale, Orders oder Telegram-Meldungen.
+
+**Noch offen:** Den Code in TradingView kompilieren und auf beiden Charts ueberpruefen; danach mit ausreichend vielen historischen Faellen samt Kosten, Out-of-sample- und Forward-Beobachtung testen. Kein Trefferzuwachs ist eine Gewinnzusage.
