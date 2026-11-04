@@ -11,6 +11,8 @@ showPanel = input.bool(true, "Entscheidungstabelle")
 showEMAs = input.bool(true, "EMA 20 / EMA 50")
 showMarkers = input.bool(true, "LONG / SHORT Kandidaten")
 showLevels = input.bool(false, "Indikative Risiko-Abstaende")
+showShadow = input.bool(false, "Alternative Trend-Kandidaten im Chart markieren")
+compareLookback = input.int(500, "Vergleich: letzte N Kerzen", minval=100, maxval=2000)
 string chicago = "America/Chicago"
 bool is15m = timeframe.isminutes and timeframe.multiplier == 15
 string tickerUpper = str.upper(syminfo.ticker)
@@ -106,10 +108,47 @@ bool auditReady = ready and not na(h1Slow) and not na(adxValue) and not na(fibHi
 // IMPORTANT: scoreAudit does not occur in "allowed", "longCandidate" or "shortCandidate".
 // Individual component labels tell exactly what contributed to the diagnostic.
 
+// SCHATTENVERGLEICH: Ersetzt NICHT die Gold-/Bitcoin-V5-Signalentscheidung.
+// Variante A: bisherige Seitwaerts-/Schwachmarktphase (< 0.5 1H-ATR).
+// Variante B: 1H-Starktrend (>= 0.5 1H-ATR) MIT richtungsbestaetigtem H1-EMA-Trend.
+// Beiden gemein: 15m-EMA-Trend, voriger EMA20-Kontakt, Kerzenbestaetigung.
+// Auf demselben Chart/Feed werden nur tatsaechlich geschlossene Kerzen verglichen.
+bool baseLongSetup = supported and is15m and ready and sessionOpen and barstate.isconfirmed and trendLong and touchLong and confirmLong
+bool baseShortSetup = supported and is15m and ready and sessionOpen and barstate.isconfirmed and trendShort and touchShort and confirmShort
+bool strongPhase = ready and not weakMarket and h1Gap / h1ATR >= 0.5
+bool strongLongCandidate = baseLongSetup and strongPhase and h1Fast > h1Slow
+bool strongShortCandidate = baseShortSetup and strongPhase and h1Fast < h1Slow
+
+// Vergangene 4 Kerzen = 60 Minuten, bewertet OHNE Vorgriffs-Blick.
+// Lediglich Richtungsrendite in ATR-Einheiten; keine simulierten Entries, SL/TP,
+// Spreads, Gebuehren, Positionslimits oder realistische Trade-Ergebnisse.
+float baselineEvent = longCandidate or shortCandidate ? 1.0 : 0.0
+float shadowEvent = strongLongCandidate or strongShortCandidate ? 1.0 : 0.0
+float baselineCum = ta.cum(baselineEvent)
+float shadowCum = ta.cum(shadowEvent)
+float baselineCount = baselineCum - nz(baselineCum[compareLookback])
+float shadowCount = shadowCum - nz(shadowCum[compareLookback])
+bool baselineMature = barstate.isconfirmed and (longCandidate[4] or shortCandidate[4]) and not na(atr14[4]) and atr14[4] > 0
+bool shadowMature = barstate.isconfirmed and (strongLongCandidate[4] or strongShortCandidate[4]) and not na(atr14[4]) and atr14[4] > 0
+float baselineMove = baselineMature ? (longCandidate[4] ? close - close[4] : close[4] - close) / atr14[4] : 0.0
+float shadowMove = shadowMature ? (strongLongCandidate[4] ? close - close[4] : close[4] - close) / atr14[4] : 0.0
+float baselineMatureCum = ta.cum(baselineMature ? 1.0 : 0.0)
+float shadowMatureCum = ta.cum(shadowMature ? 1.0 : 0.0)
+float baselineMoveCum = ta.cum(baselineMove)
+float shadowMoveCum = ta.cum(shadowMove)
+float baselineMatureN = baselineMatureCum - nz(baselineMatureCum[compareLookback])
+float shadowMatureN = shadowMatureCum - nz(shadowMatureCum[compareLookback])
+float baselineMoveSum = baselineMoveCum - nz(baselineMoveCum[compareLookback])
+float shadowMoveSum = shadowMoveCum - nz(shadowMoveCum[compareLookback])
+float baselineMean = baselineMatureN > 0 ? baselineMoveSum / baselineMatureN : na
+float shadowMean = shadowMatureN > 0 ? shadowMoveSum / shadowMatureN : na
+
 plot(showEMAs and supported ? ema20 : na, "EMA 20", color=color.orange, linewidth=2)
 plot(showEMAs and supported ? ema50 : na, "EMA 50", color=color.blue, linewidth=2)
 plotshape(showMarkers and longCandidate, title="V5 LONG-Kandidat", style=shape.labelup, location=location.belowbar, color=color.green, text="V5 LONG", textcolor=color.white, size=size.tiny)
 plotshape(showMarkers and shortCandidate, title="V5 SHORT-Kandidat", style=shape.labeldown, location=location.abovebar, color=color.red, text="V5 SHORT", textcolor=color.white, size=size.tiny)
+plotshape(showShadow and strongLongCandidate, title="TEST Trend LONG", style=shape.triangleup, location=location.belowbar, color=color.aqua, text="TEST L", textcolor=color.aqua, size=size.tiny)
+plotshape(showShadow and strongShortCandidate, title="TEST Trend SHORT", style=shape.triangledown, location=location.abovebar, color=color.fuchsia, text="TEST S", textcolor=color.fuchsia, size=size.tiny)
 
 // Nur zur Visualisierung am Schlusskurs; Python benutzt das naechste Kerzen-OPEN.
 float signalRisk = 1.5 * atr14
@@ -117,7 +156,7 @@ plot(showLevels and (longCandidate or shortCandidate) ? close : na, "Signal-Schl
 plot(showLevels and longCandidate ? close - signalRisk : showLevels and shortCandidate ? close + signalRisk : na, "Indikativer SL-Abstand", color=color.red, style=plot.style_circles, linewidth=2)
 plot(showLevels and longCandidate ? close + 2 * signalRisk : showLevels and shortCandidate ? close - 2 * signalRisk : na, "Indikativer TP-Abstand", color=color.green, style=plot.style_circles, linewidth=2)
 
-var table info = table.new(position.top_right, 2, 14, border_width=1)
+var table info = table.new(position.top_right, 2, 19, border_width=1)
 if barstate.islast
     if showPanel
         string direction = trendLong ? "LONG" : trendShort ? "SHORT" : "KEIN TREND"
@@ -161,5 +200,15 @@ if barstate.islast
         table.cell(info, 1, 12, (candleUp ? "KERZE-L " : candleDown ? "KERZE-S " : "KERZE:NEIN ") + (momentumUp ? "MOM-L" : momentumDown ? "MOM-S" : "MOM:NEIN"))
         table.cell(info, 0, 13, "ADX / Volatilitaet")
         table.cell(info, 1, 13, (na(adxValue) ? "n/a" : str.tostring(adxValue, "#.0")) + " / " + (volatility ? "OK" : "GERING"))
+        table.cell(info, 0, 14, "TEST 1H-Filter (nur Vergleich)")
+        table.cell(info, 1, 14, str.tostring(compareLookback) + " x 15m")
+        table.cell(info, 0, 15, "V5 unveraendert: Setups")
+        table.cell(info, 1, 15, str.tostring(baselineCount, "#"))
+        table.cell(info, 0, 16, "TEST Starktrend: Setups")
+        table.cell(info, 1, 16, str.tostring(shadowCount, "#"))
+        table.cell(info, 0, 17, "V5: 4 Kerzen Bewegung")
+        table.cell(info, 1, 17, baselineMatureN > 0 ? str.tostring(baselineMean, "#.##") + " ATR / " + str.tostring(baselineMatureN, "#") : "noch keine Stichprobe")
+        table.cell(info, 0, 18, "TEST: 4 Kerzen Bewegung")
+        table.cell(info, 1, 18, shadowMatureN > 0 ? str.tostring(shadowMean, "#.##") + " ATR / " + str.tostring(shadowMatureN, "#") : "noch keine Stichprobe")
     else
-        table.clear(info, 0, 0, 1, 13)
+        table.clear(info, 0, 0, 1, 18)
