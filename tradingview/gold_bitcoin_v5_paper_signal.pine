@@ -51,6 +51,61 @@ bool allowed = supported and is15m and ready and sessionOpen and weakMarket and 
 bool longCandidate = allowed and trendLong and touchLong and confirmLong
 bool shortCandidate = allowed and trendShort and touchShort and confirmShort
 
+// V3.9-inspired evidence audit. OBSERVATION ONLY; scores NEVER veto/generate V5 markers.
+// The historical V3.9 Python score also used H1 points and a range penalty.
+// Keep this a diagnostic estimate; it is NOT a port or calibrated probability.
+int structureLength = 6
+int liquidityLength = 12
+float structureHighNow = ta.highest(high, structureLength)
+float structureHighPrev = ta.highest(high[structureLength], structureLength)
+float structureLowNow = ta.lowest(low, structureLength)
+float structureLowPrev = ta.lowest(low[structureLength], structureLength)
+bool structureUp = structureHighNow > structureHighPrev and structureLowNow > structureLowPrev
+bool structureDown = structureHighNow < structureHighPrev and structureLowNow < structureLowPrev
+float referenceHigh = ta.highest(high[1], structureLength)
+float referenceLow = ta.lowest(low[1], structureLength)
+bool bosUp = close > referenceHigh and close[1] <= referenceHigh[1]
+bool bosDown = close < referenceLow and close[1] >= referenceLow[1]
+bool retestUp = bosUp and low <= referenceHigh + atr14 * 0.20
+bool retestDown = bosDown and high >= referenceLow - atr14 * 0.20
+float liquidityHigh = ta.highest(high[1], liquidityLength)
+float liquidityLow = ta.lowest(low[1], liquidityLength)
+bool sweepUp = low < liquidityLow and close > liquidityLow
+bool sweepDown = high > liquidityHigh and close < liquidityHigh
+// Recent 3-bar FVG with rough touch. A chart approximation, not full V3.9 matching.
+bool fvgUp = low > high[2]
+bool fvgDown = high < low[2]
+float fibHigh = ta.highest(high[1], 30)
+float fibLow = ta.lowest(low[1], 30)
+float fibWidth = math.max(fibHigh - fibLow, syminfo.mintick)
+bool fibUp = close <= fibHigh - fibWidth * 0.5 + atr14 * 0.15 and close >= fibHigh - fibWidth * 0.786 - atr14 * 0.15
+bool fibDown = close >= fibLow + fibWidth * 0.5 - atr14 * 0.15 and close <= fibLow + fibWidth * 0.786 + atr14 * 0.15
+float body = math.abs(close - open)
+bool candleUp = close > open and body >= atr14 * 0.30
+bool candleDown = close < open and body >= atr14 * 0.30
+bool momentumUp = ema20 > ema20[1] and close > close[1]
+bool momentumDown = ema20 < ema20[1] and close < close[1]
+bool volatility = close > 0 and atr14 / close * 100 >= 0.08
+[diPlus, diMinus, adxValue] = ta.dmi(14, 14)
+int adxAdjustment = adxValue >= 25 ? 5 : adxValue < 18 ? -5 : 0
+// H1 +15 is only a direction proxy based on the most recently closed H1 bar.
+float h1Fast = request.security(syminfo.tickerid, "60", ta.ema(close, 20)[1], lookahead=barmerge.lookahead_on)
+float h1Slow = request.security(syminfo.tickerid, "60", ta.ema(close, 50)[1], lookahead=barmerge.lookahead_on)
+int longRaw = (h1Fast > h1Slow ? 15 : 0) + (structureUp ? 15 : 0) +
+     (bosUp ? 10 : 0) + (retestUp ? 5 : 0) + (sweepUp ? 10 : 0) +
+     (fvgUp ? 10 : 0) + (fibUp ? 10 : 0) + (candleUp ? 10 : 0) +
+     (momentumUp ? 10 : 0) + (trendLong ? 5 : 0) + (volatility ? 5 : 0)
+int shortRaw = (h1Fast < h1Slow ? 15 : 0) + (structureDown ? 15 : 0) +
+     (bosDown ? 10 : 0) + (retestDown ? 5 : 0) + (sweepDown ? 10 : 0) +
+     (fvgDown ? 10 : 0) + (fibDown ? 10 : 0) + (candleDown ? 10 : 0) +
+     (momentumDown ? 10 : 0) + (trendShort ? 5 : 0) + (volatility ? 5 : 0)
+int longScoreAudit = math.max(0, math.min(100, longRaw + adxAdjustment))
+int shortScoreAudit = math.max(0, math.min(100, shortRaw + adxAdjustment))
+bool auditReady = ready and not na(h1Slow) and not na(adxValue) and not na(fibHigh)
+
+// IMPORTANT: scoreAudit does not occur in "allowed", "longCandidate" or "shortCandidate".
+// Individual component labels tell exactly what contributed to the diagnostic.
+
 plot(showEMAs and supported ? ema20 : na, "EMA 20", color=color.orange, linewidth=2)
 plot(showEMAs and supported ? ema50 : na, "EMA 50", color=color.blue, linewidth=2)
 plotshape(showMarkers and longCandidate, title="V5 LONG-Kandidat", style=shape.labelup, location=location.belowbar, color=color.green, text="V5 LONG", textcolor=color.white, size=size.tiny)
@@ -62,7 +117,7 @@ plot(showLevels and (longCandidate or shortCandidate) ? close : na, "Signal-Schl
 plot(showLevels and longCandidate ? close - signalRisk : showLevels and shortCandidate ? close + signalRisk : na, "Indikativer SL-Abstand", color=color.red, style=plot.style_circles, linewidth=2)
 plot(showLevels and longCandidate ? close + 2 * signalRisk : showLevels and shortCandidate ? close - 2 * signalRisk : na, "Indikativer TP-Abstand", color=color.green, style=plot.style_circles, linewidth=2)
 
-var table info = table.new(position.top_right, 2, 9, border_width=1)
+var table info = table.new(position.top_right, 2, 14, border_width=1)
 if barstate.islast
     if showPanel
         string direction = trendLong ? "LONG" : trendShort ? "SHORT" : "KEIN TREND"
@@ -93,8 +148,18 @@ if barstate.islast
         table.cell(info, 0, 6, "Kerzenbestaetigung")
         table.cell(info, 1, 6, confirmed ? "JA" : "NEIN")
         table.cell(info, 0, 7, "Score")
-        table.cell(info, 1, 7, "KEIN 65er-SCORE")
+        table.cell(info, 1, 7, "V5: KEINE SCORE-SPERRE")
         table.cell(info, 0, 8, "Ergebnis / Grund")
         table.cell(info, 1, 8, reason, text_color=color.white, bgcolor=color.new(color.gray, 45))
+        table.cell(info, 0, 9, "V3.9-Audit (nur Info)")
+        table.cell(info, 1, 9, not auditReady ? "ZU WENIG DATEN" : str.tostring(longScoreAudit) + " L / " + str.tostring(shortScoreAudit) + " S")
+        table.cell(info, 0, 10, "Struktur / BOS / Sweep")
+        table.cell(info, 1, 10, (structureUp ? "HH/HL " : structureDown ? "LH/LL " : "SEITWAERTS ") + (bosUp ? "BOS-L " : bosDown ? "BOS-S " : "") + (sweepUp ? "SWEEP-L" : sweepDown ? "SWEEP-S" : ""))
+        table.cell(info, 0, 11, "FVG / Fibonacci")
+        table.cell(info, 1, 11, (fvgUp ? "FVG-L " : fvgDown ? "FVG-S " : "FVG:NEIN ") + (fibUp ? "FIB-L" : fibDown ? "FIB-S" : "FIB:NEIN"))
+        table.cell(info, 0, 12, "Kerze / Momentum")
+        table.cell(info, 1, 12, (candleUp ? "KERZE-L " : candleDown ? "KERZE-S " : "KERZE:NEIN ") + (momentumUp ? "MOM-L" : momentumDown ? "MOM-S" : "MOM:NEIN"))
+        table.cell(info, 0, 13, "ADX / Volatilitaet")
+        table.cell(info, 1, 13, (na(adxValue) ? "n/a" : str.tostring(adxValue, "#.0")) + " / " + (volatility ? "OK" : "GERING"))
     else
-        table.clear(info, 0, 0, 1, 8)
+        table.clear(info, 0, 0, 1, 13)
