@@ -186,5 +186,30 @@
     },
     "score": null,
     "score_note": "Frozen Gold V5 uses Boolean rules, NOT the V3.9 65-point score."
+  },
+  {
+    "candle_utc": "2026-11-04T02:15:00+00:00",
+    "decision_utc": "2026-11-04T02:30:00+00:00",
+    "observed_at_utc": "2026-11-04T02:39:10.176631+00:00",
+    "side": "LONG",
+    "fresh": true,
+    "qualified": false,
+    "primary_reason": "NO_BREAKOUT_CONFIRMATION",
+    "all_reasons": [
+      "NO_BREAKOUT_CONFIRMATION"
+    ],
+    "checks": {
+      "fresh_closed_candle": true,
+      "reference_session_open": true,
+      "weak_or_sideways_1h": true,
+      "ema20_ema50_trend": true,
+      "ema20_pullback_touched": true,
+      "closed_candle_breakout": false,
+      "no_active_position": true,
+      "risk_gate_allows": true,
+      "not_previously_recorded": true
+    },
+    "score": null,
+    "score_note": "Frozen Gold V5 uses Boolean rules, NOT the V3.9 65-point score."
   }
 ]
