@@ -1,0 +1,100 @@
+//@version=6
+indicator("Gold & Bitcoin V5 – Paper Signal", overlay=true, max_labels_count=300)
+
+// Gemeinsamer, rein visueller Vergleichsindikator. KEINE Orders, KEINE Telegram-Alerts.
+// Gold: bestehende Gold-V5-Chartbedingungen inklusive Chicago-Referenzpause.
+// BTC: BTC-V5-Chartbedingungen ohne Chicago-Pause (typischerweise 24/7).
+// Die GitHub-Paper-Trades, Risk-Gates und Echtzeit-Jobfrische sind hier NICHT integriert.
+// Historische Chart-Marker sind nicht nachweislich live beobachtete Handelssignale.
+
+showPanel = input.bool(true, "Entscheidungstabelle")
+showEMAs = input.bool(true, "EMA 20 / EMA 50")
+showMarkers = input.bool(true, "LONG / SHORT Kandidaten")
+showLevels = input.bool(false, "Indikative Risiko-Abstaende")
+string chicago = "America/Chicago"
+bool is15m = timeframe.isminutes and timeframe.multiplier == 15
+string tickerUpper = str.upper(syminfo.ticker)
+bool isGold = str.contains(tickerUpper, "XAU")
+bool isBitcoin = str.contains(tickerUpper, "BTC")
+bool supported = (isGold or isBitcoin) and not (isGold and isBitcoin)
+string marketName = isGold ? "GOLD" : isBitcoin ? "BITCOIN" : "NICHT UNTERSTUETZT"
+
+float ema20 = ta.ema(close, 20)
+float ema50 = ta.ema(close, 50)
+float atr14 = ta.atr(14)
+bool trendLong = ema20 > ema50 and ema20 > ema20[1]
+bool trendShort = ema20 < ema50 and ema20 < ema20[1]
+bool touchLong = low[1] <= ema20[1]
+bool touchShort = high[1] >= ema20[1]
+bool confirmLong = close > ema20 and close > high[1] and close > open
+bool confirmShort = close < ema20 and close < low[1] and close < open
+
+// H1-Werte des zuletzt VOLLSTAENDIG geschlossenen Stundenbalkens.
+// Kein Zukunftsblick; gegenueber Python koennen Datenanbieter/EMA-Aufwaermung abweichen.
+float h1Gap = request.security(syminfo.tickerid, "60", math.abs(ta.ema(close, 20) - ta.ema(close, 50))[1], lookahead=barmerge.lookahead_on)
+float h1ATR = request.security(syminfo.tickerid, "60", ta.atr(14)[1], lookahead=barmerge.lookahead_on)
+bool weakMarket = not na(h1Gap) and not na(h1ATR) and h1ATR > 0 and h1Gap / h1ATR < 0.5
+
+// Ausschliesslich GOLD: angenaeherte Chicago-Referenzzeiten der Python-V5.
+// Nicht identisch mit einer verifizierten XAUUSD-Broker-Handelssitzung.
+int dow = dayofweek(time_close, chicago)
+int hourCT = hour(time_close, chicago)
+int minCT = minute(time_close, chicago)
+int minuteOfDay = hourCT * 60 + minCT
+bool chicagoOpen = not (dow == dayofweek.saturday or
+     (dow == dayofweek.friday and minuteOfDay >= 960) or
+     (dow == dayofweek.sunday and minuteOfDay < 1020) or
+     (dow >= dayofweek.monday and dow <= dayofweek.thursday and minuteOfDay >= 960 and minuteOfDay < 1020))
+bool sessionOpen = isBitcoin or (isGold and chicagoOpen)
+bool ready = not na(ema50) and not na(atr14) and not na(h1Gap) and not na(h1ATR)
+bool allowed = supported and is15m and ready and sessionOpen and weakMarket and barstate.isconfirmed
+bool longCandidate = allowed and trendLong and touchLong and confirmLong
+bool shortCandidate = allowed and trendShort and touchShort and confirmShort
+
+plot(showEMAs and supported ? ema20 : na, "EMA 20", color=color.orange, linewidth=2)
+plot(showEMAs and supported ? ema50 : na, "EMA 50", color=color.blue, linewidth=2)
+plotshape(showMarkers and longCandidate, title="V5 LONG-Kandidat", style=shape.labelup, location=location.belowbar, color=color.green, text="V5 LONG", textcolor=color.white, size=size.tiny)
+plotshape(showMarkers and shortCandidate, title="V5 SHORT-Kandidat", style=shape.labeldown, location=location.abovebar, color=color.red, text="V5 SHORT", textcolor=color.white, size=size.tiny)
+
+// Nur zur Visualisierung am Schlusskurs; Python benutzt das naechste Kerzen-OPEN.
+float signalRisk = 1.5 * atr14
+plot(showLevels and (longCandidate or shortCandidate) ? close : na, "Signal-Schlusskurs, kein Fill", color=color.gray, style=plot.style_circles, linewidth=2)
+plot(showLevels and longCandidate ? close - signalRisk : showLevels and shortCandidate ? close + signalRisk : na, "Indikativer SL-Abstand", color=color.red, style=plot.style_circles, linewidth=2)
+plot(showLevels and longCandidate ? close + 2 * signalRisk : showLevels and shortCandidate ? close - 2 * signalRisk : na, "Indikativer TP-Abstand", color=color.green, style=plot.style_circles, linewidth=2)
+
+var table info = table.new(position.top_right, 2, 9, border_width=1)
+if barstate.islast
+    if showPanel
+        string direction = trendLong ? "LONG" : trendShort ? "SHORT" : "KEIN TREND"
+        bool touched = trendLong ? touchLong : trendShort ? touchShort : false
+        bool confirmed = trendLong ? confirmLong : trendShort ? confirmShort : false
+        string reason = not supported ? "Nur XAUUSD / BTCUSD / BTCUSDT" :
+             not is15m ? "15-Minuten-Chart waehlen" :
+             not ready ? "Nicht genug abgeschlossene Daten" :
+             not sessionOpen ? "Gold: Chicago-Referenzpause" :
+             not weakMarket ? "1H-Marktphase nicht geeignet" :
+             not (trendLong or trendShort) ? "Kein EMA-Trend" :
+             not touched ? "Kein EMA20-Ruecksetzer" :
+             not confirmed ? "Keine Kerzenbestaetigung" :
+             (longCandidate or shortCandidate) ? "CHART-KANDIDAT, KEIN LIVE-TRADE" :
+             "Laufende Kerze: auf Abschluss warten"
+        table.cell(info, 0, 0, "Gold & Bitcoin V5", text_color=color.white, bgcolor=color.new(color.navy, 20))
+        table.cell(info, 1, 0, marketName, text_color=color.white, bgcolor=color.new(color.navy, 20))
+        table.cell(info, 0, 1, "Zeitrahmen")
+        table.cell(info, 1, 1, is15m ? "15m OK" : "BITTE 15m")
+        table.cell(info, 0, 2, "Handelssitzung")
+        table.cell(info, 1, 2, isBitcoin ? "BTC 24/7" : isGold ? (sessionOpen ? "Gold: OK" : "Gold: Pause") : "N/A")
+        table.cell(info, 0, 3, "1H seitwaerts / schwach")
+        table.cell(info, 1, 3, weakMarket ? "JA" : "NEIN")
+        table.cell(info, 0, 4, "EMA-Trend")
+        table.cell(info, 1, 4, direction)
+        table.cell(info, 0, 5, "EMA20-Ruecksetzer")
+        table.cell(info, 1, 5, touched ? "JA" : "NEIN")
+        table.cell(info, 0, 6, "Kerzenbestaetigung")
+        table.cell(info, 1, 6, confirmed ? "JA" : "NEIN")
+        table.cell(info, 0, 7, "Score")
+        table.cell(info, 1, 7, "KEIN 65er-SCORE")
+        table.cell(info, 0, 8, "Ergebnis / Grund")
+        table.cell(info, 1, 8, reason, text_color=color.white, bgcolor=color.new(color.gray, 45))
+    else
+        table.clear(info, 0, 0, 1, 8)
