@@ -18,3 +18,16 @@
 2. BTCUSD / 15m: Tabellenkopf zeigt BITCOIN; Sitzungszeile zeigt BTC 24/7.
 3. Andere Ticker/Zeitrahmen: klare Warnung und keine V5-Marker.
 4. Erst nach erfolgreichem TradingView-Compile und Chartvergleich als eingerichtet kennzeichnen.
+
+## Erweiterung 2026-11-04: transparentes Score-Audit
+
+Ein Zusatzbereich der Chart-Tabelle zeigt erstmals einen **V3.9-inspirierten** Informationsscore fuer LONG und SHORT und Einzelbefunde fuer Marktstruktur, BOS, Sweeps, einfache FVG-Pruefung, Fibonacci, Kerzenkoerper, Momentum, ADX und Volatilitaet.
+
+**Achtung:** Das ist *keine* identische Portierung des historischen V3.9-Algorithmus. Insbesondere sind H1-Gewichtung, FVG-, Kerzenmuster- und Range-Regeln verkuerzt. Der Score ist **nicht kalibriert** und misst keine Gewinnchance. **Kein Mindestscore und kein hinzugefuegter Indikator beeinflusst die unveraenderten V5-Chart-Einstiegsmarker.**
+
+Der Gold-Python-Forward-Bot verwendet weiterhin eigene feste Eintrittsregeln und sein Paper-Risikogate. Der Bitcoin-Chartindikator ist kein live ausfuehrender BTC-Python-Bot.
+
+### Noch zu pruefen
+- Pine-v6-Compile in TradingView auf beiden Symbolen. GitHub speichert Text, fuehrt aber keinen TradingView-Compiler aus.
+- Vergleich historischer Kandidaten mit altem gemeinsamen V5 vor und nach der Aenderung: die V5-Signalbedingungen sind unveraendert; dies muss mit echten gleichen Chart-Daten verifiziert werden.
+- Messung der beobachteten Forward-Ergebnisse je Scoregruppe erst bei ausreichender Stichprobe. Ein einziger abgeschlossener Gold-Forward-Trade reicht nicht.
