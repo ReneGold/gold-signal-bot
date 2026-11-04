@@ -1,38 +1,19 @@
 {
-  "observed_at_utc": "2026-11-04T21:50:02.797473+00:00",
-  "previous_observer_at_utc": "2026-11-04T17:35:58.341199+00:00",
-  "minutes_since_previous_observer": 254.07,
+  "observed_at_utc": "2026-11-04T22:50:45.790607+00:00",
+  "previous_observer_at_utc": "2026-11-04T21:50:04.642495+00:00",
+  "minutes_since_previous_observer": 60.69,
   "nominal_schedule_minutes_utc": [
     9,
     24,
     39,
     54
   ],
-  "minutes_since_most_recent_nominal_slot": 11.03,
-  "active_reference_candle_closes_since_previous_run": 17,
-  "possibly_unobserved_candle_closes_utc": [
-    "2026-11-04T17:45:00+00:00",
-    "2026-11-04T18:00:00+00:00",
-    "2026-11-04T18:15:00+00:00",
-    "2026-11-04T18:30:00+00:00",
-    "2026-11-04T18:45:00+00:00",
-    "2026-11-04T19:00:00+00:00",
-    "2026-11-04T19:15:00+00:00",
-    "2026-11-04T19:30:00+00:00",
-    "2026-11-04T19:45:00+00:00",
-    "2026-11-04T20:00:00+00:00",
-    "2026-11-04T20:15:00+00:00",
-    "2026-11-04T20:30:00+00:00",
-    "2026-11-04T20:45:00+00:00",
-    "2026-11-04T21:00:00+00:00",
-    "2026-11-04T21:15:00+00:00",
-    "2026-11-04T21:30:00+00:00",
-    "2026-11-04T21:45:00+00:00"
-  ],
+  "minutes_since_most_recent_nominal_slot": 11.75,
+  "active_reference_candle_closes_since_previous_run": 0,
+  "possibly_unobserved_candle_closes_utc": [],
   "unverified_signals": true,
   "status": "WARN",
   "warnings": [
-    "ACTIVE_SESSION_CANDLE_COVERAGE_GAP",
     "START_OFFSET_OVER_10_MINUTES_FROM_CRON_SLOT"
   ],
   "notes": [
