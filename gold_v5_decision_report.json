@@ -48,7 +48,7 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-05T09:49:13.808348+00:00",
+  "as_of_utc": "2026-11-05T09:56:12.299576+00:00",
   "latest_candle_close_utc": "2026-11-05T09:45:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
