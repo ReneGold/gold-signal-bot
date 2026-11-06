@@ -1,38 +1,7 @@
 {
   "status": "DIAGNOSTIC_ONLY",
-  "missing_slots": 28,
-  "historically_detectable_candidates": [
-    {
-      "signal_candle_open_utc": "2026-11-06T11:45:00+00:00",
-      "closed_utc": "2026-11-06T12:00:00+00:00",
-      "side": "SHORT"
-    },
-    {
-      "signal_candle_open_utc": "2026-11-06T12:00:00+00:00",
-      "closed_utc": "2026-11-06T12:15:00+00:00",
-      "side": "SHORT"
-    },
-    {
-      "signal_candle_open_utc": "2026-11-06T12:45:00+00:00",
-      "closed_utc": "2026-11-06T13:00:00+00:00",
-      "side": "SHORT"
-    },
-    {
-      "signal_candle_open_utc": "2026-11-06T13:00:00+00:00",
-      "closed_utc": "2026-11-06T13:15:00+00:00",
-      "side": "SHORT"
-    },
-    {
-      "signal_candle_open_utc": "2026-11-06T13:30:00+00:00",
-      "closed_utc": "2026-11-06T13:45:00+00:00",
-      "side": "SHORT"
-    },
-    {
-      "signal_candle_open_utc": "2026-11-06T17:30:00+00:00",
-      "closed_utc": "2026-11-06T17:45:00+00:00",
-      "side": "SHORT"
-    }
-  ],
+  "missing_slots": 14,
+  "historically_detectable_candidates": [],
   "limitations": [
     "These signals were NOT observed or tradable live.",
     "Only available provider lookback scanned; cannot prove absence of omitted signals.",
