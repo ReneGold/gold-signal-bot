@@ -1,35 +1,20 @@
 {
-  "observed_at_utc": "2026-11-06T23:16:37.588907+00:00",
-  "previous_observer_at_utc": "2026-11-06T18:21:17.796611+00:00",
-  "minutes_since_previous_observer": 295.33,
+  "observed_at_utc": "2026-11-07T02:53:14.006245+00:00",
+  "previous_observer_at_utc": "2026-11-06T23:16:38.793872+00:00",
+  "minutes_since_previous_observer": 216.59,
   "nominal_schedule_minutes_utc": [
     9,
     24,
     39,
     54
   ],
-  "minutes_since_most_recent_nominal_slot": 7.62,
-  "active_reference_candle_closes_since_previous_run": 14,
-  "possibly_unobserved_candle_closes_utc": [
-    "2026-11-06T18:30:00+00:00",
-    "2026-11-06T18:45:00+00:00",
-    "2026-11-06T19:00:00+00:00",
-    "2026-11-06T19:15:00+00:00",
-    "2026-11-06T19:30:00+00:00",
-    "2026-11-06T19:45:00+00:00",
-    "2026-11-06T20:00:00+00:00",
-    "2026-11-06T20:15:00+00:00",
-    "2026-11-06T20:30:00+00:00",
-    "2026-11-06T20:45:00+00:00",
-    "2026-11-06T21:00:00+00:00",
-    "2026-11-06T21:15:00+00:00",
-    "2026-11-06T21:30:00+00:00",
-    "2026-11-06T21:45:00+00:00"
-  ],
+  "minutes_since_most_recent_nominal_slot": 14.23,
+  "active_reference_candle_closes_since_previous_run": 0,
+  "possibly_unobserved_candle_closes_utc": [],
   "unverified_signals": true,
   "status": "WARN",
   "warnings": [
-    "ACTIVE_SESSION_CANDLE_COVERAGE_GAP"
+    "START_OFFSET_OVER_10_MINUTES_FROM_CRON_SLOT"
   ],
   "notes": [
     "This is a heartbeat/coverage warning only; no historical alert can be declared an actual realtime signal.",
