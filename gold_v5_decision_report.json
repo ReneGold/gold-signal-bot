@@ -1,24 +1,23 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 24,
+  "observed_closed_candles": 25,
   "reason_counts": {
     "MARKET_PHASE_BLOCKED": 14,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 2,
-    "REFERENCE_SESSION_CLOSED": 4
+    "REFERENCE_SESSION_CLOSED": 5
   },
   "latest": {
-    "candle_utc": "2026-11-07T02:30:00+00:00",
-    "decision_utc": "2026-11-07T02:45:00+00:00",
-    "observed_at_utc": "2026-11-07T02:53:16.010007+00:00",
+    "candle_utc": "2026-11-07T09:00:00+00:00",
+    "decision_utc": "2026-11-07T09:15:00+00:00",
+    "observed_at_utc": "2026-11-07T09:18:33.780479+00:00",
     "side": "LONG",
     "fresh": true,
     "qualified": false,
     "primary_reason": "REFERENCE_SESSION_CLOSED",
     "all_reasons": [
       "REFERENCE_SESSION_CLOSED",
-      "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
@@ -26,7 +25,7 @@
       "reference_session_open": false,
       "weak_or_sideways_1h": true,
       "ema20_ema50_trend": true,
-      "ema20_pullback_touched": false,
+      "ema20_pullback_touched": true,
       "closed_candle_breakout": false,
       "no_active_position": true,
       "risk_gate_allows": true,
@@ -40,22 +39,21 @@
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 2,
-    "REFERENCE_SESSION_CLOSED": 4
+    "REFERENCE_SESSION_CLOSED": 5
   },
   "limitations": [
     "No V3.9 score is calculated in the frozen V5 strategy.",
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-07T02:53:16.010007+00:00",
-  "latest_candle_close_utc": "2026-11-07T02:45:00+00:00",
+  "as_of_utc": "2026-11-07T09:18:33.780479+00:00",
+  "latest_candle_close_utc": "2026-11-07T09:15:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
     "primary_reason": "REFERENCE_SESSION_CLOSED",
     "all_reasons": [
       "REFERENCE_SESSION_CLOSED",
-      "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
@@ -63,7 +61,7 @@
       "reference_session_open": false,
       "weak_or_sideways_1h": true,
       "ema20_ema50_trend": true,
-      "ema20_pullback_touched": false,
+      "ema20_pullback_touched": true,
       "closed_candle_breakout": false,
       "no_active_position": true,
       "risk_gate_allows": true,
