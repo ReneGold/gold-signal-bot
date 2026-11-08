@@ -1,9 +1,7 @@
 name: Gold B-C Forward Observation
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: "7,22,37,52 * * * *"
+  workflow_dispatch: # Manueller Start; automatischen 15-Minuten-Cron pausiert (Twelve Data HTTP 429)
 
 permissions:
   contents: write
