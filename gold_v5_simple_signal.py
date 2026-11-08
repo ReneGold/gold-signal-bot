@@ -29,8 +29,14 @@ def validate(bars, minutes):
             raise ValueError("Invalid OHLC price")
         if bar.low > min(bar.open, bar.close) or bar.high < max(bar.open, bar.close):
             raise ValueError("Inconsistent OHLC")
-        if i and bar.start - bars[i - 1].start != timedelta(minutes=minutes):
-            raise ValueError("Missing or nonconsecutive candles: no signal")
+        if i:
+            delta = bar.start - bars[i - 1].start
+            if delta <= timedelta(0) or delta.total_seconds() % (minutes * 60) != 0:
+                raise ValueError("Invalid, nonmonotonic candle timestamps")
+    # Scheduled gold maintenance and weekends may cause historical gaps.
+    # Only a gap immediately before the decision disables a setup.
+    if bars[-1].start - bars[-2].start != timedelta(minutes=minutes):
+        raise ValueError("Gap in latest candles: no signal")
 
 def ema(values, period):
     alpha = 2 / (period + 1)
