@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-07T23:06:38.516904+00:00",
+  "generated_utc": "2026-11-08T02:21:14.019137+00:00",
   "mode": "OBSERVATION_ONLY",
   "provider": "XOOMAR (third-party aggregation of agency schedules)",
   "source_url": "https://xoomar.com/api/markets/calendar?importance=high",
@@ -17,7 +17,7 @@
       "title": "CPI (Consumer Price Index)",
       "release_utc": "2026-11-10T13:30:00+00:00",
       "release_berlin": "2026-11-10T14:30:00+01:00",
-      "minutes_until": 3743.4,
+      "minutes_until": 3548.8,
       "source": "XOOMAR; confirm with original agency"
     },
     {
@@ -25,7 +25,7 @@
       "title": "PPI (Producer Price Index)",
       "release_utc": "2026-11-13T13:30:00+00:00",
       "release_berlin": "2026-11-13T14:30:00+01:00",
-      "minutes_until": 8063.4,
+      "minutes_until": 7868.8,
       "source": "XOOMAR; confirm with original agency"
     },
     {
@@ -33,7 +33,7 @@
       "title": "Personal Income and Outlays (PCE)",
       "release_utc": "2026-11-25T13:30:00+00:00",
       "release_berlin": "2026-11-25T14:30:00+01:00",
-      "minutes_until": 25343.4,
+      "minutes_until": 25148.8,
       "source": "XOOMAR; confirm with original agency"
     },
     {
@@ -41,7 +41,7 @@
       "title": "Nonfarm Payrolls (Employment Situation)",
       "release_utc": "2026-12-04T13:30:00+00:00",
       "release_berlin": "2026-12-04T14:30:00+01:00",
-      "minutes_until": 38303.4,
+      "minutes_until": 38108.8,
       "source": "XOOMAR; confirm with original agency"
     }
   ],
