@@ -1,0 +1,29 @@
+name: Gold V5 SIMPLE Offline Tests
+on:
+  push:
+    branches:
+      - gold-v5-simple-paper-research
+    paths:
+      - gold_v5_simple_signal.py
+      - test_gold_v5_simple_signal.py
+      - .github/workflows/gold-v5-simple-ci.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Forschungszweig laden
+        uses: actions/checkout@v4
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Syntax überprüfen
+        run: python -m py_compile gold_v5_simple_signal.py test_gold_v5_simple_signal.py
+      - name: Gold V5 SIMPLE Offline-Tests
+        run: python -m unittest -v test_gold_v5_simple_signal.py
