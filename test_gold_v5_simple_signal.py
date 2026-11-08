@@ -12,7 +12,7 @@ def series(n, minutes, start, initial=100, step=0.2):
 class GoldSimpleTests(unittest.TestCase):
     def setUp(self):
         self.h1=series(80,60,datetime(2026,11,1,tzinfo=UTC),initial=100,step=0.4)
-        self.m15=series(80,15,self.h1[-1].start-timedelta(hours=19,minutes=45),
+        self.m15=series(80,15,self.h1[-1].start-timedelta(hours=19),
                         initial=110,step=0.2)
         # Last H1 bar closes at 08:00; last 15m bar closes there too.
         self.assertEqual(self.h1[-1].start+timedelta(hours=1),
