@@ -1,21 +1,19 @@
 {
-  "observed_at_utc": "2026-11-08T02:21:13.599138+00:00",
-  "previous_observer_at_utc": "2026-11-07T23:06:39.874995+00:00",
-  "minutes_since_previous_observer": 194.56,
+  "observed_at_utc": "2026-11-08T09:11:27.414061+00:00",
+  "previous_observer_at_utc": "2026-11-08T02:21:14.893919+00:00",
+  "minutes_since_previous_observer": 410.21,
   "nominal_schedule_minutes_utc": [
     9,
     24,
     39,
     54
   ],
-  "minutes_since_most_recent_nominal_slot": 12.22,
+  "minutes_since_most_recent_nominal_slot": 2.45,
   "active_reference_candle_closes_since_previous_run": 0,
   "possibly_unobserved_candle_closes_utc": [],
   "unverified_signals": true,
-  "status": "WARN",
-  "warnings": [
-    "START_OFFSET_OVER_10_MINUTES_FROM_CRON_SLOT"
-  ],
+  "status": "PASS",
+  "warnings": [],
   "notes": [
     "This is a heartbeat/coverage warning only; no historical alert can be declared an actual realtime signal.",
     "Only successful runs that saved the summary are visible to this local report; to discover failed GitHub jobs independently, inspect Actions history or scheduled monitor.",
