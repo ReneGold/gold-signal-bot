@@ -19,7 +19,7 @@ class GoldSimpleTests(unittest.TestCase):
                          self.m15[-1].start+timedelta(minutes=15))
         self.now=self.m15[-1].start+timedelta(minutes=15)
     def test_no_future_h1(self):
-        future=self.h1[:-1]+[Bar(self.h1[-1].start+timedelta(hours=1),160,161,159,160)]
+        future=self.h1+[Bar(self.h1[-1].start+timedelta(hours=1),160,161,159,160)]
         self.assertEqual(decide(self.m15,future,self.now)["reason"],"H1_NOT_CLOSED_OR_STALE")
     def test_stale_signal(self):
         self.assertEqual(decide(self.m15,self.h1,self.now+timedelta(minutes=16))["reason"],"STALE_OR_OPEN_BAR")
