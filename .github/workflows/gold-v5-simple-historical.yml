@@ -1,0 +1,57 @@
+name: Gold V5 SIMPLE Historical Pilot
+on:
+  push:
+    branches:
+      - gold-v5-simple-paper-research
+    paths:
+      - .github/workflows/gold-v5-simple-historical.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  historical-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Research branch auschecken
+        uses: actions/checkout@v4
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntaktische Pruefung
+        run: python -m py_compile gold_v5_simple_signal.py gold_v5_simple_import_dukascopy.py gold_v5_simple_backtest.py
+      - name: Historische Gold-Daten 15 Minuten herunterladen
+        run: >
+          npx --yes dukascopy-node@1.51.1 -i xauusd -from 2026-08-01 -to 2026-09-01
+          -t m15 -f csv -p bid -dir raw -fn gold15 --cache
+          --batch-size 5 --batch-pause 2000 --rate-limit-retries 3
+      - name: Historische Gold-Daten 1 Stunde herunterladen
+        run: >
+          npx --yes dukascopy-node@1.51.1 -i xauusd -from 2026-08-01 -to 2026-09-01
+          -t h1 -f csv -p bid -dir raw -fn gold1h --cache
+          --batch-size 5 --batch-pause 2000 --rate-limit-retries 3
+      - name: UTC-OHLC Daten prüfen und konvertieren
+        run: |
+          python gold_v5_simple_import_dukascopy.py --source raw/gold15.csv --out data/gold15.csv --minutes 15
+          python gold_v5_simple_import_dukascopy.py --source raw/gold1h.csv --out data/gold1h.csv --minutes 60
+      - name: SIMPLE In-Sample Forschungsbacktest
+        run: >
+          python gold_v5_simple_backtest.py --bars15 data/gold15.csv
+          --bars1h data/gold1h.csv --roundtrip-cost 0.8
+          --out out/gold_simple_pilot.json
+      - name: Forschungs-Ergebnisse als Artefakte sichern
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-simple-historical-pilot
+          path: |
+            out/gold_simple_pilot.json
+          if-no-files-found: warn
+          retention-days: 14
