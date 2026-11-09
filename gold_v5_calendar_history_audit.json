@@ -1,11 +1,11 @@
 {
-  "checked_utc": "2026-11-09T11:18:13.567072+00:00",
+  "checked_utc": "2026-11-09T20:04:05.348073+00:00",
   "source_status": "THIRD_PARTY_UNVERIFIED",
-  "new_unique_category_time_pairs": 0,
-  "archived_pairs": 5,
+  "new_unique_category_time_pairs": 1,
+  "archived_pairs": 6,
   "current_feed_usable": true,
   "schedule_changes_proven": false,
-  "fomc_currently_seen": false,
+  "fomc_currently_seen": true,
   "uncertainties": [
     "Calendar events have no stable unique release identifier; apparent date changes cannot be confidently detected.",
     "Missing events or provider outages do not mean cancellation or a news-free trading session.",
