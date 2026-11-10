@@ -1,9 +1,9 @@
 {
-  "generated_utc": "2026-11-10T11:51:03.181092+00:00",
+  "generated_utc": "2026-11-10T18:13:17.871223+00:00",
   "status": "LIMITED_VERIFIED_SNAPSHOT",
   "scope": "FORWARD paper signals only",
   "observed_forward_signal_count": 1,
-  "reference_event_count_including_fomc": 5,
+  "reference_event_count_including_fomc": 4,
   "blackout_comparisons_minutes_each_side": {
     "15": {
       "flagged_signals": 0,
