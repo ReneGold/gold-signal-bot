@@ -1,30 +1,18 @@
 {
-  "observed_at_utc": "2026-11-10T23:18:46.846332+00:00",
-  "previous_observer_at_utc": "2026-11-10T18:53:51.575753+00:00",
-  "minutes_since_previous_observer": 264.92,
+  "observed_at_utc": "2026-11-10T23:46:41.192769+00:00",
+  "previous_observer_at_utc": "2026-11-10T23:18:48.716759+00:00",
+  "minutes_since_previous_observer": 27.87,
   "nominal_schedule_minutes_utc": [
     9,
     24,
     39,
     54
   ],
-  "minutes_since_most_recent_nominal_slot": 9.77,
-  "active_reference_candle_closes_since_previous_run": 14,
+  "minutes_since_most_recent_nominal_slot": 7.68,
+  "active_reference_candle_closes_since_previous_run": 2,
   "possibly_unobserved_candle_closes_utc": [
-    "2026-11-10T19:00:00+00:00",
-    "2026-11-10T19:15:00+00:00",
-    "2026-11-10T19:30:00+00:00",
-    "2026-11-10T19:45:00+00:00",
-    "2026-11-10T20:00:00+00:00",
-    "2026-11-10T20:15:00+00:00",
-    "2026-11-10T20:30:00+00:00",
-    "2026-11-10T20:45:00+00:00",
-    "2026-11-10T21:00:00+00:00",
-    "2026-11-10T21:15:00+00:00",
-    "2026-11-10T21:30:00+00:00",
-    "2026-11-10T21:45:00+00:00",
-    "2026-11-10T23:00:00+00:00",
-    "2026-11-10T23:15:00+00:00"
+    "2026-11-10T23:30:00+00:00",
+    "2026-11-10T23:45:00+00:00"
   ],
   "unverified_signals": true,
   "status": "WARN",
