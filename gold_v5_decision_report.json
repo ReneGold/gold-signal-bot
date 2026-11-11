@@ -1,17 +1,17 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 48,
+  "observed_closed_candles": 49,
   "reason_counts": {
-    "MARKET_PHASE_BLOCKED": 29,
+    "MARKET_PHASE_BLOCKED": 30,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 3,
     "REFERENCE_SESSION_CLOSED": 12
   },
   "latest": {
-    "candle_utc": "2026-11-11T02:30:00+00:00",
-    "decision_utc": "2026-11-11T02:45:00+00:00",
-    "observed_at_utc": "2026-11-11T02:59:16.995974+00:00",
+    "candle_utc": "2026-11-11T02:45:00+00:00",
+    "decision_utc": "2026-11-11T03:00:00+00:00",
+    "observed_at_utc": "2026-11-11T03:08:16.402021+00:00",
     "side": "NONE",
     "fresh": true,
     "qualified": false,
@@ -37,7 +37,7 @@
     "score_note": "Frozen Gold V5 uses Boolean rules, NOT the V3.9 65-point score."
   },
   "last_96": {
-    "MARKET_PHASE_BLOCKED": 29,
+    "MARKET_PHASE_BLOCKED": 30,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 3,
@@ -48,8 +48,8 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-11T02:59:16.995974+00:00",
-  "latest_candle_close_utc": "2026-11-11T02:45:00+00:00",
+  "as_of_utc": "2026-11-11T03:08:16.402021+00:00",
+  "latest_candle_close_utc": "2026-11-11T03:00:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
