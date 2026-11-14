@@ -48,24 +48,24 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-14T02:43:36.435391+00:00",
-  "latest_candle_close_utc": "2026-11-14T02:30:00+00:00",
-  "latest_candle_was_fresh": true,
+  "as_of_utc": "2026-11-14T09:30:07.092036+00:00",
+  "latest_candle_close_utc": "2026-11-14T09:15:00+00:00",
+  "latest_candle_was_fresh": false,
   "latest_decision": {
     "qualified": false,
-    "primary_reason": "REFERENCE_SESSION_CLOSED",
+    "primary_reason": "STALE_OR_MISSED_RUN",
     "all_reasons": [
+      "STALE_OR_MISSED_RUN",
       "REFERENCE_SESSION_CLOSED",
       "MARKET_PHASE_BLOCKED",
-      "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
-      "fresh_closed_candle": true,
+      "fresh_closed_candle": false,
       "reference_session_open": false,
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
-      "ema20_pullback_touched": false,
+      "ema20_pullback_touched": true,
       "closed_candle_breakout": false,
       "no_active_position": true,
       "risk_gate_allows": true,
