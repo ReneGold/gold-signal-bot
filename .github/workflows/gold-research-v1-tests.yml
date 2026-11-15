@@ -1,0 +1,24 @@
+name: Gold Research V1 – isolated tests
+on:
+  push:
+    branches: [gold-research-v1]
+    paths:
+      - gold_research_v1.py
+      - test_gold_research_v1.py
+      - .github/workflows/gold-research-v1-tests.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax
+        run: python -m py_compile gold_research_v1.py test_gold_research_v1.py
+      - name: Synthetic offline tests
+        run: python -m unittest -v test_gold_research_v1.py
