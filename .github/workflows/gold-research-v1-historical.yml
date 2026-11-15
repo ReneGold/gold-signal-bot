@@ -1,0 +1,54 @@
+name: Gold Research V1 Historical Audit
+on:
+  push:
+    branches: [gold-research-v1]
+    paths:
+      - .github/workflows/gold-research-v1-historical.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  historical-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Code syntax and data quality unit tests
+        run: |
+          python -m py_compile gold_research_v1.py gold_research_v1_backtest.py gold_research_import_dukascopy.py
+          python -m unittest -v test_gold_research_v1.py test_gold_research_v1_backtest.py
+      - name: Gold XAUUSD 15m historical 2026 Aug-Oct
+        run: >
+          npx --yes dukascopy-node@1.51.1 -i xauusd
+          -from 2026-08-01 -to 2026-11-01 -t m15 -f csv -p bid
+          -dir raw -fn gold15 --cache
+          --batch-size 5 --batch-pause 2000 --rate-limit-retries 3
+      - name: Gold XAUUSD 1h historical 2026 Aug-Oct
+        run: >
+          npx --yes dukascopy-node@1.51.1 -i xauusd
+          -from 2026-08-01 -to 2026-11-01 -t h1 -f csv -p bid
+          -dir raw -fn gold1h --cache
+          --batch-size 5 --batch-pause 2000 --rate-limit-retries 3
+      - name: Import and validate historical XAUUSD OHLC
+        run: |
+          python gold_research_import_dukascopy.py --source raw/gold15.csv --out data/gold15.csv --minutes 15
+          python gold_research_import_dukascopy.py --source raw/gold1h.csv --out data/gold1h.csv --minutes 60
+      - name: XAUUSD breakout research replay
+        run: |
+          python gold_research_v1_backtest.py --bars15 data/gold15.csv --bars1h data/gold1h.csv --cost 0.8 --slippage 0.0 --out out/gold_research_v1_aug_oct.json
+      - name: Retain audited report for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-research-v1-historical-audit
+          path: out/gold_research_v1_aug_oct.json
+          if-no-files-found: warn
+          retention-days: 30
