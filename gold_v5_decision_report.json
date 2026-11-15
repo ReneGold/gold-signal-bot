@@ -1,17 +1,17 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 64,
+  "observed_closed_candles": 65,
   "reason_counts": {
     "MARKET_PHASE_BLOCKED": 41,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 3,
-    "REFERENCE_SESSION_CLOSED": 16
+    "REFERENCE_SESSION_CLOSED": 17
   },
   "latest": {
-    "candle_utc": "2026-11-14T20:15:00+00:00",
-    "decision_utc": "2026-11-14T20:30:00+00:00",
-    "observed_at_utc": "2026-11-14T20:36:31.026896+00:00",
+    "candle_utc": "2026-11-14T23:45:00+00:00",
+    "decision_utc": "2026-11-15T00:00:00+00:00",
+    "observed_at_utc": "2026-11-15T00:11:54.008214+00:00",
     "side": "SHORT",
     "fresh": true,
     "qualified": false,
@@ -40,15 +40,15 @@
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 3,
-    "REFERENCE_SESSION_CLOSED": 16
+    "REFERENCE_SESSION_CLOSED": 17
   },
   "limitations": [
     "No V3.9 score is calculated in the frozen V5 strategy.",
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-14T20:36:31.026896+00:00",
-  "latest_candle_close_utc": "2026-11-14T20:30:00+00:00",
+  "as_of_utc": "2026-11-15T00:11:54.008214+00:00",
+  "latest_candle_close_utc": "2026-11-15T00:00:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
