@@ -1,33 +1,31 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 68,
+  "observed_closed_candles": 69,
   "reason_counts": {
-    "MARKET_PHASE_BLOCKED": 41,
+    "MARKET_PHASE_BLOCKED": 42,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 3,
     "REFERENCE_SESSION_CLOSED": 20
   },
   "latest": {
-    "candle_utc": "2026-11-15T19:30:00+00:00",
-    "decision_utc": "2026-11-15T19:45:00+00:00",
-    "observed_at_utc": "2026-11-15T19:50:22.741468+00:00",
+    "candle_utc": "2026-11-15T23:15:00+00:00",
+    "decision_utc": "2026-11-15T23:30:00+00:00",
+    "observed_at_utc": "2026-11-15T23:34:09.153891+00:00",
     "side": "LONG",
     "fresh": true,
     "qualified": false,
-    "primary_reason": "REFERENCE_SESSION_CLOSED",
+    "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
-      "REFERENCE_SESSION_CLOSED",
       "MARKET_PHASE_BLOCKED",
-      "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
-      "reference_session_open": false,
+      "reference_session_open": true,
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
-      "ema20_pullback_touched": false,
+      "ema20_pullback_touched": true,
       "closed_candle_breakout": false,
       "no_active_position": true,
       "risk_gate_allows": true,
@@ -37,7 +35,7 @@
     "score_note": "Frozen Gold V5 uses Boolean rules, NOT the V3.9 65-point score."
   },
   "last_96": {
-    "MARKET_PHASE_BLOCKED": 41,
+    "MARKET_PHASE_BLOCKED": 42,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 3,
@@ -48,24 +46,22 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-15T19:50:22.741468+00:00",
-  "latest_candle_close_utc": "2026-11-15T19:45:00+00:00",
+  "as_of_utc": "2026-11-15T23:34:09.153891+00:00",
+  "latest_candle_close_utc": "2026-11-15T23:30:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
-    "primary_reason": "REFERENCE_SESSION_CLOSED",
+    "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
-      "REFERENCE_SESSION_CLOSED",
       "MARKET_PHASE_BLOCKED",
-      "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
-      "reference_session_open": false,
+      "reference_session_open": true,
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
-      "ema20_pullback_touched": false,
+      "ema20_pullback_touched": true,
       "closed_candle_breakout": false,
       "no_active_position": true,
       "risk_gate_allows": true,
