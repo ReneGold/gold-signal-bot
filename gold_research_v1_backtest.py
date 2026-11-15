@@ -51,7 +51,7 @@ def quality(b15,h1):
             "h1_blocks_unmatched_missing_15m":missing,
             "h1_blocks_price_mismatch":mismatch,"mismatch_examples":examples}
 
-def replay(b15,h1,extra_round_trip=0.8,adverse_each_side=0.0):
+def replay(b15,h1,extra_round_trip=0.8,adverse_each_side=0.0,allowed_signal_hours_utc=None):
     if extra_round_trip<0 or adverse_each_side<0:raise ValueError("Negative cost")
     if len(b15)<200 or len(h1)<90:raise ValueError("Too little input")
     closeh=[b.start+timedelta(hours=1) for b in h1]
@@ -62,6 +62,9 @@ def replay(b15,h1,extra_round_trip=0.8,adverse_each_side=0.0):
     for i in range(100,len(b15)-17):
         if i<no_overlap_until:continue
         close_time=b15[i].start+timedelta(minutes=15)
+        if allowed_signal_hours_utc is not None and close_time.hour not in allowed_signal_hours_utc:
+            rejected["OUTSIDE_PREDECLARED_UTC_SESSION"]+=1
+            continue
         if b15[i+1].start != close_time:
             rejected["NO_NEXT_BAR_OPEN"]=rejected["NO_NEXT_BAR_OPEN"]+1
             continue
