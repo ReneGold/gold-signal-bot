@@ -1,32 +1,30 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 73,
+  "observed_closed_candles": 74,
   "reason_counts": {
     "MARKET_PHASE_BLOCKED": 46,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
-    "NO_PULLBACK_TOUCH": 3,
+    "NO_PULLBACK_TOUCH": 4,
     "REFERENCE_SESSION_CLOSED": 20
   },
   "latest": {
-    "candle_utc": "2026-11-16T10:30:00+00:00",
-    "decision_utc": "2026-11-16T10:45:00+00:00",
-    "observed_at_utc": "2026-11-16T10:57:39.720820+00:00",
-    "side": "NONE",
+    "candle_utc": "2026-11-16T18:30:00+00:00",
+    "decision_utc": "2026-11-16T18:45:00+00:00",
+    "observed_at_utc": "2026-11-16T18:53:24.975233+00:00",
+    "side": "SHORT",
     "fresh": true,
     "qualified": false,
-    "primary_reason": "MARKET_PHASE_BLOCKED",
+    "primary_reason": "NO_PULLBACK_TOUCH",
     "all_reasons": [
-      "MARKET_PHASE_BLOCKED",
-      "NO_EMA_TREND",
       "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
       "reference_session_open": true,
-      "weak_or_sideways_1h": false,
-      "ema20_ema50_trend": false,
+      "weak_or_sideways_1h": true,
+      "ema20_ema50_trend": true,
       "ema20_pullback_touched": false,
       "closed_candle_breakout": false,
       "no_active_position": true,
@@ -40,7 +38,7 @@
     "MARKET_PHASE_BLOCKED": 46,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
-    "NO_PULLBACK_TOUCH": 3,
+    "NO_PULLBACK_TOUCH": 4,
     "REFERENCE_SESSION_CLOSED": 20
   },
   "limitations": [
@@ -48,23 +46,21 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-16T10:57:39.720820+00:00",
-  "latest_candle_close_utc": "2026-11-16T10:45:00+00:00",
+  "as_of_utc": "2026-11-16T18:53:24.975233+00:00",
+  "latest_candle_close_utc": "2026-11-16T18:45:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
-    "primary_reason": "MARKET_PHASE_BLOCKED",
+    "primary_reason": "NO_PULLBACK_TOUCH",
     "all_reasons": [
-      "MARKET_PHASE_BLOCKED",
-      "NO_EMA_TREND",
       "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
       "reference_session_open": true,
-      "weak_or_sideways_1h": false,
-      "ema20_ema50_trend": false,
+      "weak_or_sideways_1h": true,
+      "ema20_ema50_trend": true,
       "ema20_pullback_touched": false,
       "closed_candle_breakout": false,
       "no_active_position": true,
