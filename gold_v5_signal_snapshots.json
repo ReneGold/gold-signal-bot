@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "signal_utc": "2026-11-17T12:15:00+00:00",
+    "decision_utc": "2026-11-17T12:30:00+00:00",
+    "cohort": "FORWARD",
+    "side": "SHORT",
+    "phase": "RANGE_OR_WEAK",
+    "trigger": "EMA trend, EMA20 pullback touch, closed-candle breakout",
+    "ema20_15m": 3863.71264,
+    "ema50_15m": 3865.23333,
+    "ema20_previous_15m": 3863.91668,
+    "atr14_15m": 6.13488,
+    "ema20_1h": 3866.22921,
+    "ema50_1h": 3869.50363,
+    "atr14_1h": 12.99868,
+    "ema_gap_1h_over_atr": 0.2519,
+    "candle": {
+      "open": 3863.01252,
+      "high": 3866.5851,
+      "low": 3860.55669,
+      "close": 3861.77422,
+      "body": 1.2383,
+      "upper_wick": 3.57258,
+      "lower_wick": 1.21753
+    },
+    "previous_high": 3869.07065,
+    "previous_low": 3862.04766,
+    "signal_ema20_distance_atr": -0.31597,
+    "risk_distance": 9.20232,
+    "captured_at_decision": true,
+    "broker_bid_ask": null,
+    "spread": null,
+    "slippage": null,
+    "support_resistance_zone": null,
+    "limitations": "No verified broker quote, spread, or support/resistance zones available."
+  }
+]

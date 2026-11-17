@@ -1,20 +1,22 @@
 {
   "risk_gate": {
-    "decision": "ALLOW",
-    "reasons": [],
+    "decision": "BLOCK",
+    "reasons": [
+      "EXISTING_POSITION"
+    ],
     "daily_R": 0,
     "loss_streak": 0,
     "max_closed_dd_R": 0.0
   },
-  "as_of_utc": "2026-11-17T11:05:39.326867+00:00",
+  "as_of_utc": "2026-11-17T12:31:39.469914+00:00",
   "candidate": "Gold V5 frozen sideways pullback",
-  "forward_signals": 1,
-  "forward_pending": 0,
+  "forward_signals": 2,
+  "forward_pending": 1,
   "forward_open": 0,
   "forward_closed": 1,
   "forward_net_R_closed": 1.90306,
   "initial_backfill_count": 5,
-  "new_signals_this_run": 0,
+  "new_signals_this_run": 1,
   "entries_recorded_this_run": 0,
   "positions_closed_this_run": 0,
   "unresolved_missing_data": 0,

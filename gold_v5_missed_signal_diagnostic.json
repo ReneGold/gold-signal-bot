@@ -1,21 +1,16 @@
 {
   "status": "DIAGNOSTIC_ONLY",
-  "missing_slots": 30,
+  "missing_slots": 6,
   "historically_detectable_candidates": [
     {
-      "signal_candle_open_utc": "2026-11-17T04:30:00+00:00",
-      "closed_utc": "2026-11-17T04:45:00+00:00",
-      "side": "LONG"
+      "signal_candle_open_utc": "2026-11-17T12:00:00+00:00",
+      "closed_utc": "2026-11-17T12:15:00+00:00",
+      "side": "SHORT"
     },
     {
-      "signal_candle_open_utc": "2026-11-17T04:45:00+00:00",
-      "closed_utc": "2026-11-17T05:00:00+00:00",
-      "side": "LONG"
-    },
-    {
-      "signal_candle_open_utc": "2026-11-17T07:00:00+00:00",
-      "closed_utc": "2026-11-17T07:15:00+00:00",
-      "side": "LONG"
+      "signal_candle_open_utc": "2026-11-17T12:15:00+00:00",
+      "closed_utc": "2026-11-17T12:30:00+00:00",
+      "side": "SHORT"
     }
   ],
   "limitations": [

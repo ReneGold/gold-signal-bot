@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-11-17T11:05:39.806241+00:00",
+  "generated_utc": "2026-11-17T12:31:39.798233+00:00",
   "scope": "FORWARD CLOSED_PAPER only; INITIAL_BACKFILL excluded",
   "closed_forward_trades": 1,
-  "forward_open_or_pending": 0,
+  "forward_open_or_pending": 1,
   "observed_wins": 1,
   "observed_net_R": 1.90306,
   "win_rate_wilson_95_pct": [

@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-17T11:05:39.897134+00:00",
+  "generated_utc": "2026-11-17T12:31:39.896225+00:00",
   "mode": "RESEARCH_ONLY_NO_TRADE_GATE_CHANGES",
   "modules": {
     "news_blackout": {
@@ -19,13 +19,13 @@
       "illustrative_quote_spread_usd": null,
       "actual_spread_limit": null,
       "execution_filter_active": false,
-      "recent_signal_atr14_15m": null,
+      "recent_signal_atr14_15m": 6.13488,
       "volatility_guard_active": false,
       "note": "ATR diagnostics exist for future snapshots; no validated broker spread, session or empirical volatility thresholds."
     },
     "entry_exit": {
       "status": "PAPER_RULES_PRESENT_NOT_EXECUTION_VALIDATED",
-      "pending_entry_count": 0,
+      "pending_entry_count": 1,
       "open_paper_count": 0,
       "unresolved_data_gap_count": 0,
       "closed_exit_reasons": {
@@ -57,7 +57,7 @@
       "note": "Sensitivity is not a broker execution backtest. No confidence in profitability from sparse forward observations."
     }
   },
-  "forward_ledger_count": 1,
-  "matched_signal_snapshots": 0,
+  "forward_ledger_count": 2,
+  "matched_signal_snapshots": 1,
   "critical": "No live order capability. News and spread data missing; do not claim filters are operational."
 }

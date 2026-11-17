@@ -1,9 +1,9 @@
 {
-  "generated_utc": "2026-11-17T11:05:39.760516+00:00",
+  "generated_utc": "2026-11-17T12:31:39.754103+00:00",
   "scope": "Only FORWARD cohort; excludes all INITIAL_BACKFILL and recovered records",
   "sample_size": 1,
-  "forward_signals_total": 1,
-  "forward_positions_open_or_pending": 0,
+  "forward_signals_total": 2,
+  "forward_positions_open_or_pending": 1,
   "wins": 1,
   "losses_and_breakeven": 0,
   "win_rate_pct": 100.0,
@@ -12,7 +12,7 @@
   "profit_factor": null,
   "max_closed_drawdown_R": 0.0,
   "first_signal_utc": "2026-10-29T23:00:00+00:00",
-  "last_signal_utc": "2026-10-29T23:00:00+00:00",
+  "last_signal_utc": "2026-11-17T12:15:00+00:00",
   "limitations": [
     "A small or positive sample does not show profitability.",
     "Paper fills use indicative next-bar OHLC; no executable bid/ask, spread verification, holiday adjustments or slippage.",

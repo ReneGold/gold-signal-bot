@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-11-17T11:05:39.712147+00:00",
+  "generated_utc": "2026-11-17T12:31:39.709160+00:00",
   "mode": "READ_ONLY_FORWARD_REVIEW",
-  "forward_signal_count": 1,
-  "captured_snapshots": 0,
+  "forward_signal_count": 2,
+  "captured_snapshots": 1,
   "historical_missing_snapshots": 1,
   "observations": [
     {
@@ -26,6 +26,38 @@
       "atr14_1h": null,
       "signal_candle": null,
       "snapshot_note": "MISSING_HISTORICAL_NOT_RECONSTRUCTED",
+      "reference_news_within_60_minutes": [],
+      "calendar_coverage": "PARTIAL_ONLY_UNKNOWN_OTHER_EVENTS"
+    },
+    {
+      "signal_utc": "2026-11-17T12:15:00+00:00",
+      "direction": "SHORT",
+      "phase": "RANGE_OR_WEAK",
+      "entry_utc": "2026-11-17T12:30:00+00:00",
+      "entry": null,
+      "stop": null,
+      "target": null,
+      "risk": "9.20232",
+      "status": "PENDING_ENTRY",
+      "exit_reason": null,
+      "net_R": null,
+      "indicators_captured_at_signal": true,
+      "ema20_15m": 3863.71264,
+      "ema50_15m": 3865.23333,
+      "atr14_15m": 6.13488,
+      "ema20_1h": 3866.22921,
+      "ema50_1h": 3869.50363,
+      "atr14_1h": 12.99868,
+      "signal_candle": {
+        "open": 3863.01252,
+        "high": 3866.5851,
+        "low": 3860.55669,
+        "close": 3861.77422,
+        "body": 1.2383,
+        "upper_wick": 3.57258,
+        "lower_wick": 1.21753
+      },
+      "snapshot_note": "CAPTURED",
       "reference_news_within_60_minutes": [],
       "calendar_coverage": "PARTIAL_ONLY_UNKNOWN_OTHER_EVENTS"
     }
