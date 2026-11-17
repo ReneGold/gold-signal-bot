@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-17T12:31:39.896225+00:00",
+  "generated_utc": "2026-11-17T19:47:17.649073+00:00",
   "mode": "RESEARCH_ONLY_NO_TRADE_GATE_CHANGES",
   "modules": {
     "news_blackout": {
@@ -25,11 +25,11 @@
     },
     "entry_exit": {
       "status": "PAPER_RULES_PRESENT_NOT_EXECUTION_VALIDATED",
-      "pending_entry_count": 1,
+      "pending_entry_count": 0,
       "open_paper_count": 0,
       "unresolved_data_gap_count": 0,
       "closed_exit_reasons": {
-        "TP": 1,
+        "TP": 2,
         "STOP": 0,
         "TIME": 0
       },
@@ -42,14 +42,14 @@
     },
     "realistic_validation": {
       "status": "INSUFFICIENT_FORWARD_SAMPLE",
-      "forward_closed_count": 1,
+      "forward_closed_count": 2,
       "backfill_excluded": true,
-      "forward_net_R_at_existing_assumed_cost": 1.90306,
+      "forward_net_R_at_existing_assumed_cost": 3.81613,
       "extra_adverse_price_cost_usd_per_trade_to_total_net_R": {
-        "0.0": 1.90306,
-        "0.5": 1.84247,
-        "1.0": 1.78188,
-        "2.0": 1.6607
+        "0.0": 3.81613,
+        "0.5": 3.70121,
+        "1.0": 3.58628,
+        "2.0": 3.35644
       },
       "independent_out_of_sample_validated": false,
       "verified_broker_execution": false,

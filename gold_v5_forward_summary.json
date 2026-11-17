@@ -1,24 +1,22 @@
 {
   "risk_gate": {
-    "decision": "BLOCK",
-    "reasons": [
-      "EXISTING_POSITION"
-    ],
-    "daily_R": 0,
+    "decision": "ALLOW",
+    "reasons": [],
+    "daily_R": 1.91307,
     "loss_streak": 0,
     "max_closed_dd_R": 0.0
   },
-  "as_of_utc": "2026-11-17T12:31:39.469914+00:00",
+  "as_of_utc": "2026-11-17T19:47:17.096603+00:00",
   "candidate": "Gold V5 frozen sideways pullback",
   "forward_signals": 2,
-  "forward_pending": 1,
+  "forward_pending": 0,
   "forward_open": 0,
-  "forward_closed": 1,
-  "forward_net_R_closed": 1.90306,
+  "forward_closed": 2,
+  "forward_net_R_closed": 3.81613,
   "initial_backfill_count": 5,
-  "new_signals_this_run": 1,
-  "entries_recorded_this_run": 0,
-  "positions_closed_this_run": 0,
+  "new_signals_this_run": 0,
+  "entries_recorded_this_run": 1,
+  "positions_closed_this_run": 1,
   "unresolved_missing_data": 0,
   "caveat": "Observational paper fill at next bar open; not executable broker data. No lookahead signal candidates; schedule may be delayed or miss signals."
 }

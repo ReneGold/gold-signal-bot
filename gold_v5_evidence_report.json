@@ -1,12 +1,12 @@
 {
-  "generated_utc": "2026-11-17T12:31:39.798233+00:00",
+  "generated_utc": "2026-11-17T19:47:17.570863+00:00",
   "scope": "FORWARD CLOSED_PAPER only; INITIAL_BACKFILL excluded",
-  "closed_forward_trades": 1,
-  "forward_open_or_pending": 1,
-  "observed_wins": 1,
-  "observed_net_R": 1.90306,
+  "closed_forward_trades": 2,
+  "forward_open_or_pending": 0,
+  "observed_wins": 2,
+  "observed_net_R": 3.81613,
   "win_rate_wilson_95_pct": [
-    20.65,
+    34.24,
     100.0
   ],
   "evidence_stage": "INSUFFICIENT",

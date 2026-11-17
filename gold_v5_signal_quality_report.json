@@ -1,42 +1,49 @@
 {
-  "generated_utc": "2026-11-17T12:31:39.841481+00:00",
+  "generated_utc": "2026-11-17T19:47:17.611120+00:00",
   "scope": "Only closed FORWARD paper trades; INITIAL_BACKFILL excluded",
   "all_closed_forward": {
-    "trades": 1,
-    "wins": 1,
+    "trades": 2,
+    "wins": 2,
     "losses_or_flat": 0,
-    "net_R": 1.90306,
-    "average_R": 1.90306
+    "net_R": 3.81613,
+    "average_R": 1.90807
   },
   "segments": {
     "direction": {
       "SHORT": {
-        "trades": 1,
-        "wins": 1,
+        "trades": 2,
+        "wins": 2,
         "losses_or_flat": 0,
-        "net_R": 1.90306,
-        "average_R": 1.90306
+        "net_R": 3.81613,
+        "average_R": 1.90807
       }
     },
     "recorded_phase": {
       "RANGE_OR_WEAK": {
-        "trades": 1,
-        "wins": 1,
+        "trades": 2,
+        "wins": 2,
         "losses_or_flat": 0,
-        "net_R": 1.90306,
-        "average_R": 1.90306
+        "net_R": 3.81613,
+        "average_R": 1.90807
       }
     },
     "exit_reason": {
       "TP": {
-        "trades": 1,
-        "wins": 1,
+        "trades": 2,
+        "wins": 2,
         "losses_or_flat": 0,
-        "net_R": 1.90306,
-        "average_R": 1.90306
+        "net_R": 3.81613,
+        "average_R": 1.90807
       }
     },
     "signal_time_utc": {
+      "12-18 UTC": {
+        "trades": 1,
+        "wins": 1,
+        "losses_or_flat": 0,
+        "net_R": 1.91307,
+        "average_R": 1.91307
+      },
       "18-24 UTC": {
         "trades": 1,
         "wins": 1,
@@ -48,8 +55,8 @@
   },
   "coverage": {
     "forward_signals": 2,
-    "closed": 1,
-    "open_or_pending": 1,
+    "closed": 2,
+    "open_or_pending": 0,
     "unresolved": 0
   },
   "research_limits": [
