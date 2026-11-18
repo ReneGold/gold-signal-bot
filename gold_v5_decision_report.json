@@ -1,18 +1,18 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 86,
+  "observed_closed_candles": 87,
   "reason_counts": {
     "ELIGIBLE": 1,
-    "MARKET_PHASE_BLOCKED": 53,
+    "MARKET_PHASE_BLOCKED": 54,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 8,
     "REFERENCE_SESSION_CLOSED": 20
   },
   "latest": {
-    "candle_utc": "2026-11-18T18:45:00+00:00",
-    "decision_utc": "2026-11-18T19:00:00+00:00",
-    "observed_at_utc": "2026-11-18T19:02:10.427182+00:00",
+    "candle_utc": "2026-11-18T19:15:00+00:00",
+    "decision_utc": "2026-11-18T19:30:00+00:00",
+    "observed_at_utc": "2026-11-18T19:31:57.409741+00:00",
     "side": "SHORT",
     "fresh": true,
     "qualified": false,
@@ -37,7 +37,7 @@
   },
   "last_96": {
     "ELIGIBLE": 1,
-    "MARKET_PHASE_BLOCKED": 53,
+    "MARKET_PHASE_BLOCKED": 54,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 8,
@@ -48,8 +48,8 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-18T19:02:10.427182+00:00",
-  "latest_candle_close_utc": "2026-11-18T19:00:00+00:00",
+  "as_of_utc": "2026-11-18T19:31:57.409741+00:00",
+  "latest_candle_close_utc": "2026-11-18T19:30:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
