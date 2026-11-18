@@ -1,34 +1,32 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 83,
+  "observed_closed_candles": 84,
   "reason_counts": {
     "ELIGIBLE": 1,
-    "MARKET_PHASE_BLOCKED": 50,
+    "MARKET_PHASE_BLOCKED": 51,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 8,
     "REFERENCE_SESSION_CLOSED": 20
   },
   "latest": {
-    "candle_utc": "2026-11-18T02:30:00+00:00",
-    "decision_utc": "2026-11-18T02:45:00+00:00",
-    "observed_at_utc": "2026-11-18T02:56:52.411068+00:00",
+    "candle_utc": "2026-11-18T10:15:00+00:00",
+    "decision_utc": "2026-11-18T10:30:00+00:00",
+    "observed_at_utc": "2026-11-18T10:40:39.096546+00:00",
     "side": "SHORT",
     "fresh": true,
     "qualified": false,
     "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
-      "MARKET_PHASE_BLOCKED",
-      "NO_PULLBACK_TOUCH",
-      "NO_BREAKOUT_CONFIRMATION"
+      "MARKET_PHASE_BLOCKED"
     ],
     "checks": {
       "fresh_closed_candle": true,
       "reference_session_open": true,
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
-      "ema20_pullback_touched": false,
-      "closed_candle_breakout": false,
+      "ema20_pullback_touched": true,
+      "closed_candle_breakout": true,
       "no_active_position": true,
       "risk_gate_allows": true,
       "not_previously_recorded": true
@@ -38,7 +36,7 @@
   },
   "last_96": {
     "ELIGIBLE": 1,
-    "MARKET_PHASE_BLOCKED": 50,
+    "MARKET_PHASE_BLOCKED": 51,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 8,
@@ -49,24 +47,22 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-18T02:56:52.411068+00:00",
-  "latest_candle_close_utc": "2026-11-18T02:45:00+00:00",
+  "as_of_utc": "2026-11-18T10:40:39.096546+00:00",
+  "latest_candle_close_utc": "2026-11-18T10:30:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
     "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
-      "MARKET_PHASE_BLOCKED",
-      "NO_PULLBACK_TOUCH",
-      "NO_BREAKOUT_CONFIRMATION"
+      "MARKET_PHASE_BLOCKED"
     ],
     "checks": {
       "fresh_closed_candle": true,
       "reference_session_open": true,
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
-      "ema20_pullback_touched": false,
-      "closed_candle_breakout": false,
+      "ema20_pullback_touched": true,
+      "closed_candle_breakout": true,
       "no_active_position": true,
       "risk_gate_allows": true,
       "not_previously_recorded": true
