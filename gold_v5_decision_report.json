@@ -1,24 +1,25 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 91,
+  "observed_closed_candles": 92,
   "reason_counts": {
     "ELIGIBLE": 1,
-    "MARKET_PHASE_BLOCKED": 58,
+    "MARKET_PHASE_BLOCKED": 59,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 8,
     "REFERENCE_SESSION_CLOSED": 20
   },
   "latest": {
-    "candle_utc": "2026-11-19T09:00:00+00:00",
-    "decision_utc": "2026-11-19T09:15:00+00:00",
-    "observed_at_utc": "2026-11-19T09:25:19.093451+00:00",
+    "candle_utc": "2026-11-19T17:15:00+00:00",
+    "decision_utc": "2026-11-19T17:30:00+00:00",
+    "observed_at_utc": "2026-11-19T17:38:43.690261+00:00",
     "side": "SHORT",
     "fresh": true,
     "qualified": false,
     "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
       "MARKET_PHASE_BLOCKED",
+      "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
@@ -26,7 +27,7 @@
       "reference_session_open": true,
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
-      "ema20_pullback_touched": true,
+      "ema20_pullback_touched": false,
       "closed_candle_breakout": false,
       "no_active_position": true,
       "risk_gate_allows": true,
@@ -37,7 +38,7 @@
   },
   "last_96": {
     "ELIGIBLE": 1,
-    "MARKET_PHASE_BLOCKED": 58,
+    "MARKET_PHASE_BLOCKED": 59,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 8,
@@ -48,14 +49,15 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-19T09:25:19.093451+00:00",
-  "latest_candle_close_utc": "2026-11-19T09:15:00+00:00",
+  "as_of_utc": "2026-11-19T17:38:43.690261+00:00",
+  "latest_candle_close_utc": "2026-11-19T17:30:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
     "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
       "MARKET_PHASE_BLOCKED",
+      "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
@@ -63,7 +65,7 @@
       "reference_session_open": true,
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
-      "ema20_pullback_touched": true,
+      "ema20_pullback_touched": false,
       "closed_candle_breakout": false,
       "no_active_position": true,
       "risk_gate_allows": true,
