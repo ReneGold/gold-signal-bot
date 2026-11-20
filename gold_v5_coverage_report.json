@@ -1,21 +1,44 @@
 {
-  "observed_at_utc": "2026-11-20T16:25:02.290251+00:00",
-  "previous_observer_at_utc": "2026-11-20T16:04:28.332584+00:00",
-  "minutes_since_previous_observer": 20.57,
+  "observed_at_utc": "2026-11-20T22:47:17.086405+00:00",
+  "previous_observer_at_utc": "2026-11-20T16:25:03.706428+00:00",
+  "minutes_since_previous_observer": 382.22,
   "nominal_schedule_minutes_utc": [
     9,
     24,
     39,
     54
   ],
-  "minutes_since_most_recent_nominal_slot": 1.03,
-  "active_reference_candle_closes_since_previous_run": 1,
+  "minutes_since_most_recent_nominal_slot": 8.28,
+  "active_reference_candle_closes_since_previous_run": 22,
   "possibly_unobserved_candle_closes_utc": [
-    "2026-11-20T16:15:00+00:00"
+    "2026-11-20T16:30:00+00:00",
+    "2026-11-20T16:45:00+00:00",
+    "2026-11-20T17:00:00+00:00",
+    "2026-11-20T17:15:00+00:00",
+    "2026-11-20T17:30:00+00:00",
+    "2026-11-20T17:45:00+00:00",
+    "2026-11-20T18:00:00+00:00",
+    "2026-11-20T18:15:00+00:00",
+    "2026-11-20T18:30:00+00:00",
+    "2026-11-20T18:45:00+00:00",
+    "2026-11-20T19:00:00+00:00",
+    "2026-11-20T19:15:00+00:00",
+    "2026-11-20T19:30:00+00:00",
+    "2026-11-20T19:45:00+00:00",
+    "2026-11-20T20:00:00+00:00",
+    "2026-11-20T20:15:00+00:00",
+    "2026-11-20T20:30:00+00:00",
+    "2026-11-20T20:45:00+00:00",
+    "2026-11-20T21:00:00+00:00",
+    "2026-11-20T21:15:00+00:00",
+    "2026-11-20T21:30:00+00:00",
+    "2026-11-20T21:45:00+00:00"
   ],
   "unverified_signals": true,
-  "status": "PASS",
-  "warnings": [],
+  "status": "WARN",
+  "warnings": [
+    "ACTIVE_SESSION_CANDLE_COVERAGE_GAP"
+  ],
   "notes": [
     "This is a heartbeat/coverage warning only; no historical alert can be declared an actual realtime signal.",
     "Only successful runs that saved the summary are visible to this local report; to discover failed GitHub jobs independently, inspect Actions history or scheduled monitor.",
