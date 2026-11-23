@@ -1,25 +1,26 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 109,
+  "observed_closed_candles": 110,
   "reason_counts": {
     "ELIGIBLE": 1,
-    "MARKET_PHASE_BLOCKED": 68,
+    "MARKET_PHASE_BLOCKED": 69,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 8,
     "REFERENCE_SESSION_CLOSED": 28
   },
   "latest": {
-    "candle_utc": "2026-11-23T01:15:00+00:00",
-    "decision_utc": "2026-11-23T01:30:00+00:00",
-    "observed_at_utc": "2026-11-23T01:36:28.399582+00:00",
+    "candle_utc": "2026-11-23T07:45:00+00:00",
+    "decision_utc": "2026-11-23T08:00:00+00:00",
+    "observed_at_utc": "2026-11-23T08:06:10.551852+00:00",
     "side": "LONG",
     "fresh": true,
     "qualified": false,
     "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
       "MARKET_PHASE_BLOCKED",
-      "NO_PULLBACK_TOUCH"
+      "NO_PULLBACK_TOUCH",
+      "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
@@ -27,7 +28,7 @@
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
       "ema20_pullback_touched": false,
-      "closed_candle_breakout": true,
+      "closed_candle_breakout": false,
       "no_active_position": true,
       "risk_gate_allows": true,
       "not_previously_recorded": true
@@ -37,25 +38,26 @@
   },
   "last_96": {
     "ELIGIBLE": 1,
-    "MARKET_PHASE_BLOCKED": 61,
+    "MARKET_PHASE_BLOCKED": 62,
     "NO_EMA_TREND": 1,
     "NO_PULLBACK_TOUCH": 6,
-    "REFERENCE_SESSION_CLOSED": 27
+    "REFERENCE_SESSION_CLOSED": 26
   },
   "limitations": [
     "No V3.9 score is calculated in the frozen V5 strategy.",
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-23T01:36:28.399582+00:00",
-  "latest_candle_close_utc": "2026-11-23T01:30:00+00:00",
+  "as_of_utc": "2026-11-23T08:06:10.551852+00:00",
+  "latest_candle_close_utc": "2026-11-23T08:00:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
     "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
       "MARKET_PHASE_BLOCKED",
-      "NO_PULLBACK_TOUCH"
+      "NO_PULLBACK_TOUCH",
+      "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
@@ -63,7 +65,7 @@
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
       "ema20_pullback_touched": false,
-      "closed_candle_breakout": true,
+      "closed_candle_breakout": false,
       "no_active_position": true,
       "risk_gate_allows": true,
       "not_previously_recorded": true
