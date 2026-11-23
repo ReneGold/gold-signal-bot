@@ -1,19 +1,28 @@
 {
-  "observed_at_utc": "2026-11-22T19:27:46.610855+00:00",
-  "previous_observer_at_utc": "2026-11-22T11:54:37.948712+00:00",
-  "minutes_since_previous_observer": 453.14,
+  "observed_at_utc": "2026-11-23T00:26:18.133691+00:00",
+  "previous_observer_at_utc": "2026-11-22T19:27:47.812280+00:00",
+  "minutes_since_previous_observer": 298.51,
   "nominal_schedule_minutes_utc": [
     9,
     24,
     39,
     54
   ],
-  "minutes_since_most_recent_nominal_slot": 3.77,
-  "active_reference_candle_closes_since_previous_run": 0,
-  "possibly_unobserved_candle_closes_utc": [],
+  "minutes_since_most_recent_nominal_slot": 2.3,
+  "active_reference_candle_closes_since_previous_run": 6,
+  "possibly_unobserved_candle_closes_utc": [
+    "2026-11-22T23:00:00+00:00",
+    "2026-11-22T23:15:00+00:00",
+    "2026-11-22T23:30:00+00:00",
+    "2026-11-22T23:45:00+00:00",
+    "2026-11-23T00:00:00+00:00",
+    "2026-11-23T00:15:00+00:00"
+  ],
   "unverified_signals": true,
-  "status": "PASS",
-  "warnings": [],
+  "status": "WARN",
+  "warnings": [
+    "ACTIVE_SESSION_CANDLE_COVERAGE_GAP"
+  ],
   "notes": [
     "This is a heartbeat/coverage warning only; no historical alert can be declared an actual realtime signal.",
     "Only successful runs that saved the summary are visible to this local report; to discover failed GitHub jobs independently, inspect Actions history or scheduled monitor.",

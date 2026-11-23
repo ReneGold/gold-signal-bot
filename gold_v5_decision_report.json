@@ -1,31 +1,30 @@
 {
   "mode": "OBSERVED_ONLY_NO_LOOKAHEAD",
-  "observed_closed_candles": 107,
+  "observed_closed_candles": 108,
   "reason_counts": {
     "ELIGIBLE": 1,
-    "MARKET_PHASE_BLOCKED": 66,
+    "MARKET_PHASE_BLOCKED": 67,
     "NO_BREAKOUT_CONFIRMATION": 1,
     "NO_EMA_TREND": 3,
     "NO_PULLBACK_TOUCH": 8,
     "REFERENCE_SESSION_CLOSED": 28
   },
   "latest": {
-    "candle_utc": "2026-11-22T19:00:00+00:00",
-    "decision_utc": "2026-11-22T19:15:00+00:00",
-    "observed_at_utc": "2026-11-22T19:27:47.812280+00:00",
+    "candle_utc": "2026-11-23T00:00:00+00:00",
+    "decision_utc": "2026-11-23T00:15:00+00:00",
+    "observed_at_utc": "2026-11-23T00:26:19.394430+00:00",
     "side": "LONG",
     "fresh": true,
     "qualified": false,
-    "primary_reason": "REFERENCE_SESSION_CLOSED",
+    "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
-      "REFERENCE_SESSION_CLOSED",
       "MARKET_PHASE_BLOCKED",
       "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
-      "reference_session_open": false,
+      "reference_session_open": true,
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
       "ema20_pullback_touched": false,
@@ -49,21 +48,20 @@
     "Only actually processed fresh completed bars appear; missed GitHub executions are not invented.",
     "These diagnostics do not establish profitability or executable broker fills."
   ],
-  "as_of_utc": "2026-11-22T19:27:47.812280+00:00",
-  "latest_candle_close_utc": "2026-11-22T19:15:00+00:00",
+  "as_of_utc": "2026-11-23T00:26:19.394430+00:00",
+  "latest_candle_close_utc": "2026-11-23T00:15:00+00:00",
   "latest_candle_was_fresh": true,
   "latest_decision": {
     "qualified": false,
-    "primary_reason": "REFERENCE_SESSION_CLOSED",
+    "primary_reason": "MARKET_PHASE_BLOCKED",
     "all_reasons": [
-      "REFERENCE_SESSION_CLOSED",
       "MARKET_PHASE_BLOCKED",
       "NO_PULLBACK_TOUCH",
       "NO_BREAKOUT_CONFIRMATION"
     ],
     "checks": {
       "fresh_closed_candle": true,
-      "reference_session_open": false,
+      "reference_session_open": true,
       "weak_or_sideways_1h": false,
       "ema20_ema50_trend": true,
       "ema20_pullback_touched": false,
