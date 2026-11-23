@@ -1,18 +1,7 @@
 {
   "status": "DIAGNOSTIC_ONLY",
-  "missing_slots": 26,
-  "historically_detectable_candidates": [
-    {
-      "signal_candle_open_utc": "2026-11-23T02:45:00+00:00",
-      "closed_utc": "2026-11-23T03:00:00+00:00",
-      "side": "LONG"
-    },
-    {
-      "signal_candle_open_utc": "2026-11-23T03:00:00+00:00",
-      "closed_utc": "2026-11-23T03:15:00+00:00",
-      "side": "LONG"
-    }
-  ],
+  "missing_slots": 6,
+  "historically_detectable_candidates": [],
   "limitations": [
     "These signals were NOT observed or tradable live.",
     "Only available provider lookback scanned; cannot prove absence of omitted signals.",
