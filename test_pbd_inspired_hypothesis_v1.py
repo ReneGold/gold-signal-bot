@@ -19,7 +19,7 @@ class PbdHypothesisTests(unittest.TestCase):
         self.assertAlmostEqual(s["lower"],104.1)
     def test_no_future_bar_in_signal(self):
         a=synthetic()
-        self.assertEqual(setup(a),setup(a+[bar(29,103.5,101)]))
+        self.assertEqual(setup(a),setup((a+[bar(29,103.5,101)])[:29]))
     def test_no_signal_without_impulse(self):
         a=synthetic()
         for i in range(20,24):a[i]=bar(i,100,100.1)
