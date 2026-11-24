@@ -1,8 +1,8 @@
 name: Gold V5 Forward Paper Beobachtung
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '9,24,39,54 * * * *'
+  # Schedule paused: Gold SIMPLE V1 is the only new automatic paper alert pipeline.
+  # Manual V5 history/diagnostics remain available.
 permissions:
   contents: write
 concurrency:
