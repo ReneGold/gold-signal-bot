@@ -12,8 +12,7 @@ on:
         required: false
         type: boolean
         default: false
-  schedule:
-    - cron: '13,43 * * * *'
+  # Legacy V5 schedule paused during SIMPLE V1 paper-only pilot; manual test remains available.
 permissions:
   actions: write
   contents: read
