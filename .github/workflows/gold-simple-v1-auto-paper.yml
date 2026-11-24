@@ -1,0 +1,46 @@
+name: Gold SIMPLE V1 – Telegram PAPER-Signale
+on:
+  schedule:
+    - cron: '4,19,34,49 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+concurrency:
+  group: gold-simple-v1-telegram
+  cancel-in-progress: false
+
+jobs:
+  paper-signal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Gold SIMPLE isolierten Zweig laden
+        uses: actions/checkout@v4
+        with:
+          ref: gold-simple-telegram-v1
+          persist-credentials: true
+          fetch-depth: 1
+      - name: Python installieren
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Code und Sicherheitschecks prüfen
+        run: |
+          python -m py_compile gold_simple_telegram_v1.py gold_simple_live_paper.py
+          python -m unittest -q test_gold_simple_telegram_v1.py test_gold_simple_live_paper.py
+      - name: Neue geschlossene Gold-Kerze prüfen – nur PAPER-Signal
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python gold_simple_live_paper.py --send-paper
+      - name: Versandmarkierung dauerhaft im isolierten Zweig speichern
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gold_simple_v1_sent_state.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Persist Gold SIMPLE paper notification cursor"
+            git push origin HEAD:gold-simple-telegram-v1
+          fi
