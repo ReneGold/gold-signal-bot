@@ -1,0 +1,26 @@
+name: Gold SIMPLE V1 – Test der automatischen Paper-Signale
+on:
+  push:
+    branches: [gold-simple-telegram-v1]
+    paths:
+      - .github/workflows/gold-simple-v1-paper-selftest.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test der einfachen Signallogik ohne Versenden
+        run: |
+          python -m py_compile gold_simple_telegram_v1.py gold_simple_live_paper.py
+          python -m unittest -v test_gold_simple_telegram_v1.py test_gold_simple_live_paper.py
+      - name: Datenabruf und Status ohne Telegram-Nachricht
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: python gold_simple_live_paper.py
