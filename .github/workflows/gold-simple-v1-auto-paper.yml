@@ -1,5 +1,9 @@
 name: Gold SIMPLE V1 – Telegram PAPER-Signale
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/gold-simple-v1-auto-paper.yml
   schedule:
     - cron: '4,19,34,49 * * * *'
   workflow_dispatch:
