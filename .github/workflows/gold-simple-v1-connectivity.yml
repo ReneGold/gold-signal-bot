@@ -1,0 +1,29 @@
+name: Gold SIMPLE V1 – Telegram Verbindung und Signallogik
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gold-simple-telegram-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Offline tests (no messaging)
+        run: |
+          python -m py_compile gold_simple_telegram_v1.py
+          python -m unittest -v test_gold_simple_telegram_v1.py
+      - name: One real-data no-send diagnostic
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: python gold_simple_telegram_v1.py
+      - name: Send a clearly labelled Telegram connectivity test (NOT A SIGNAL)
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python gold_simple_telegram_v1.py --test-telegram
