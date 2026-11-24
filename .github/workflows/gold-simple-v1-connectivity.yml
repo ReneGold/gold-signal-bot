@@ -1,5 +1,9 @@
 name: Gold SIMPLE V1 – Telegram Verbindung und Signallogik
 on:
+  push:
+    branches: [gold-simple-telegram-v1]
+    paths:
+      - .github/workflows/gold-simple-v1-connectivity.yml
   workflow_dispatch:
 permissions:
   contents: read
