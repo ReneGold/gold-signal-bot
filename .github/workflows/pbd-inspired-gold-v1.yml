@@ -1,0 +1,51 @@
+name: PbD-inspired Gold V1 – historical research
+on:
+  push:
+    branches: [gold-pbd-hypothesis-v1]
+    paths:
+      - .github/workflows/pbd-inspired-gold-v1.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pbd-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Frozen hypothesis syntax and offline unit tests
+        run: |
+          python -m py_compile pbd_inspired_hypothesis_v1.py gold_research_import_dukascopy.py
+          python -m unittest -v test_pbd_inspired_hypothesis_v1.py
+      - name: Download 15m Dukascopy indicative bid candles
+        run: >
+          npx --yes dukascopy-node@1.51.1 -i xauusd
+          -from 2026-08-01 -to 2026-11-24 -t m15 -f csv -p bid
+          -dir raw -fn gold15 --cache
+          --batch-size 5 --batch-pause 2000 --rate-limit-retries 3
+      - name: Validate and normalize 15m dataset
+        run: >
+          python gold_research_import_dukascopy.py
+          --source raw/gold15.csv --out data/gold15.csv --minutes 15
+      - name: Research replay – no alerts or broker connection
+        run: >
+          python pbd_inspired_hypothesis_v1.py
+          --bars15 data/gold15.csv
+          --cost 0.8
+          --out out/pbd_inspired_gold_v1_report.json
+      - name: Preserve full audit including individual trades
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pbd-inspired-gold-v1-audit
+          path: out/pbd_inspired_gold_v1_report.json
+          if-no-files-found: warn
+          retention-days: 30
