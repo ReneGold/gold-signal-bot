@@ -1,0 +1,27 @@
+name: Daytrader V1 historical data probe
+on:
+  push:
+    branches: [gold-ai-daytrader-1]
+    paths:
+      - '.github/workflows/daytrader-v1-history-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'requests>=2.31,<3'
+      - name: Check historical data availability
+        env:
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+        run: python -m daytrader_v1.history_probe > history-probe.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daytrader-v1-history-probe
+          path: history-probe.json
